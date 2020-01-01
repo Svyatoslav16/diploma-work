@@ -1,0 +1,74 @@
+main {
+    width: 100%;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
+    margin: 10% auto;
+}
+
+a {
+    color:#0366d6;
+    text-decoration: none;
+}
+
+.auth-form-body {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #d8dee2;
+    border-radius: 5px;
+}
+
+.auth-form-body h1 { 
+    text-align: center;    
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: -.5px;
+    margin-bottom: 30px;
+}
+
+.auth-form-body input {
+    width: 98%;
+    background-color: #fff;
+    border: 1px solid #d1d5da;
+    border-radius: 3px;
+    margin: 5px 0 15px 0;
+    padding: 6px 1%;
+}
+
+.auth-form-body label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.auth-form-body label .passwordReset {
+    float: right;
+    font-size: 12px;
+}
+
+.auth-form-body .singIn-button {
+    color: #fff;
+    background: rgb(224, 113, 113);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    width: 100%;
+    padding: 6px 12px;
+    border: 1px solid rgba(27,31,35,.2);
+    border-radius: .25em;
+}
+
+.create-account {
+    background: #fff;
+    margin-top: 10px;
+    padding: 5px 15px;
+    text-align: center;
+    border: 1px solid#d8dee2;
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #24292e;
+}
