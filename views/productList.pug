@@ -11,28 +11,21 @@
 <body>
     <header>
         include layout/menu.pug
-        <div class="authorization">
-            if(successAuthentication)
-                <details class="details">
-                    <summary>#{userName}</summary>
-                    <div class="dropdown-menu">
-                        <a href="signOut" class="sign-out">Выйти</a>
-                    </div>
-                </details>
-            else  
-                <a href="signUp" class="signUp">Зарегистрироваться</a>
-                <a href="signIn" class="signIn">Войти</a>
-        </div>
+        include layout/myProfile.pug
     </header>
     <main>
         <div class="product-list">
             each product in productList 
                 <div class="product">
-                    <h4> #{product.product_name}</h4>
+                    <h3 class="product-name"> #{product.product_name}</h3>
                     <img src="#{product.product_url_img}"/>
-                    <p>#{product.product_amount}</p>
+                    <p>Цена: <span class="product_amount">#{product.product_amount}</span></p>
+                    <button class="add-to-cart" data-product_id="#{product.product_id}">Добавить в корзину</button>
                 </div> 
         </div>        
     </main>
+    if(successAuthentication)
+        <script src="javascript/addToCart.js" defer></script>
+    include layout/footer.pug
 </body>
 </html>

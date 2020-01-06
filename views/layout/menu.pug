@@ -1,9 +1,11 @@
 <menu>
     if(isWorker)
         <li><a href="/">Главная</a></li>  
-        <li><a href="productList">Список товаров</a></li>
+        <li><a href="productList">Каталог товаров</a></li>
         <li><a href="addProduct">Добавить товар</a></li>
     else
         <li><a href="/">Главная</a></li>  
-        <li><a href="productList">Список товаров</a></li>
+        <li><a href="productList">Каталог товаров</a></li>
+        if(successAuthentication)
+            <li><a href="cart">Корзина</a></li>
 </menu>

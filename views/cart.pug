@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/cart.css">
+    <title>Корзина</title>
+</head>
+<body>
+    <header>
+        include layout/menu.pug
+        include layout/myProfile.pug
+    </header>
+    <main>
+        <h1 class="cart-title">Корзина</h1>
+        if(productList)
+            <div class="main-container">
+                <div class="cart-items">
+                    each product in productList
+                        <div class="product">
+                            //- 
+                            <div class="product-image-wrap">
+                                <img src='#{product.product_url_img}' />
+                            </div>
+                            <div class="product-property">
+                                <div class="product-info">
+                                    <div class="product-caption">
+                                        <div class="product-name">
+                                            <a href="#" class="product-name-link">#{product.product_name}</a>
+                                        </div>
+                                        <div class="menu-product">
+                                            <div class="menu-product-wrapper">
+                                                <button class="menu-control-button" data-product_id=#{product.product_id}>Удалить</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="count-buttons">
+                                        <button class="button-minus" onclick="action(this)" data-product_id=#{product.product_id}><i>-</i></button>
+                                        <input type="number" class="count-value" value="#{product.product_count}" min="1" max="99"/>
+                                        <button class="button-plus" onclick="action(this)" data-product_id=#{product.product_id}><i>+</i></button>
+                                    </div>
+                                </div>
+                                <div class="product-price">
+                                    <div class="price">
+                                        <div class="price-block">
+                                            <span class="price-current">#{product.product_amount} 
+                                                <i class="ru-currency-icon_bold">Р</i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="product-remains">
+                                        <div class="product-remains-wrap">
+                                            <span class="product-remains">В наличии: #{product.product_count_stock}</span> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="total-amount">
+                    <div class="total-amount-label">
+                        <div class="total-amount-count">Итого: 1 товар</div>
+                        <div class="price">на 9 999
+                            <i class="ru-currency-icon_bold">Р</i>
+                        </div>
+                    </div>
+                    <div class="total-amount-button">
+                        <button class="buy-button">Оформить заказ</button>
+                    </div>
+                </div>
+            </div>
+        else 
+            <div>Ваша корзина пуста</div>
+    </main>
+    if(successAuthentication)
+        <script src="javascript/cart.js" defer></script>
+    include layout/footer.pug
+</body>
+</html>

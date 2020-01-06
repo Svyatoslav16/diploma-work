@@ -6,23 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/addProduct.css">
-    <title>Home</title>
+    <title>Добавить товар</title>
 </head>
 <body>
     <header>
         include layout/menu.pug
-        <div class="authorization">
-            if(successAuthentication)
-                <details class="details">
-                    <summary>#{userName}</summary>
-                    <div class="dropdown-menu">
-                        <a href="signOut" class="sign-out">Выйти</a>
-                    </div>
-                </details>
-            else  
-                <a href="signUp" class="signUp">Зарегистрироваться</a>
-                <a href="signIn" class="signIn">Войти</a>
-        </div>
+        include layout/myProfile.pug
     </header>
     <main>
         <form action="/addProduct" method="POST" enctype="multipart/form-data">

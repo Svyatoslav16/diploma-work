@@ -5,18 +5,42 @@ main {
 
 .product-list {
     width: auto;
-    background: #fff;
     display: grid;
     grid-template-columns: repeat(3, minmax(200px, 250px));
     justify-content: center;
     align-items: center;
-    padding: 10px 20px;
-    border-radius: 5px;
 }
 
-.product img{
-    border-radius: 3px;
+.product {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    background: #fff;
+    margin: 5px 10px;
+    padding: 10px 0;
+    border-radius: 20px;
+}
+.product * {
+    margin: 5px 0;
+}
+
+.product .product-name {
+    font-weight: normal;
 }
 
 
+.product .add-to-cart {
+    cursor: pointer;
+    width: 80%;
+    border-radius: 10px;
+    font-size: 16px;
+    padding: 7px 0;
+    background:#fff;
+    border: 1px solid#d9d9d9;
+}
+
+.product .add-to-cart:hover {
+    background: #e54823;
+    color: white;
+}
 
