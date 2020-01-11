@@ -20,7 +20,6 @@
                 <div class="cart-items">
                     each product in productList
                         <div class="product">
-                            //- 
                             <div class="product-image-wrap">
                                 <img src='#{product.product_url_img}' />
                             </div>
@@ -39,17 +38,16 @@
                                 </div>
                                 <div>
                                     <div class="count-buttons">
-                                        <button class="button-minus" onclick="action(this)" data-product_id=#{product.product_id}><i>-</i></button>
-                                        <input type="number" class="count-value" value="#{product.product_count}" min="1" max="99"/>
-                                        <button class="button-plus" onclick="action(this)" data-product_id=#{product.product_id}><i>+</i></button>
+                                        <button class="button-action button-minus" data-product_id=#{product.product_id}><i>-</i></button>
+                                        <input type="number" class="count-value" value="#{product.product_count}" min="1" max="99" data-product_id="#{product.product_id}" >
+                                        <button class="button-action button-plus" data-product_id=#{product.product_id}><i>+</i></button>
                                     </div>
                                 </div>
                                 <div class="product-price">
                                     <div class="price">
                                         <div class="price-block">
-                                            <span class="price-current">#{product.product_amount} 
-                                                <i class="ru-currency-icon_bold">Р</i>
-                                            </span>
+                                            <span class="price-current">#{product.product_amount}</span> 
+                                            <i class="ru-currency-icon_bold">Р</i>
                                         </div>
                                     </div>
                                     <div class="product-remains">
@@ -63,8 +61,9 @@
                 </div>
                 <div class="total-amount">
                     <div class="total-amount-label">
-                        <div class="total-amount-count">Итого: 1 товар</div>
-                        <div class="price">на 9 999
+                        <div class="total-amount-count">Итого: #{total_amount_count} товар(a)</div>
+                        <div class="price">на 
+                            <span class="price-value">#{total_amount}</span>
                             <i class="ru-currency-icon_bold">Р</i>
                         </div>
                     </div>

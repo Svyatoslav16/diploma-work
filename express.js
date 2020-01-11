@@ -12,7 +12,7 @@ const path = require('path'),
 
 session.cart = {};
 
-const connection = mysql.createPool({
+const conn = mysql.createPool({
     host: 'localhost',
     user: 'root',
     database: 'internet_magazine',
@@ -39,7 +39,7 @@ const fileFilter = (req, file, cb) => {
 
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 
-const options = {
+const sessionOptions = {
     host: 'localhost',
     user: 'root',
     password: 'Plmoknn1605',
@@ -63,7 +63,7 @@ app.use(session({
     secret: 'secret_key',
     resave: false,
     saveUninitialized: false,
-    store: new MySQLStore(options),
+    store: new MySQLStore(sessionOptions),
     cookie: {
         path: "/",
         httpOnly: true,
@@ -73,53 +73,57 @@ app.use(session({
 
 app.set("view engine", "pug");
 
-app.get("/", urlencodedParser, function (req, response) {
+app.get("/", urlencodedParser, (req, res) => {
     if(req.session.userName  && req.session.successAuthentication) {
-        response.render('index', {
+        res.render('index', {
             userName: req.session.userName,
             successAuthentication: req.session.successAuthentication,
             isWorker: req.session.isWorker
         });
     } else {
-        response.render('index', {
+        res.render('index', {
             successAuthentication: false
         })
     }
 });
-app.get("/signUp", urlencodedParser, function (req, response) {
-    response.sendFile(`${__dirname}/public/html/signUp.html`);
+app.get("/signUp", urlencodedParser, (req, res) =>{
+    res.sendFile(`${__dirname}/public/html/signUp.html`);
 });
-app.get("/signIn", urlencodedParser, function (req, response) {
-    response.sendFile(`${__dirname}/public/html/signIn.html`);
+app.get("/signIn", urlencodedParser, (req, res) => {
+    res.sendFile(`${__dirname}/public/html/signIn.html`);
 });
-app.get("/signOut", urlencodedParser, function (req, response) {
+app.get("/signOut", urlencodedParser, (req, res) => {
     req.session.destroy(function(err) {
         if(err) {throw err};
-        return response.redirect(302, '/');
+        return res.redirect(302, '/');
     })
 });
-app.get("/resetPassword", urlencodedParser, function (req, response) {
-    response.sendFile(`${__dirname}/public/html/resetPassword.html`);
+app.get("/resetPassword", urlencodedParser, (req, res) => {
+    res.sendFile(`${__dirname}/public/html/resetPassword.html`);
 });
-app.get("/addProduct", urlencodedParser, function (req, response) {
+
+//Дергается при нажатии кнопки Добав 
+app.get("/addProduct", urlencodedParser, (req, res) => {
     if(req.session.successAuthentication && req.session.isWorker) {
-        response.render('addProduct', {
+        res.render('addProduct', {
             userName: req.session.userName,
             successAuthentication: req.session.successAuthentication,
             isWorker: req.session.isWorker 
         });
     } else {
-        response.redirect(302, '/');
+        res.redirect(302, '/');
     }
 });
-app.get("/productList", urlencodedParser, function (req, response) {
-    connection.query(`SELECT product_id,
+
+//Деграется при нажатии кнопки "Каталог товаров"
+app.get("/productList", urlencodedParser, (req, res) => {
+    conn.query(`SELECT product_id,
                              product_name,
                              product_url_img,
                              product_amount 
                       FROM productList`, (err, productList) => {
         if(productList) {
-            response.render('productList', {
+            res.render('productList', {
                 userName: req.session.userName,
                 successAuthentication: req.session.successAuthentication,
                 isWorker: req.session.isWorker, 
@@ -131,65 +135,94 @@ app.get("/productList", urlencodedParser, function (req, response) {
     });
 });
 app.get('/cart', (req, res) => {
-    if(req.session.successAuthentication && req.session.userId) {
-        connection.query(`SELECT * 
-                          FROM orderList
-                          WHERE user_id=${req.session.userId}`, (selectErr, selectResult) => {
+    if(req.session.successAuthentication && 
+       req.session.userId && 
+       !req.session.isWorker) {
+        conn.query(`SELECT * 
+                    FROM orderList
+                    WHERE user_id=${req.session.userId}`, (selectErr, selectResult) => {
             if(selectErr) {throw selectErr;}
-            if(typeof selectResult[0] === "object" && selectResult[0] !== undefined) {
-                let productListWithSort  = selectResult[0].product_ids.split(',')
-                                                                      .sort((a,b) => a.split(":")[0]-b.split(":")[0]);
+            if(typeof selectResult[0] === "object" && 
+               selectResult[0] !== undefined && 
+               selectResult[0].product_ids !== '') {
                 let productIds = [];
-                productListWithSort.forEach(e => productIds.push(e.split(':')[0]));
-                connection.query(`SELECT product_id,
-                                         product_name,
-                                         product_url_img,
-                                         product_description,
-                                         product_amount,
-                                         product_count_stock 
-                                  FROM productList 
-                                  WHERE product_id IN(${productIds.toString()})`, (selectErr, selectResult) => {
-                    if(selectErr) {throw selectErr;}
-                    if(selectResult) {
-                        for (let i = 0; i < selectResult.length; i++) {
-                            selectResult[i].product_count=productListWithSort[i].split(':')[1];
+                let productListWithSort = (selectResult[0].product_ids.length > 3) ? selectResult[0].product_ids.split(',')
+                                                                      .sort((a,b) => a.split(":")[0]-b.split(":")[0]) : selectResult[0].product_ids.split(':')[0];
+                if(typeof productListWithSort === 'object') {
+                    productListWithSort.forEach(e => productIds.push(e.split(':')[0]))
+                } else if(typeof productListWithSort === 'string') {
+                    productIds = productListWithSort;
+                }
+                conn.query(`SELECT  product_id,
+                                    product_name,
+                                    product_url_img,
+                                    product_description,
+                                    product_amount,
+                                    product_count_stock 
+                            FROM productList 
+                            WHERE product_id IN(${productIds.toString()})`, (selectProductListErr, selectProductListResult) => {
+                    if(selectProductListErr) {throw selectProductListErr;}
+                    if(typeof selectProductListResult[0] === "object" && selectProductListResult[0] !== undefined) {
+                        let total_amount_count = 0;
+                        let total_amount = 0;
+                        if(typeof productListWithSort === "object") {
+                            for (let i = 0; i < selectProductListResult.length; i++) {
+                                selectProductListResult[i].product_count = productListWithSort[i].split(':')[1];
+                                total_amount_count++;
+                                total_amount += selectProductListResult[i].product_count * 
+                                                selectProductListResult[i].product_amount;
+                            }
+                        } else if(typeof productIds === 'string') {
+                            selectProductListResult[0].product_count = selectResult[0].product_ids.split(':')[1];
+                            total_amount += selectProductListResult[0].product_count *
+                                            selectProductListResult[0].product_amount;
+                            total_amount_count++;
                         }
+                        conn.query(`UPDATE orderList SET total_amount = ${total_amount}
+                                          WHERE user_id = ${req.session.userId}`, (updateErr, updateResult) => {
+                            if(updateErr) {throw updateErr;}
+                        });
                         res.render('cart', {
                             userName: req.session.userName,
                             successAuthentication: req.session.successAuthentication,
                             isWorker: req.session.isWorker, 
-                            productList : selectResult,
+                            productList: selectProductListResult,
+                            total_amount: total_amount,
+                            total_amount_count: total_amount_count
                         });
-                    }
+                    } 
                 });
             } else {
                 res.render('cart', {
                     userName: req.session.userName,
                     successAuthentication: req.session.successAuthentication,
-                    isWorker: req.session.isWorker, 
+                    isWorker: req.session.isWorker 
                 });
             }
         });
+    } else {
+        res.redirect(302, '/');
     }
 });
 
-app.post("/signUp", urlencodedParser, function (req, response) {
-    if(!req.body) return response.sendStatus(400);
-    connection.query(`SELECT user_id 
+app.post("/signUp", urlencodedParser, (req, res) => {
+    if(!req.body) return res.sendStatus(400);
+    conn.query(`SELECT user_id 
                       FROM users 
                       ORDER BY user_id DESC LIMIT 1`,
                     (err, users) => {
         if(err) {throw err;}
         if (typeof users[0] === "object" && users[0] !== undefined){
-            connection.query(`insert into users values(${(users.length != 0) ? users[0].user_id + 1 : 1}, 
-                                                      '${req.body.userSurname}', 
-                                                      '${req.body.userName}', 
-                                                      '${req.body.userPatronymic}',
-                                                      '${req.body.email}',
-                                                      '${req.body.telephone}',
-                                                      '${req.body.password}')`, (insertErr, insertResult) => {
+            conn.query(`INSERT INTO users 
+                              VALUES(${(users.length != 0) ? users[0].user_id + 1 : 1}, 
+                                    '${req.body.userSurname}', 
+                                    '${req.body.userName}', 
+                                    '${req.body.userPatronymic}',
+                                    '${req.body.email}',
+                                    '${req.body.telephone}',
+                                    '${req.body.password}')`, (insertErr, insertResult) => {
                 if(insertErr) {throw insertErr;}
-                response.render('index', {
+                res.render('index', {
                     successAuthentication: false
                 });
             });
@@ -198,16 +231,16 @@ app.post("/signUp", urlencodedParser, function (req, response) {
         }
     });
 });
-app.post("/signIn", urlencodedParser, function (req, response) {
-    if(!req.body) return response.sendStatus(400);
-    connection.query(`SELECT user_id,
+app.post("/signIn", urlencodedParser, (req, res) => {
+    if(!req.body) return res.sendStatus(400);
+    conn.query(`SELECT user_id,
                              user_name, 
                              user_surname 
                       FROM users 
                       WHERE (${(req.body.login.match(/^\d+$/) !== null) ? 
-                        `telephone=${req.body.login}` : 
-                        `email='${req.body.login}'`}) AND
-                         password='${req.body.password}'`,
+                            `telephone=${req.body.login}` : 
+                            `email='${req.body.login}'`}) AND
+                            password='${req.body.password}'`,
                     (err, users) => {
         if(err) {throw err;}
         if(typeof users[0] === "object" && users[0] !== undefined) {
@@ -215,27 +248,27 @@ app.post("/signIn", urlencodedParser, function (req, response) {
             req.session.isWorker = false;
             req.session.successAuthentication = true;
             req.session.userId = users[0].user_id;
-            response.render('index', {
+            res.render('index', {
                 userName: req.session.userName,
                 successAuthentication: req.session.successAuthentication,
                 isWorker: req.session.isWorker 
             });
         } else if(users[0] === undefined) {
-            connection.query(`SELECT worker_id,
-                                     worker_name, 
-                                     worker_surname 
-                              FROM worker 
-                              WHERE (${(req.body.login.match(/^\d+$/) !== null) ? 
-                                `telephone=${req.body.login}` : 
-                                `email='${req.body.login}'`}) AND
-                                 password='${req.body.password}'`, (workerSelectErr, worker) => {
+            conn.query(`SELECT  worker_id,
+                                worker_name, 
+                                worker_surname 
+                        FROM worker 
+                        WHERE (${(req.body.login.match(/^\d+$/) !== null) ? 
+                                    `telephone=${req.body.login}` : 
+                                    `email='${req.body.login}'`}) AND
+                                    password='${req.body.password}'`, (workerSelectErr, worker) => {
                 if(workerSelectErr) {throw workerSelectErr;}
                 if(typeof worker[0] === "object" && worker[0] !== undefined) {
                     req.session.userName = `${worker[0].worker_name} ${worker[0].worker_surname}`;
                     req.session.isWorker = true;
                     req.session.successAuthentication =  true;
                     req.session.workerId = worker[0].worker_id;
-                    response.render('index', {
+                    res.render('index', {
                         userName: req.session.userName,
                         successAuthentication: req.session.successAuthentication,
                         isWorker: req.session.isWorker 
@@ -245,17 +278,17 @@ app.post("/signIn", urlencodedParser, function (req, response) {
         }
     });
 });
-app.post("/resetPassword", urlencodedParser, function (req, response) {
-    if(!req.body) return response.sendStatus(400);
-    connection.query(`SELECT user_name, 
-                             email 
-                      FROM users 
-                      WHERE email='${req.body.email}'`, (err, selectResult) => {
+app.post("/resetPassword", urlencodedParser, (req, res) => {
+    if(!req.body) return res.sendStatus(400);
+    conn.query(`SELECT  user_name, 
+                        email 
+                FROM users 
+                WHERE email='${req.body.email}'`, (err, selectResult) => {
         
         if(typeof selectResult[0] === "object" && selectResult[0] !== undefined) {
             let newPassword = generatePassword.generatePassword();
-            connection.query(`UPDATE users SET password = '${newPassword}' 
-                              WHERE email = '${req.body.email}'`, (updateErr, updateResult) => {
+            conn.query(`UPDATE users SET password = '${newPassword}' 
+                        WHERE email = '${req.body.email}'`, (updateErr, updateResult) => {
                 if(updateErr) {throw updateErr;}
                 if(typeof updateResult[0] === "object" && updateResult[0] !== undefined) {
                     sendMail({
@@ -270,7 +303,7 @@ app.post("/resetPassword", urlencodedParser, function (req, response) {
                         console.log(err && err.stack);
                         console.dir(reply);
                     });
-                    response.render('index', {
+                    res.render('index', {
                         userName: req.session.userName,
                         successAuthentication: req.session.successAuthentication,
                         isWorker: req.session.isWorker
@@ -282,20 +315,22 @@ app.post("/resetPassword", urlencodedParser, function (req, response) {
         }
     });
 });
-app.post("/addProduct", urlencodedParser, function (req, response) {
+
+
+app.post("/addProduct", urlencodedParser, (req, res) => {
     if(req.session.successAuthentication && req.session.isWorker) {
-        connection.query(`SELECT product_id 
-                          FROM productList 
-                          ORDER BY product_id DESC LIMIT 1`, (selectErr, selectResult) => {
+        conn.query(`SELECT product_id 
+                    FROM productList 
+                    ORDER BY product_id DESC LIMIT 1`, (selectErr, selectResult) => {
             if(typeof selectResult[0] === "object" && selectResult[0] !== undefined) {
-                connection.query(`INSERT INTO productList 
-                                  VALUES(${(selectResult.length != 0) ? selectResult[0].product_id + 1 : 1}, 
-                                        '${req.body.productName}', 
-                                        '${"productImages/" + req.file.originalname}',
-                                        '${req.body.descriptionProduct}',
-                                        '${req.body.productAmount}')`, (insertErr, insertResult) => {
+                conn.query(`INSERT INTO productList 
+                            VALUES(${(selectResult.length != 0) ? selectResult[0].product_id + 1 : 1}, 
+                                    '${req.body.productName}', 
+                                    '${"productImages/" + req.file.originalname}',
+                                    '${req.body.descriptionProduct}',
+                                    '${req.body.productAmount}')`, (insertErr, insertResult) => {
                     if(insertResult) {
-                        response.render('index', {
+                        res.render('index', {
                             userName: req.session.userName,
                             successAuthentication: req.session.successAuthentication,
                             isWorker: req.session.isWorker
@@ -309,58 +344,57 @@ app.post("/addProduct", urlencodedParser, function (req, response) {
             }
         });
     } else {
-        response.send('Не удалось добавить продукт в корзину')
+        res.send('Не удалось добавить продукт в корзину')
     }
 });
 app.post('/addToCart', (req, res) => {
     if(req.body.product_id) {
-        connection.query(`SELECT product_id, 
-                                product_name,
-                                product_amount
-                          FROM productList 
-                          WHERE product_id = ${req.body.product_id}`, (productListErr, productListResult) => {
+        conn.query(`SELECT  product_id, 
+                            product_name,
+                            product_amount
+                    FROM productList 
+                    WHERE product_id = ${req.body.product_id}`, (productListErr, productListResult) => {
             if(productListErr) {throw productListErr;}
             if(typeof productListResult[0] === "object" && productListResult[0] !== undefined) {
-                connection.query(`SELECT user_id,
-                                         product_ids 
-                                  FROM orderList 
-                                  WHERE user_id = ${req.session.userId}`, (orderListErr, orderListResult) => {
+                conn.query(`SELECT  user_id,
+                                    product_ids 
+                            FROM orderList 
+                            WHERE user_id = ${req.session.userId}`, (orderListErr, orderListResult) => {
                     if(orderListErr) {throw orderListErr;}
                     if(typeof orderListResult[0] === "object" && orderListResult[0] !== undefined) {
                         let customShoppingCart = orderListResult[0].product_ids.split(',');
                         for(let i = 0; i < customShoppingCart.length; i++) {
-                            let currentProductArray = customShoppingCart[i].split(':');
-                            if(currentProductArray[0] === req.body.product_id) {
-                                let currentProduct;
-                                currentProductArray[1] = parseInt(currentProductArray[1]) + 1;
-                                currentProduct = `${currentProductArray[0]}:${currentProductArray[1]}`;
-                                customShoppingCart[i] = currentProduct;
-                                connection.query(`UPDATE orderList 
-                                                    SET product_ids = '${customShoppingCart.toString()}'
-                                                    WHERE user_id = ${req.session.userId}`, (updateErr, updateResult) => {
+                            let currentProduct = customShoppingCart[i].split(':');
+                            if(currentProduct[0] === req.body.product_id) {
+                                currentProduct[1] = parseInt(currentProduct[1]) + 1;
+                                customShoppingCart[i] = `${currentProduct[0]}:${currentProduct[1]}`;
+                                conn.query(`UPDATE orderList 
+                                            SET product_ids = '${customShoppingCart.toString()}'
+                                            WHERE user_id = ${req.session.userId}`, (updateErr, updateResult) => {
                                     if(updateErr) {throw updateErr;}
                                 });
                                 break;
                             } else if(i === customShoppingCart.length -1 && customShoppingCart[i].split(':')[0] !== req.body.product_id) {
                                 customShoppingCart.push(`${req.body.product_id}:1`);
-                                connection.query(`UPDATE orderList 
-                                                    SET product_ids = '${customShoppingCart.toString()}'
-                                                    WHERE user_id = ${req.session.userId}`, (updateErr, updateResult) => {
+                                conn.query(`UPDATE orderList 
+                                            SET product_ids = '${customShoppingCart.toString()}'
+                                            WHERE user_id = ${req.session.userId}`, (updateErr, updateResult) => {
                                     if(updateErr) {throw updateErr;}
                                 });
                                 break;
                             }
                         }
                     } else if(orderListResult[0] === undefined) {
-                        connection.query(`SELECT order_id 
-                                          FROM orderList 
-                                          ORDER BY order_id 
-                                          DESC LIMIT 1`,(selectErr, selectResult) => {
+                        conn.query(`SELECT order_id 
+                                    FROM orderList 
+                                    ORDER BY order_id 
+                                    DESC LIMIT 1`,(selectErr, selectResult) => {
                             if(selectErr) {throw selectErr;}
-                                connection.query(`INSERT INTO orderList
+                                conn.query(`INSERT INTO orderList
                                                   VALUES(${(selectResult.length !== 0) ? selectResult[0].order_id + 1 : 1},
                                                          ${req.session.userId},
-                                                         '${req.body.product_id}:1')`, (insertErr, insertResult) => {
+                                                        '${req.body.product_id}:1',
+                                                        0)`, (insertErr, insertResult) => {
                                     if(insertErr) {throw insertErr;}
                                     console.log("Первый заказ добавлен в корзину в корзину");                        
                                 });
@@ -374,25 +408,23 @@ app.post('/addToCart', (req, res) => {
     }
 });
 app.post('/changeCountProductInCart', (req, res) => {
-    if(req.body.product_id !== undefined && (typeof req.body.action) === 'string') {
-        if(req.body.action === 'plus') {
-            connection.query(`SELECT user_id,
-                                     product_ids 
-                              FROM orderList 
-                              WHERE user_id = ${req.session.userId}`, (selectErr, selectResult) => {
+    if(req.body.product_id !== undefined) {
+        if(req.body.action === 'plus' && req.body.nodeName === 'BUTTON') {
+            conn.query(`SELECT  user_id,
+                                product_ids 
+                        FROM orderList 
+                        WHERE user_id = ${req.session.userId}`, (selectErr, selectResult) => {
                 if(selectErr) {throw selectErr;}
                 if(typeof selectResult[0] === "object" && selectResult[0] !== undefined ) {
                     let customShoppingCart = selectResult[0].product_ids.split(',');
                     for(let i = 0; i < customShoppingCart.length; i++) {
-                        let currentProductArray = customShoppingCart[i].split(':');
-                        if(currentProductArray[0] === req.body.product_id) {
-                            let currentProduct;
-                            currentProductArray[1] = parseInt(currentProductArray[1]) + 1;
-                            currentProduct = `${currentProductArray[0]}:${currentProductArray[1]}`;
-                            customShoppingCart[i] = currentProduct;
-                            connection.query(`UPDATE orderList 
-                                              SET product_ids = '${customShoppingCart.toString()}'
-                                              WHERE user_id = ${req.session.userId}`, (updateErr, updateResult) => {
+                        let currentProduct = customShoppingCart[i].split(':');
+                        if(currentProduct[0] === req.body.product_id) {
+                            currentProduct[1] = parseInt(currentProduct[1]) + 1;
+                            customShoppingCart[i] = `${currentProduct[0]}:${currentProduct[1]}`;
+                            conn.query(`UPDATE orderList 
+                                        SET product_ids = '${customShoppingCart.toString()}'
+                                        WHERE user_id = ${req.session.userId}`, (updateErr, updateResult) => {
                                 if(updateErr) {throw updateErr;}
                                 res.sendStatus(200);
                             });
@@ -400,25 +432,62 @@ app.post('/changeCountProductInCart', (req, res) => {
                     }
                 }                
             });
-        } else if(req.body.action === 'minus') {
-            connection.query(`SELECT user_id,
-                                     product_ids 
-                              FROM orderList 
-                              WHERE user_id = ${req.session.userId}`, (selectErr, selectResult) => {
+        } else if(req.body.action === 'minus' && req.body.nodeName === 'BUTTON') {
+            conn.query(`SELECT  user_id,
+                                product_ids 
+                        FROM orderList 
+                        WHERE user_id = ${req.session.userId}`, (selectErr, selectResult) => {
                 if(selectErr) {throw selectErr;}
                 if(typeof selectResult[0] === "object" && selectResult[0] !== undefined ) {
                     let customShoppingCart = selectResult[0].product_ids.split(',');
-
                     for(let i = 0; i < customShoppingCart.length; i++) {
-                        let currentProductArray = customShoppingCart[i].split(':');
-                        if(currentProductArray[0] === req.body.product_id) {
-                            let currentProduct;
-                            currentProductArray[1]--;
-                            currentProduct = `${currentProductArray[0]}:${currentProductArray[1]}`;
-                            customShoppingCart[i] = currentProduct;
-                            connection.query(`UPDATE orderList 
-                                                SET product_ids = '${customShoppingCart.toString()}'
-                                                WHERE user_id = ${req.session.userId}`, (updateErr, updateResult) => {
+                        let currentProduct = customShoppingCart[i].split(':');
+                        if(currentProduct[0] === req.body.product_id) {
+                            if(parseInt(currentProduct[1]) <= 1) {
+                                customShoppingCart.splice(i,1); 
+                            } else {
+                                currentProduct[1]--;
+                                customShoppingCart[i] = `${currentProduct[0]}:${currentProduct[1]}`;
+                            }
+                            if(customShoppingCart.length != 0) { 
+                                conn.query(`UPDATE orderList 
+                                                    SET product_ids = '${customShoppingCart.toString()}'
+                                                    WHERE user_id = ${req.session.userId}`, (updateErr, updateResult) => {
+                                    if(updateErr) {throw updateErr;}
+                                    res.sendStatus(200);
+                                });
+                            } else if(customShoppingCart.length == 0) {
+                                conn.query(`DELETE FROM orderList
+                                                  WHERE user_id=${req.session.userId} `, (deleteErr, deleteResult)=>{
+                                    if(deleteErr) {throw deleteErr;}
+                                    res.sendStatus(200);
+                                });
+                            }
+                        }
+                    }
+                }                
+            });
+        } else if(req.body.nodeName === 'INPUT' && 
+                  req.body.input_count !== null && 
+                  typeof(parseInt(req.body.input_count)) === 'number' &&
+                  typeof(parseInt(req.body.input_count)) !=='NaN' &&
+                  req.body.action === 'changeByInput' &&
+                  parseInt(req.body.input_count) >= 1) {
+            conn.query(`SELECT  user_id,
+                                product_ids 
+                        FROM orderList 
+                        WHERE user_id = ${req.session.userId}`, (selectErr, selectResult) => {
+                if(selectErr) {throw selectErr;}
+                if(typeof selectResult[0] === "object" && selectResult[0] !== undefined ) {
+                    let customShoppingCart = selectResult[0].product_ids.split(',');
+                    for(let i = 0; i < customShoppingCart.length; i++) {
+                        let currentProduct = customShoppingCart[i].split(':');
+                        if(currentProduct[0] === req.body.product_id) {
+                            currentProduct[1] = Math.floor(req.body.input_count);
+                            customShoppingCart[i] = `${currentProduct[0]}:${currentProduct[1]}`;
+                            conn.query(`UPDATE orderList 
+                                        SET product_ids = '${customShoppingCart.toString()}'
+                                        WHERE user_id = ${req.session.userId}`, (updateErr, updateResult) => {
                                 if(updateErr) {throw updateErr;}
                                 res.sendStatus(200);
                             });
@@ -431,7 +500,6 @@ app.post('/changeCountProductInCart', (req, res) => {
         res.send('Неверное действие или нет id продукта');
     }
 });
-
 
 app.listen(3000);
 

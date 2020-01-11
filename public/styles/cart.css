@@ -8,6 +8,7 @@
     grid-template-columns: [cart-items] 68% [total-amount] 25%;
     justify-content: center;
     padding-bottom: 20px;
+    position: relative;
 }
 
 .cart-items {
@@ -116,13 +117,6 @@
 }
 
 .count-buttons button {
-    /* width: 31px;
-    height: 38px;
-    border: none;
-    background: #fff;
-    font-size: 18px;
-    cursor: pointer;
-    color: #ddd; */
     box-shadow: none;
     background:#fff;
     color: #ababab;
@@ -155,16 +149,10 @@
 }
 
 .count-buttons .button-minus {
-    /* border: 1px solid #ddd;
-    border-right: none;
-    border-radius: 8px 0 0 8px; */
     border-radius: 8px 0 0 8px;
     border-right: none;
 }
 .count-buttons .button-plus {
-    /* border: 1px solid #ddd;
-    border-left: none;
-    border-radius: 0 8px 8px 0; */
     border-radius: 0 8px 8px 0;
     border-left: none;
     -webkit-appearance: button;
@@ -176,7 +164,8 @@
     text-align: right;
 }
 
-.price-block .price-current {
+.price-current,
+.price-block i {
     font-size: 16px;
     font-weight: 501;
 }
@@ -216,3 +205,39 @@
     background: linear-gradient(to bottom, rgb(224, 113, 113),rgb(227, 51, 51));
     box-shadow: inset 0 -3px 0 0 rgba(0,0,0,0.1);
 }
+
+
+/* Стили для оформления заказа */
+.order-registration-wrapper {
+    opacity: 1;
+    z-index: 99999;
+    position: absolute;
+    display: grid;
+    grid-template-columns: 0.8fr;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+}
+
+.order-registration-wrapper:hover .main-container {
+    background: #fff;
+}
+
+.order-registration-form {
+    width: 50%;
+    background: #fff;
+}
+
+.user-data {
+    /* background: red; */
+}
+
+.adress {
+    width: 150px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* Стили для оформления заказа */
