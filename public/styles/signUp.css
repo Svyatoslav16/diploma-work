@@ -2,14 +2,15 @@ main {
     width: 100%;
     display: grid;
     justify-content: center;
-    align-items: center;
 }
 
 form {
+    /* width: 50%; */
     background: #fff;
     padding: 40px;
     border: 1px solid #d8dee2;
     border-radius: 5px;
+    margin: 30px auto;
 }
 
 form h1 { 
@@ -20,32 +21,57 @@ form h1 {
     margin-bottom: 30px;
 }
 
+form > div {
+    padding: 10px 0;
+}
+
 form input {
-    width: 98%;
+    position: relative;
+    text-align: center;
+    width: 97%;
     background-color: #fff;
     border: 1px solid #d1d5da;
     border-radius: 3px;
-    margin: 0px 0 5px 0;
     padding: 6px 1%;
 }
 
 form label {
     font-size: 14px;
-    /* display: block; */
+    display: block;
     font-weight: 600;
     text-align: left;
 }
 
-
+.singUp-button-wrap {
+    text-align: center;
+}
 
 .singUp-button {
+    margin-top: 20px;
+    cursor: pointer;
     color: #fff;
     background: rgb(224, 113, 113);
     font-size: 14px;
     font-weight: 600;
     line-height: 20px;
-    width: 101%;
+    min-width: max-content;
+    max-width: 250px;
     padding: 6px 12px;
     border: 1px solid rgba(27,31,35,.2);
     border-radius: .25em;
 }
+
+@media screen and (max-width: 999px) {
+    form {
+        padding: 20px;
+        margin: 30px 10px;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    form {
+        min-width: 400px;
+        max-width: 500px;
+    }
+}
+

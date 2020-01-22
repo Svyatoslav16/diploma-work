@@ -1,0 +1,94 @@
+main {
+    display: grid;
+    grid-template-columns: [order-info] 1fr [order-total] 270px;
+    background: #fff;
+    margin-bottom: 20px;
+}
+
+.order-info {
+    grid-column: order-info;
+    display: grid;
+    grid-template-columns: minmax(260px, 400px) 1fr;
+    justify-content: center;
+    width: 100%;
+    padding: 15px;
+}
+
+.order-total {
+    grid-column: order-total;
+    background: #f2f2f2;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 20px;
+    border: 1px solid #bfbebe;
+}
+
+.total-amount-label > div {
+    display: inline;
+}
+
+.productList {
+    border-collapse: collapse;
+}
+
+.productList tr {
+    text-align: left;
+}
+
+.productList thead th {
+    padding-bottom: 4px;
+    font-weight: normal;
+}
+
+.productList th,
+.productList td {
+    padding-right: 35px;
+}
+
+.product {
+    border: 2px solid #f2f2f2;
+    border-left: none;
+    border-right: none;
+}
+
+.product-image {
+    max-width: 50px;
+    margin: 0 auto;
+}
+
+.product-image img {
+    width: 100%;
+    min-width: 20px;
+    height: auto;
+    margin: 5px;
+}
+
+.product-name {
+    min-width: max-content;
+    max-width: 170px;
+}
+
+.order-button {
+    cursor: pointer;
+    color: #fff;
+    background: linear-gradient(to top, rgb(224, 113, 113),rgb(227, 51, 51));
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    width: 100%;
+    border: 1px solid rgba(27,31,35,.2);
+    border-radius: 5px;
+}
+
+.order-button:hover {
+    background: linear-gradient(to bottom, rgb(224, 113, 113),rgb(227, 51, 51));
+    box-shadow: inset 0 -3px 0 0 rgba(0,0,0,0.1);
+}
+
+.order-button a {
+    color: inherit;
+    padding: 10px 5px;
+    display: block;
+    width: 100%;
+}
+

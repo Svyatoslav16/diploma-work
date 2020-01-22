@@ -44,16 +44,12 @@
                                     </div>
                                 </div>
                                 <div class="product-price">
-                                    <div class="price">
-                                        <div class="price-block">
-                                            <span class="price-current">#{product.product_amount}</span> 
-                                            <i class="ru-currency-icon_bold">Р</i>
-                                        </div>
+                                    <div class="price-block">
+                                        <span class="price-current">#{product.product_amount}</span> 
+                                        <i class="ru-currency-icon_bold">Р</i>
                                     </div>
-                                    <div class="product-remains">
-                                        <div class="product-remains-wrap">
-                                            <span class="product-remains">В наличии: #{product.product_count_stock}</span> 
-                                        </div>
+                                    <div class="product-remains-wrap">
+                                        <span class="product-remains">В наличии: #{product.product_count_stock}</span> 
                                     </div>
                                 </div>
                             </div>
@@ -68,7 +64,9 @@
                         </div>
                     </div>
                     <div class="total-amount-button">
-                        <button class="buy-button">Оформить заказ</button>
+                        <button class="buy-button">
+                            <a href='/orderRegistration'>Перейти к оформлению заказа</a>
+                        </button>
                     </div>
                 </div>
             </div>

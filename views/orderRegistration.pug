@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/orderRegistration.css">
+    <title>Корзина</title>
+</head>
+<body>
+    <header>
+        include layout/menu.pug
+        include layout/myProfile.pug
+    </header>
+    <main>
+        if(productList)
+            <div class="order-info">
+                <div class="user-data">
+                    <div class="full-name">
+                        | ФИО:   #{user_data.user_surname} #{user_data.user_name} #{user_data.user_patronymic}
+                    </div>
+                    <div class="email">
+                        | Email:   #{user_data.email}
+                    </div>
+                    <div class="telephone">
+                        | Телефон:   #{user_data.telephone}
+                    </div>
+                    <div class="adress">
+                        <input type="text" value="#{user_data.address}"/>
+                        <button class="save-adress">Запомнить адрес</button>
+                    </div>
+                </div>
+                <div class="order-items">
+                    <table class="productList">
+                        <caption>Список товаров</caption>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Наименование</th>
+                                <th>Стоимость</th>
+                                <th>Количество</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            each product in productList
+                                <tr class="product">
+                                    <td class="product-image"><img src='#{product.product_url_img}' /></td>
+                                    <td class="product-name">#{product.product_name}</td>
+                                    <td>
+                                        | #{product.product_amount}
+                                        <i class="ru-currency-icon_bold">Р</i>
+                                    </td>
+                                    <td>#{product.product_count}</td>
+                                </tr>
+                        </tbody>
+                        //- <div class="product-image-wrap">
+                        //-     <img src='#{product.product_url_img}' />
+                        //- </div>
+                        //- <div class="product-caption">
+                        //-     <label>Наименование</label>
+                        //-     <span>#{product.product_name}</span>
+                        //- </div>
+                        //- <div class="product-price">
+                        //-     <span class="price-current">#{product.product_amount}</span> 
+                        //-     <i class="ru-currency-icon_bold">Р</i>
+                        //- </div>
+                        //- <div class="product-count">
+                        //-     | Количество: #{product.product_count}
+                        //- </div>
+                    </table>
+                </div>
+            </div>
+            <div class="order-total">
+                <h2 class="order-heading">Ваш заказ:</h2>
+                <div class="total-amount-label">
+                    <div class="total-amount-count">#{total_amount_count} товар(a)</div>
+                    <div class="price">на 
+                        <span class="price-value">#{total_amount}</span>
+                        <i class="ru-currency-icon_bold">Р</i>
+                    </div>
+                </div>
+                <div class="order-button-wrap">
+                    <button class="order-button">
+                        <a href='/orderRegistration'>Оформить заказ</a>
+                    </button>
+                </div>
+            </div>   
+    </main>
+    include layout/footer.pug
+</body>
+</html>

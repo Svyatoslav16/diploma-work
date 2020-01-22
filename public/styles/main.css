@@ -3,17 +3,22 @@
     padding: 0;
 }
 
+html {
+    height: 100%;
+}
+
 a, a:hover, a:focus, a:visited {
     text-decoration: none;
 }
 
+@font-face {
+    font-family: SourceSansProRegular;
+    src: url(../fonts/SourceSansPro-Regular.ttf);
+}
+
 body {
-    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-    /* background: linear-gradient(90deg, rgb(117, 214, 206) 0%,
-                                        rgb(180, 59, 59) 50%,
-                                        rgb(58, 32, 153) 100%); */
+    height: 100%;
+    font-family: SourceSansProRegular;
     background: #f2f2f2;
 }
 
@@ -30,6 +35,10 @@ menu {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(50px, max-content));
     list-style-type: none;
+}
+
+main {
+    height: calc(100% - 79px);
 }
 
 menu li {
@@ -88,6 +97,7 @@ footer {
     background: #24292e;
     color: #fff;
     text-align: center;
+    margin-top: -20px;
 }
 
 /* Убирает стрелки из поля с типом number */

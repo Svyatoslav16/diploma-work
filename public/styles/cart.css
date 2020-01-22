@@ -7,8 +7,6 @@
     display: grid;
     grid-template-columns: [cart-items] 68% [total-amount] 25%;
     justify-content: center;
-    padding-bottom: 20px;
-    position: relative;
 }
 
 .cart-items {
@@ -188,7 +186,7 @@
     display: inline;
 }
 
-.total-amount-button .buy-button {
+.buy-button {
     cursor: pointer;
     color: #fff;
     background: linear-gradient(to top, rgb(224, 113, 113),rgb(227, 51, 51));
@@ -196,48 +194,18 @@
     font-weight: 600;
     line-height: 20px;
     width: 100%;
-    padding: 15px;
     border: 1px solid rgba(27,31,35,.2);
     border-radius: 5px;
 }
 
-.total-amount-button .buy-button:hover {
+.buy-button:hover {
     background: linear-gradient(to bottom, rgb(224, 113, 113),rgb(227, 51, 51));
     box-shadow: inset 0 -3px 0 0 rgba(0,0,0,0.1);
 }
 
-
-/* Стили для оформления заказа */
-.order-registration-wrapper {
-    opacity: 1;
-    z-index: 99999;
-    position: absolute;
-    display: grid;
-    grid-template-columns: 0.8fr;
-    justify-content: center;
-    align-items: center;
+.buy-button a {
+    color: inherit;
+    padding: 15px 0;
+    display: block;
     width: 100%;
-    height: 100%;
-    background: #fff;
 }
-
-.order-registration-wrapper:hover .main-container {
-    background: #fff;
-}
-
-.order-registration-form {
-    width: 50%;
-    background: #fff;
-}
-
-.user-data {
-    /* background: red; */
-}
-
-.adress {
-    width: 150px;
-    border-radius: 5px;
-    padding: 5px;
-}
-
-/* Стили для оформления заказа */

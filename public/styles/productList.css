@@ -1,6 +1,16 @@
+html, 
+body, 
+main {
+    height: auto;
+}
+
 main {
     display: grid;
     justify-items: center;
+}
+
+footer {
+    margin-top: 20px;
 }
 
 .product-list {

@@ -16,25 +16,37 @@
         </menu>
     </header>
     <main>
-        <form action="/singUp" method="POST">
+        <form action="/signUp" method="POST" class="sign-up-form">
             <h1>Создайте свой аккаунт</h1>
-            <label for="userName">Имя</label><br>
-            <input id="userName" type="text" name="userName" /><br><br>
-            <label for="userSurname">Фамилия</label><br>
-            <input id="userSurname" type="text" name="userSurname" /><br><br>
-            <label for="userPatronymic">Отчество</label><br>
-            <input id="userPatronymic" type="text" name="userPatronymic" /><br><br>
-            <label for="email">Email</label>
-            <input id="email" type="email" name="email"><br><br>
-            <label for="telephone">Номер телефона</label>
-            <input id="telephone" type="number" name="telephone"><br><br>
-            <label for="password">Пароль</label>
-            <input id="password" type="password" name="password"><br><br>
-            <input type="submit" class="singUp-button" value="Зарегистрироваться" />
+            <div>            
+                <label for="userName">Имя</label>
+                <input id="userName" type="text" name="userName" />
+            </div>
+            <div>
+                <label for="userSurname">Фамилия</label>
+                <input id="userSurname" type="text" name="userSurname" />
+            </div>
+            <div>            
+                <label for="userPatronymic">Отчество</label>
+                <input id="userPatronymic" type="text" name="userPatronymic" />
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email">
+            </div>
+            <div>
+                <label for="telephone">Номер телефона</label>
+                <input id="telephone" type="text"  name="telephone">
+            </div>
+            <div>
+                <label for="password">Пароль</label>
+                <input id="password" type="password" name="password">
+            </div>
+            <div class="singUp-button-wrap">
+                <input type="submit" class="singUp-button" value="Зарегистрироваться" />
+            </div>
         </form>
     </main>
-    <!-- <footer>
-        Copyright &copy;2019 Марюха Святослав Сергеевич.
-    </footer> -->
+    <script src="../javascript/signUp.js" defer></script>
 </body>
 </html>
