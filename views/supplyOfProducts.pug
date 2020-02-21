@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/supplyOfProducts.css">
+    <title>Приход товаров</title>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        <h1>Приход товаров</h1>
+        <table class="table_adaptive">
+            <thead>
+                <tr>
+                    <th>Код прихода</th>
+                    <th>Наименование</th>
+                    <th>Категория</th>
+                    <th>Стоимость</th>
+                    <th>Количество</th>
+                </tr>
+            </thead>
+            <tbody>
+                each product in supplyOfProducts
+                    <tr>
+                        <td data-label="Код прихода">#{product.income_id}</td>
+                        <td data-label="Наименование">#{product.product_name}</td>
+                        <td data-label="Категория">#{product.category_name}</td>
+                        <td data-label="Количество">#{product.product_amount}</td>
+                        <td data-label="Стоимость">#{product.count}</td>
+                    </tr>
+            </tbody>
+        </table>
+    </main>
+    include layout/footer.pug
+</body>
+</html>

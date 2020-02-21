@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/order.css">
+    <title>Мои заказы</title>
+    <script src="javascript/myOrders.js" defer></script>
+    <script src="javascript/toProductDetails.js" defer></script>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        <h1>Номер заказа: #{orderId}</h1>
+        <div class="order-items">
+            each product in orderData
+                <div class="product" data-product_id = '#{product.product_id}'>
+                    <div class="product-image-wrap">
+                        <a href="/product?productId=#{product.product_id}"><img src="#{product.product_url_img}"/></a>
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">#{product.product_name}</div>
+                        <div class="product-price">
+                            <span class="price-current">Цена: #{product.product_amount}</span> 
+                            <img src="images/ruble.svg" alt="ruble" class="ruble-icon" width="20px" height="20px">
+                        </div>
+                        <div class="product-count">
+                            | Количество: #{product.product_count} шт.
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="total">
+            <span class="total-amount">Итого: #{totalAmount}</span> 
+            <i class="fas fa-ruble-sign"></i>
+        </div>
+    </main>
+    include layout/footer.pug
+</body>
+</html>

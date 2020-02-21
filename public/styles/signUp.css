@@ -4,61 +4,30 @@ main {
     justify-content: center;
 }
 
-form {
-    /* width: 50%; */
+.sign-up-form {
     background: #fff;
-    padding: 40px;
+    width: 100%;
+    padding: 20px;
+    margin-top: 10%;
     border: 1px solid #d8dee2;
-    border-radius: 5px;
-    margin: 30px auto;
+    border-radius: 12px;
+    display: grid;
+    align-items: center;
 }
 
-form h1 { 
-    text-align: center;    
-    font-size: 24px;
-    font-weight: 400;
-    letter-spacing: -.5px;
-    margin-bottom: 30px;
-}
-
-form > div {
-    padding: 10px 0;
-}
-
-form input {
-    position: relative;
+.sign-up-form h1 { 
     text-align: center;
-    width: 97%;
-    background-color: #fff;
-    border: 1px solid #d1d5da;
-    border-radius: 3px;
-    padding: 6px 1%;
+    font-size: 20px;
 }
 
-form label {
-    font-size: 14px;
-    display: block;
-    font-weight: 600;
-    text-align: left;
-}
-
-.singUp-button-wrap {
+.signUp-button-wrap {
+    width: 100%;
     text-align: center;
 }
-
-.singUp-button {
-    margin-top: 20px;
-    cursor: pointer;
-    color: #fff;
-    background: rgb(224, 113, 113);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 20px;
-    min-width: max-content;
-    max-width: 250px;
-    padding: 6px 12px;
-    border: 1px solid rgba(27,31,35,.2);
-    border-radius: .25em;
+.signUp-button {
+    
+    min-width: 300px;
+    max-width: 400px;
 }
 
 @media screen and (max-width: 999px) {

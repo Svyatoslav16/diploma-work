@@ -1,0 +1,22 @@
+main {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.sales-range {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.sales-range > input[type="date"] {
+    margin: 0 0 20px 0;
+    padding: 10px 5px;
+    text-align: center;
+}
+
+.sales-range > input[type="submit"] {
+    padding: 10px;
+    cursor: pointer;
+}

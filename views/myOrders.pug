@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/myOrders.css">
+    <title>Мои заказы</title>
+    <script src="javascript/myOrders.js" defer></script>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        if(ordersArray)
+            each order in ordersArray 
+                <div class="order" data-order_id='#{order.orderId}'>
+                    <div class="order-number">
+                        | Номер заказа: #{order.orderId}
+                    </div>
+                    <div class="order-info">
+                        <div class="total-amount">
+                            | Итоговая стоимость: #{order.totalAmount}
+                        </div>
+                        <div class="total-count">
+                            | Кол-во товаров: #{order.totalCount}
+                        </div>
+                        <div class="order-date">
+                            | Дата заказа: #{order.orderDate}
+                        </div>    
+                    </div>
+                </div>
+        else 
+            <div> У вас нет заказов</div>
+    </main>
+    include layout/footer.pug
+</body>
+</html>

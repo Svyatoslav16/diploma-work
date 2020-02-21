@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/addWorker.css">
+    <link rel="stylesheet" href="styles/module/customSelect.css">
+    <script src="javascript/customSelect.js" defer></script>
+    <title>Главная</title>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        <form action="/addWorker" method="post" class="add-worker-form">
+            <h1>Добавить нового сотрудника</h1>
+            <div class="material-design-input-wrap">
+                <input type="number" class="material-design-input" name="workerId" required autocomplete="off"/>
+                <label for="workerId" class="login-label material-design-label-for-input">
+                    <span class="content-login">Код сотрудника</span>
+                </label>
+            </div>
+            <div class="position material-design-select-wrap">
+                <div class="select-box">
+                    <div class="options-container">
+                        each position in positions
+                            <div class="option">
+                                <input type="radio" class="radio" name="#{position.position_name}" value="#{position.position_id}"/>
+                                <label for="#{position.position_name}">#{position.position_name}</label>
+                            </div>
+                    </div>
+                    <div class="selected" name="position">
+                        | Должность
+                    </div>
+                </div>
+            </div>
+            <div class="material-design-input-wrap">
+                <input type="text" class="material-design-input" name="surname" required autocomplete="off">
+                <label for="surname" class="surname-label material-design-label-for-input">
+                    <span class="content-surname">Фамилия</span>
+                </label>
+            </div>
+            <div class="material-design-input-wrap">
+                <input type="text" class="material-design-input" name="name" required autocomplete="off">
+                <label for="name" class="name-label material-design-label-for-input">
+                    <span class="content-name">Имя</span>
+                </label>
+            </div>
+            <div class="material-design-input-wrap">
+                <input type="text" class="material-design-input" name="patronymic" required autocomplete="off">
+                <label for="patronymic" class="patronymic-label material-design-label-for-input">
+                    <span class="content-patronymic">Отчество</span>
+                </label>
+            </div>
+            <div class="material-design-input-wrap">
+                <input type="number" class="material-design-input" name="telephone" required autocomplete="off">
+                <label for="telephone" class="telephone-label material-design-label-for-input">
+                    <span class="content-telephone">Телефон</span>
+                </label>
+            </div>
+            <div class="material-design-input-wrap">
+                <input type="email" class="material-design-input" name="email" required autocomplete="off">
+                <label for="email" class="email-label material-design-label-for-input">
+                    <span class="content-email">Email</span>
+                </label>
+            </div>
+            <div class="material-design-input-wrap">
+                <input type="password" class="material-design-input" name="password" required autocomplete="off">
+                <label for="password" class="password-label material-design-label-for-input">
+                    <span class="content-password">Пароль</span>
+                </label>
+            </div>
+            <div class="add-worker-button-wrap">
+                <button class="btn add-worker-button">Войти</button>
+            </div> 
+        </form>
+    </main>
+    include layout/footer.pug
+</body>
+</html>

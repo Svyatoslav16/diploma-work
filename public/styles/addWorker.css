@@ -1,0 +1,34 @@
+main {
+    width: 100%;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
+
+.add-worker-form h1 {
+    text-align: center;
+}
+
+.add-worker-form {
+    background: #fff;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #d8dee2;
+    border-radius: 12px;
+    display: grid;
+    margin-bottom: 20px;
+}
+
+.add-worker-button-wrap {
+    width: 100%;
+    text-align: center;
+}
+.add-worker-button {
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.position {
+    padding: 20px 0 5px 0px;
+}

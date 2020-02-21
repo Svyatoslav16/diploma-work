@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/salesByRange.css">
+    <title>Продажи за период</title>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        <div class="date-range">
+            <span>#{startDate}</span>
+            <span>#{endDate}</span>
+        </div>
+        <table class="sales">
+            <thead>
+                <tr>
+                    <th>Наименование товара</th>
+                    <th>Количество</th>
+                    <th>Цена</th>
+                    <th>Категория</th>
+                    <th>Покупатель</th>
+                    <th>Время</th>
+                </tr>
+            </thead>
+            <tbody>
+                each sale in salesByRange
+                    <tr>
+                        <td>
+                            | #{sale.product_name}
+                        </td>
+                        <td>
+                            | #{sale.product_count}
+                        </td>
+                        <td>
+                            | #{sale.product_amount}
+                        </td>
+                        <td>
+                            | #{sale.category_name}
+                        </td>
+                        <td>
+                            | #{sale.user_name}
+                        </td>
+                        <td>
+                            | #{sale.order_date}
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+    </main>
+    include layout/footer.pug
+</body>
+</html>

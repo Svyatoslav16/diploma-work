@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <title>Отчёт по товарам</title>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        <h1 class="product-report-title">Отчёт по товарам</h1>
+        <table class="products table_adaptive">
+            <tbody>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Категория</th>
+                    <th>Описание</th>
+                    <th>Цена</th>
+                    <th>В наличии</th>
+                </tr>
+            </tbody>
+                each product in products
+                    <tr class="product">
+                        <td data-label="Наименование">#{product.product_name}</td>
+                        <td data-label="Категория">#{product.category_name}</td>
+                        <td data-label="Описание">#{product.product_description}</td>
+                        <td data-label="Цена">#{product.product_amount}</td>
+                        <td data-label="В наличии">#{product.product_count_stock}</td>
+                    </tr>
+        </table>
+    </main>
+    include layout/footer.pug
+</body>
+</html>

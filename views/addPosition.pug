@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/addPosition.css">
+    <title>Главная</title>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        <form action="/addPosition" method="post" class="add-position-form">
+            <h1>Добавить должность</h1>
+            <div class="material-design-input-wrap">
+                <input type="text" class="material-design-input" name="positionName" required autocomplete="off"/>
+                <label for="positionName" class="positionName-label material-design-label-for-input">
+                    <span class="content-positionName">Наименование должности</span>
+                </label>
+            </div>
+            <div class="add-position-button-wrap">
+                <button class="btn add-position-button">Добавить должность</button>
+            </div> 
+        </form>
+    </main>
+    include layout/footer.pug
+</body>
+</html>

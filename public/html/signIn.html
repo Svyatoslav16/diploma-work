@@ -10,21 +10,28 @@
 </head>
 <body>
     <main>
-        <form action="/signIn" method="POST">
-            <div class="auth-form-body">
-                <h1>Войти в личный кабинет</h1>
-                <label for="login-field">Email или номер телефона</label>
-                <input type="text" id="login-field" title="Телефон или email" name="login">
-                <label for="password">Пароль <a class="passwordReset" href="resetPassword"> Забыли пароль?</a></label>
-                <input type="password" id="password" title="Пароль" name="password">
-                <input class="singIn-button" type="submit" value="Войти">
+        <form action="/signIn" method="POST" class="login-form">
+            <h1>Войти в личный кабинет</h1>
+            <div class="login material-design-input-wrap">
+                <input type="text" class="material-design-input" name="login" required/>
+                <label for="login" class="login-label material-design-label-for-input">
+                    <span class="content-login">Email или номер телефона</span>
+                </label>
             </div>
-            <div class="create-account">
-                <p>
-                    Новичок в Интернет-магазине? <a href="signUp">Создайте новый аккаунт.</a>
-                </p>
+            <div class="password material-design-input-wrap">
+                <input type="password" class="material-design-input" name="password" required>
+                <label for="password" class="password-label material-design-label-for-input">
+                    <span class="content-password">Пароль</span>
+                </label>
             </div>
+            <div class="signIn-button-wrap">
+                <button class="btn signIn-button">Войти</button>
+            </div> 
         </form>
+        <div class="account-action">
+            <a href="signUp">Создайте новый аккаунт</a>
+            <a class="passwordReset" href="resetPassword"> Забыли пароль?</a>
+        </div>
     </main>
 </body>
 </html>

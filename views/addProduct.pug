@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="styles/main.css">
+    include layout/header.pug
     <link rel="stylesheet" href="styles/addProduct.css">
     <title>Добавить товар</title>
 </head>
 <body>
-    <header>
-        include layout/menu.pug
-        include layout/myProfile.pug
-    </header>
+    include layout/menu.pug
     <main>
         <form action="/addProduct" method="POST" enctype="multipart/form-data">
             <label for="product-name">Название товара</label>
             <input type="text" id="product-name" title="Наименование товара" name="productName">
             <label for="product-image">Картинка товара</label>
             <input type="file" name="filedata" accept="image/png">
+            <label for="product-count-stock">Количество товара</label>
+            <input type="number" name="productCountStock">
             <label for="product-amount">Стоимость товара</label>
             <input type="number" id="product-amount" title="Стоимость товара" name="productAmount">
+            <label for="productCategoryId">Категория товара</label>
+            <select name="productCategoryId" class="">
+                <option value="" disabled selected non>Категория</option>
+                each category in categories
+                    <option value="#{category.category_id}">#{category.category_name}</option>
+            </select>
             <label for="description-product">Описание товара</label>
             <textarea id="description-product" name="descriptionProduct"></textarea>
             <input type="submit" class="addProduct-button" value="Добавить товар">
         </form>
     </main>
+    include layout/footer.pug
 </body>
 </html>

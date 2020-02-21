@@ -1,8 +1,10 @@
 main {
     width: 100%;
+    margin-top: 10%;
     display: grid;
     justify-content: center;
     align-items: center;
+    height: auto;
 }
 
 a {
@@ -10,68 +12,40 @@ a {
     text-decoration: none;
 }
 
-.auth-form-body {
+.login-form {
     background: #fff;
+    width: 100%;
     padding: 20px;
     border: 1px solid #d8dee2;
-    border-radius: 5px;
+    border-radius: 12px;
+    display: grid;
 }
 
-.auth-form-body h1 { 
-    font-size: 24px;
-    font-weight: 400;
-    letter-spacing: -.5px;
-    margin-bottom: 30px;
-}
-
-.auth-form-body input {
-    width: 98%;
-    background-color: #fff;
-    border: 1px solid #d1d5da;
-    border-radius: 3px;
-    margin: 5px 0 15px 0;
-    padding: 6px 1%;
-}
-
-.auth-form-body label {
-    font-size: 14px;
-    display: block;
-    margin-bottom: 7px;
-    font-weight: 600;
-    text-align: left;
-}
-
-.auth-form-body label .passwordReset {
-    float: right;
-    font-size: 12px;
-}
-
-.auth-form-body .singIn-button {
-    cursor: pointer;
-    color: #fff;
-    background: linear-gradient(to top, rgb(224, 113, 113),rgb(227, 51, 51));
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 20px;
-    width: 100%;
-    padding: 6px 12px;
-    border: 1px solid rgba(27,31,35,.2);
-    border-radius: .25em;
-}
-
-.auth-form-body .singIn-button:hover {
-    background: linear-gradient(to bottom, rgb(224, 113, 113),rgb(227, 51, 51));
-    box-shadow: inset 0 -3px 0 0 rgba(0,0,0,0.1);
-}
-
-.create-account {
-    background: #fff;
-    margin-top: 10px;
-    padding: 5px 15px;
+.login-form h1 {
     text-align: center;
-    border: 1px solid#d8dee2;
-    border-radius: 5px;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #24292e;
+}
+
+.signIn-button-wrap {
+    width: 100%;
+    text-align: center;
+}
+.signIn-button {
+    min-width: 300px;
+    max-width: 400px;
+    outline: none;
+}
+
+.account-action {
+    background: #fff;
+    width: 100%;
+    padding: 20px;
+    margin-top: 10px;
+    border: 1px solid #d8dee2;
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(max-content, 0.5fr));
+}
+
+.account-action .passwordReset {
+    text-align: right;
 }

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/salesByRangeForm.css">
+    <title>Продажи за период</title>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        <form action="/getSalesByRange" method="POST" class="sales-range">
+            <label for="startDate">Введите начало периода</label>
+            <input type="date" id="startDate" name="startDate" min="2019-01-01" max="2025-01-01">
+            <label for="endDate">Введите конец периода</label>
+            <input type="date" id="endDate" name="endDate" min="2019-01-01" max="2025-01-01">
+            <input type="submit" value="Показать продажи за период">
+        </form>
+    </main>
+    include layout/footer.pug
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/product.css">
+    <title>#{product.product_name}</title>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        <div class="product-wrapper">
+            <div class="product-image-wrap">
+                <img src="#{product.product_url_img}" />
+            </div>  
+            <div class="product-description">#{product.product_description}</div>
+            <div>
+                <div class="product-price">
+                    <span class="price-current">#{product.product_amount}</span> 
+                    <img src="images/ruble.svg" alt="ruble" class="ruble-icon" width="25px" height="20px">
+                </div> 
+                <div class="product-count-stock">
+                    <span>#{product.product_count_stock}</span>
+                    <img src="images/warehouse.svg" alt="warehouse" width="20px" height="20px">
+                </div>
+            </div>
+             
+        </div>
+    </main>
+    include layout/footer.pug
+</body>
+</html>
+

@@ -9,41 +9,35 @@
     <title>Регистрация</title>
 </head>
 <body>
-    <header>
-        <menu>
-            <li><a href="/">Главная</a></li>  
-            <li><a href="productList">Каталог товаров</a></li> 
-        </menu>
-    </header>
     <main>
         <form action="/signUp" method="POST" class="sign-up-form">
             <h1>Создайте свой аккаунт</h1>
-            <div>            
-                <label for="userName">Имя</label>
-                <input id="userName" type="text" name="userName" />
+            <div class="material-design-input-wrap">            
+                <input id="userSurname" class="material-design-input" type="text" name="userSurname" required />
+                <label for="userSurname" class="material-design-label-for-input"><span>Фамилия</span></label>
             </div>
-            <div>
-                <label for="userSurname">Фамилия</label>
-                <input id="userSurname" type="text" name="userSurname" />
+            <div class="material-design-input-wrap">
+                <input id="userName" class="material-design-input" type="text" name="userName" required />
+                <label for="userName" class="material-design-label-for-input"><span>Имя</span></label>
             </div>
-            <div>            
-                <label for="userPatronymic">Отчество</label>
-                <input id="userPatronymic" type="text" name="userPatronymic" />
+            <div class="material-design-input-wrap">            
+                <input id="userPatronymic" class="material-design-input" type="text" name="userPatronymic" required />
+                <label for="userPatronymic" class="material-design-label-for-input"><span>Отчество</span></label>
             </div>
-            <div>
-                <label for="email">Email</label>
-                <input id="email" type="email" name="email">
+            <div class="material-design-input-wrap">
+                <input id="email" class="material-design-input" type="email" name="email" required />
+                <label for="email" class="material-design-label-for-input"><span>Email</span></label>
             </div>
-            <div>
-                <label for="telephone">Номер телефона</label>
-                <input id="telephone" type="text"  name="telephone">
+            <div class="material-design-input-wrap">
+                <input id="telephone" class="material-design-input" type="text"  name="telephone" required />
+                <label for="telephone" class="material-design-label-for-input"><span>Номер телефона</span></label>
             </div>
-            <div>
-                <label for="password">Пароль</label>
-                <input id="password" type="password" name="password">
+            <div class="material-design-input-wrap">
+                <input id="password" class="material-design-input" type="password" name="password" required />
+                <label for="password" class="material-design-label-for-input"><span>Пароль</span></label>
             </div>
-            <div class="singUp-button-wrap">
-                <input type="submit" class="singUp-button" value="Зарегистрироваться" />
+            <div class="signUp-button-wrap">
+                <button type="submit" class="btn signUp-button">Зарегистрироваться</button>
             </div>
         </form>
     </main>

@@ -1,18 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="styles/main.css">
+    include layout/header.pug
     <link rel="stylesheet" href="styles/cart.css">
     <title>Корзина</title>
 </head>
 <body>
-    <header>
-        include layout/menu.pug
-        include layout/myProfile.pug
-    </header>
+    include layout/menu.pug
     <main>
         <h1 class="cart-title">Корзина</h1>
         if(productList)
@@ -21,13 +15,13 @@
                     each product in productList
                         <div class="product">
                             <div class="product-image-wrap">
-                                <img src='#{product.product_url_img}' />
+                                <a href="/product?productId=#{product.product_id}"><img src="#{product.product_url_img}"/></a>
                             </div>
                             <div class="product-property">
                                 <div class="product-info">
                                     <div class="product-caption">
                                         <div class="product-name">
-                                            <a href="#" class="product-name-link">#{product.product_name}</a>
+                                            <a href="/product?productId=#{product.product_id}" class="product-name-link">#{product.product_name}</a>
                                         </div>
                                         <div class="menu-product">
                                             <div class="menu-product-wrapper">
@@ -46,10 +40,11 @@
                                 <div class="product-price">
                                     <div class="price-block">
                                         <span class="price-current">#{product.product_amount}</span> 
-                                        <i class="ru-currency-icon_bold">Р</i>
+                                        <img src="images/ruble.svg" alt="ruble" class="ruble-icon" width="20px" height="20px">
                                     </div>
                                     <div class="product-remains-wrap">
                                         <span class="product-remains">В наличии: #{product.product_count_stock}</span> 
+                                        <img src="images/warehouse.svg" alt="warehouse" width="20px" height="20px">
                                     </div>
                                 </div>
                             </div>
@@ -57,10 +52,10 @@
                 </div>
                 <div class="total-amount">
                     <div class="total-amount-label">
-                        <div class="total-amount-count">Итого: #{total_amount_count} товар(a)</div>
-                        <div class="price">на 
+                        <div class="total-amount-count">Итого: #{total_count} товар(a) на</div>
+                        <div class="price">
                             <span class="price-value">#{total_amount}</span>
-                            <i class="ru-currency-icon_bold">Р</i>
+                            <img src="images/ruble.svg" alt="ruble" class="ruble-icon" width="20px" height="20px">
                         </div>
                     </div>
                     <div class="total-amount-button">

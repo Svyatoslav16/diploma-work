@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="styles/main.css">
+    include layout/header.pug
     <link rel="stylesheet" href="styles/productList.css">
     <title>Каталог товаров</title>
 </head>
 <body>
-    <header>
-        include layout/menu.pug
-        include layout/myProfile.pug
-    </header>
+    include layout/menu.pug
+    <aside>
+        <ul class="product-categories">
+            each category in categories
+                li(class=(category.category_name==activeCategory ? 'active' : ''))
+                    <a href="productList?categoryName=#{category.category_name}">#{category.category_name}</a>
+                //- <li></li>
+        </ul>
+    </aside>
     <main>
         <div class="product-list">
             each product in productList 
                 <div class="product">
-                    <h3 class="product-name"> #{product.product_name}</h3>
-                    <img src="#{product.product_url_img}"/>
-                    <p>Цена: <span class="product_amount">#{product.product_amount}</span></p>
+                    <h3 class="product-name"> <a href="/product?productId=#{product.product_id}" class="product-name-link">#{product.product_name}</a></h3>
+                    <a href="/product?productId=#{product.product_id}"><img src="#{product.product_url_img}"/></a>
+                    <div class="product-price">
+                        <span class="product_amount">#{product.product_amount}</span>
+                        <img src="images/ruble.svg" alt="ruble" class="ruble-icon" width="30px" height="25px">
+                    </div>
                     <button class="add-to-cart" data-product_id="#{product.product_id}">Добавить в корзину</button>
                 </div> 
         </div>        

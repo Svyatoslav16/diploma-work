@@ -56,7 +56,7 @@ function changeByButton() {
         this.parentNode.parentNode.parentNode.querySelector('.product-remains').style.color = 'red';
         setTimeout(() => {
             this.parentNode.parentNode.parentNode.querySelector('.product-remains').style.color = 'initial';
-        }, 1500);
+        }, 1000);
     }
 }
 
@@ -107,11 +107,11 @@ function changeWithInput() {
             if(body !== undefined) {
                 this.value = body.stock;
                 this.style.color = "red";
-                this.parentNode.parentNode.parentNode.children[2].children[1].children[0].children[0].style.color = 'red';
+                this.parentNode.parentNode.parentNode.querySelector('.product-remains').style.color = 'red';
                 setTimeout(() => {
                     this.style.color="#666";
-                    this.parentNode.parentNode.parentNode.children[2].children[1].children[0].children[0].style.color = 'initial';
-                }, 1500);
+                    this.parentNode.parentNode.parentNode.querySelector('.product-remains').style.color = 'initial';
+                }, 1000);
                 totalAmount();
             }
         });

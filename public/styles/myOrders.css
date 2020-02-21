@@ -1,0 +1,21 @@
+.order {
+    background: #fff;
+    padding: 20px 30px;
+    display: grid;
+    grid-template-columns: 1fr; 
+    margin: 1% 15%;
+    cursor: pointer;
+    position: relative;
+    transition: .3s;
+}
+
+.order:hover {
+    background:rgb(224, 93, 93);
+    color: #fff;
+    box-shadow: 4px 5px 0 rgb(250, 123, 123);
+}
+
+.order .order-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 0.5fr));;
+}
