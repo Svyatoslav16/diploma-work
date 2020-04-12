@@ -1,0 +1,38 @@
+main {
+    width: 100%;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
+
+.add-count-product-form h1 {
+    text-align: center;
+}
+
+.add-count-product-form {
+    background: #fff;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #d8dee2;
+    border-radius: 12px;
+    display: grid;
+    margin-bottom: 20px;
+}
+
+.add-count-product-button-wrap {
+    width: 100%;
+    text-align: center;
+}
+
+.product-name {
+    padding: 20px 0 5px 0px;
+}
+
+.categories {
+    margin-bottom: 10px;
+}
+
+.products .selected {
+    margin-bottom: 0;
+}

@@ -4,37 +4,37 @@
         <span></span>
     </label> 
     <menu>
-        if(successAuthentication === true)
+        if(successAuthentication)
             <span class="user-name-show-for-mobile">#{userName}</span>
         <hr class="show-for-mobile">
         <li><a href="/">Главная</a></li>
-        <li><a href="productList">Каталог товаров</a></li>
-        if(isWorker === true && successAuthentication === true)
-            <li><a href="salesPerDay">Продажи за день</a></li>
-            <li><a href="productsReport">Товары</a></li>
-            <li><a href="supplyOfProducts">Приход товаров</a></li>
+        <li><a href="/productList">Каталог товаров</a></li>
+        if(isWorker && successAuthentication)
+            <li><a href="/salesPerDay">Продажи за день</a></li>
+            <li><a href="/productsReport">Товары</a></li>
+            <li><a href="/supplyOfProducts">Приход товаров</a></li>
         <hr class="show-for-mobile">
     </menu>
     <div class="my-profile-wrap">
         <div class="my-profile">
-            if(successAuthentication === true)
+            if(successAuthentication)
                 <span class="user-name-hide-for-mobile">#{userName}</span>
                 <input id="profile__toggle" type="checkbox" />
+                <img src="../images/arrow-down.svg" class="my-profile__arrow-down-icon" alt="" srcset="">
                 <div class="profile-action">
                     if(isWorker === false)
                         <a href="myOrders">Мои заказы</a>
-                        <a href="cart">Корзина</a>
-                    if(isWorker === true)
-                        <a href="addProduct">Добавить товар</a>
-                        <a href="addProductCategory">Добавить категорию</a>
-                        <a href="addWorker">Добавить сотрудника</a>
-                        <a href="addPosition">Добавить должность</a>
-                        <a href="income">Приход</a>
-                    <a href="signOut" class="sign-out">Выйти</a>
+                        <a href="cart1">Корзина</a>
+                    if(isWorker)
+                        <a href="/addProduct">Добавить товар</a>
+                        <a href="/addProductCategory">Добавить категорию</a>
+                        <a href="/addWorker">Добавить сотрудника</a>
+                        <a href="/addPosition">Добавить должность</a>
+                        <a href="/arrivalOfGoods">Приход</a>
+                    <a href="/signOut" class="sign-out">Выйти</a>
                 </div>
             else
                 <a href="signIn">Войти</a>
         </div>
     </div>
-    <script src="javascript/checkboxMenu.js"></script>
 </header>

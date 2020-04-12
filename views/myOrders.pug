@@ -9,26 +9,31 @@
 <body>
     include layout/menu.pug
     <main>
-        if(ordersArray)
-            each order in ordersArray 
-                <div class="order" data-order_id='#{order.orderId}'>
-                    <div class="order-number">
-                        | Номер заказа: #{order.orderId}
-                    </div>
-                    <div class="order-info">
-                        <div class="total-amount">
-                            | Итоговая стоимость: #{order.totalAmount}
+        <h1 class="my-orders-title">Мои заказы</h1>
+        <div class="orders">
+            if(ordersArray)
+                each order in ordersArray 
+                    <div class="order" data-order_id='#{order.orderId}'>
+                        <div class="order-header">
+                            <div class="order-number-and-date">
+                                <span class="order-number">##{order.orderId}</span>
+                                <span class="order-date">#{order.orderDate}</span>
+                            </div>
+                            <div class="total-amount">
+                                |#{order.totalAmount}
+                                <object type="image/svg+xml" data="images/ruble-white.svg" class="ruble-icon">Руб.</object>
+                            </div>
                         </div>
-                        <div class="total-count">
-                            | Кол-во товаров: #{order.totalCount}
+                        <div class="order-body">
+                            <div class="total-count">
+                                | Товаров 
+                                <span class="total-count__span">#{order.totalCount}</span>
+                            </div>
                         </div>
-                        <div class="order-date">
-                            | Дата заказа: #{order.orderDate}
-                        </div>    
                     </div>
-                </div>
-        else 
-            <div> У вас нет заказов</div>
+            else 
+                <div> У вас нет заказов</div>
+        </div>
     </main>
     include layout/footer.pug
 </body>

@@ -3,29 +3,68 @@
 <head>
     include layout/header.pug
     <link rel="stylesheet" href="styles/addProduct.css">
+    <link rel="stylesheet" href="styles/module/customSelect.css">
+    <link rel="stylesheet" href="styles/module/customInputFile.css">
+    <script src="javascript/customSelect.js" defer></script>
+    <script src="javascript/customInputFile.js" defer></script>
     <title>Добавить товар</title>
 </head>
 <body>
     include layout/menu.pug
     <main>
-        <form action="/addProduct" method="POST" enctype="multipart/form-data">
-            <label for="product-name">Название товара</label>
-            <input type="text" id="product-name" title="Наименование товара" name="productName">
-            <label for="product-image">Картинка товара</label>
-            <input type="file" name="filedata" accept="image/png">
-            <label for="product-count-stock">Количество товара</label>
-            <input type="number" name="productCountStock">
-            <label for="product-amount">Стоимость товара</label>
-            <input type="number" id="product-amount" title="Стоимость товара" name="productAmount">
-            <label for="productCategoryId">Категория товара</label>
-            <select name="productCategoryId" class="">
-                <option value="" disabled selected non>Категория</option>
-                each category in categories
-                    <option value="#{category.category_id}">#{category.category_name}</option>
-            </select>
-            <label for="description-product">Описание товара</label>
-            <textarea id="description-product" name="descriptionProduct"></textarea>
-            <input type="submit" class="addProduct-button" value="Добавить товар">
+        <form action="/addProduct" method="POST" class="form add-product-form" enctype="multipart/form-data">
+            <h1>Добавить товар</h1>
+            <div class="material-design-input-wrap">
+                <input type="text" class="material-design-input" id="product-name" name="productName" required>
+                <label for="product-name" class="material-design-label-for-input">
+                    <span class="content-product-name">Название товара</span>
+                </label>
+            </div>
+            <div class="field-wrapper">
+                <input type="file" name="filedata" accept="image/png" id="field__file" class="field field__file">
+                <label class="field__file-wrapper" for="field__file">
+                    <div class="field__file-fake">Файл не выбран</div>
+                    <div class="field__file-button">
+                        <object type="image/svg+xml" data="images/download.svg" class="icon-download">Выбрать</object>
+                    </div>
+                </label>
+            </div>
+            <div class="material-design-input-wrap">
+                <input type="number" class="material-design-input" id="product-count" name="productCount" required min="0" max="99">
+                <label for="product-count" class="material-design-label-for-input">
+                    <span class="content-product-count">Количество товара</span>
+                </label>
+            </div>
+            <div class="material-design-input-wrap">
+                <input type="number" class="material-design-input" id="product-amount" name="productAmount" required min="0">
+                <label for="product-amount" class="material-design-label-for-input">
+                    <span class="content-product-amount">Стоимость товара</span>
+                </label>
+            </div>
+            <div class="categories">
+                <div class="select-box">
+                    <div class="options-container">
+                        each category in categories
+                            <div class="option">
+                                <input type="radio" class="radio" id="#{category.name}" name="productCategoryId" value="#{category.id}" required/>
+                                <label for="#{category.name}">#{category.name}</label>
+                            </div>
+                    </div>
+                    <div class="selected" name="categories">
+                        | Категория
+                    </div>
+                </div>
+            </div>
+            <div class="material-design-textarea-wrap">
+                <textarea class="material-design-textarea" id="product-desctiption" name="productDescription" required>
+                </textarea>
+                <label for="product-desctiption" class="material-design-label-for-textarea">
+                    <span class="content-product-desctiption">Описание товара</span>
+                </label>
+            </div>
+            <div class="submit-button-wrap add-product-button-wrap">
+                <button class="btn submit-button add-product-button">Добавить товар</button>
+            </div> 
         </form>
     </main>
     include layout/footer.pug

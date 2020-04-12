@@ -10,9 +10,8 @@
     <aside>
         <ul class="product-categories">
             each category in categories
-                li(class=(category.category_name==activeCategory ? 'active' : ''))
-                    <a href="productList?categoryName=#{category.category_name}">#{category.category_name}</a>
-                //- <li></li>
+                li(class=(category.name==activeCategory ? 'active' : ''))
+                    <a href="productList?categoryName=#{category.name}">#{category.name}</a>
         </ul>
     </aside>
     <main>
@@ -23,9 +22,15 @@
                     <a href="/product?productId=#{product.product_id}"><img src="#{product.product_url_img}"/></a>
                     <div class="product-price">
                         <span class="product_amount">#{product.product_amount}</span>
-                        <img src="images/ruble.svg" alt="ruble" class="ruble-icon" width="30px" height="25px">
+                        <object type="image/svg+xml" data="images/ruble.svg" class="ruble-icon">Рубль(я)</object>
                     </div>
-                    <button class="add-to-cart" data-product_id="#{product.product_id}">Добавить в корзину</button>
+                    if !isWorker
+                        <button class="add-to-cart" data-product_id="#{product.product_id}">
+                            if(successAuthentication) 
+                                | Добавить в корзину
+                            else 
+                                <a href="/signIn">Добавить в корзину</a>
+                        </button>
                 </div> 
         </div>        
     </main>

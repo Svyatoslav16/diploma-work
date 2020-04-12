@@ -38,18 +38,18 @@ function changeByButton() {
                     }
                 }
                 totalAmount();
-                this.enabled;
             } else if(!res.ok) {
                 return res.json();
             }
         }).then(body => {
-            if(body!== undefined) {
+            if(body !== undefined) {
                 if (this.classList[1].split("-")[1] === 'plus') {
                     this.previousElementSibling.value = body.stock;
                 } else if(this.classList[1].split("-")[1] === 'minus') {
                     this.nextElementSibling.value = body.stock;
                 }
                 totalAmount();
+                this.enabled;
             }
         });
     } else {
@@ -78,6 +78,8 @@ function deleteByButton() {
         if(res.ok) {
             this.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
             totalAmount();
+        } else {
+            console.log(res.status);
         }
     });
 }
@@ -122,7 +124,7 @@ function changeWithInput() {
 function totalAmount() {
     let priceValue = document.querySelector('.price-value');
     let productList = document.querySelectorAll('.product');
-    document.getElementsByClassName('total-amount-count')[0].innerText = `Итого: ${document.getElementsByClassName('product').length} товар(а)`;
+    document.getElementsByClassName('total-amount-count')[0].innerText = `Итого: ${document.getElementsByClassName('product').length} товар(а) на`;
     priceValue.innerText = 0;
     if(productList.length > 0) {    
         productList.forEach(elem => {

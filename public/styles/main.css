@@ -8,14 +8,9 @@ html, body {
     height: 100%;
 }
 
-main {
-    min-height: calc(100vh - 118px);
-    /* height: calc(100% - 100px); */
-}
-
 h1 {
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 button {
@@ -25,8 +20,9 @@ button::-moz-focus-inner {
     border: 0;
 }
 
-img.ruble-icon {
-    margin: 0;
+.ruble-icon {
+    width: 20px;
+    height: 20px;
 }
 
 a, a:hover, a:focus, a:visited {
@@ -39,6 +35,21 @@ input {
     border-radius: 3px;
 }
 
+:invalid {
+    box-shadow: none;
+    border: none;
+    outline:0;
+}
+
+textarea {
+    overflow: hidden;
+    border: none;
+    /* border-bottom: 2px solid rgb(224, 113, 113); */
+    background: rgba(244, 242, 242, 0.96);
+    width: 100%;
+    resize: none;
+}
+
 body {
     background: #f2f2f2;
 }
@@ -49,8 +60,23 @@ header {
     font-size: 17px;
 }
 
+.form {
+    background: #fff;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #d8dee2;
+    border-radius: 12px;
+    display: grid;
+    align-items: center;
+}
+
+.form .submit-button-wrap {
+    text-align: center;
+}
+
 footer {
     padding: 15px 20px;
+    margin-top: 20px;
     background: linear-gradient(to bottom, #4d4d4d 0%, #1a1a1a 100%);
     color: #fff;
     text-align: center;
@@ -87,9 +113,13 @@ menu > li > a {
 @media (min-width: 925px) {
     header {
         display: grid;
-        grid-template-columns: 1fr 200px;
+        grid-template-columns: 1fr 300px;
         margin: 0 0 20px 0;
         padding: 15px 20px;
+    }
+
+    main {
+        min-height: calc(100vh - 138px);
     }
 
     menu {
@@ -98,7 +128,7 @@ menu > li > a {
 
     #menu__toggle,
     .menu__btn,
-    .profile-action,
+    /* .profile-action, */
     .user-name-show-for-mobile,
     .show-for-mobile {
         display: none;
@@ -129,19 +159,15 @@ menu > li > a {
     
     .user-name-hide-for-mobile {
         position: relative;
-        padding: 15px 0;
     }
 
-    .user-name-hide-for-mobile::after {
-        content: '';
+    .my-profile__arrow-down-icon {
         position: absolute;
-        display: block;
-        background: url("../../images/arrow-down.svg") no-repeat;
         height: 20px;
         width: 20px;
         right: -22px;
-        top: 13px;
-        transition: all 0.4s;
+        top: -2px;
+        transition: all 0.6s;
         cursor: pointer;
         pointer-events: none;
     }
@@ -151,7 +177,6 @@ menu > li > a {
     }
 
     #profile__toggle {
-        padding: 15px 0;
         opacity: 0;
         position: absolute;
         width: 120%;
@@ -161,19 +186,7 @@ menu > li > a {
         cursor: pointer;
     }
 
-    .profile-action > a {
-        display: block;
-        padding: 5px 0 5px 10px;
-        color: #fff;
-        border-radius: 5px;
-    }
-
-    .profile-action > a:hover {
-        background: linear-gradient(to bottom, #333, #4d4d4d);
-    }
-
-    #profile__toggle:checked ~ .profile-action {
-        display: block;
+    .profile-action {
         position: absolute;
         top: 45px;
         width: calc(170% - 20px);
@@ -182,6 +195,32 @@ menu > li > a {
         margin-left: -35%;
         border-radius: 10px;
         z-index: 1;
+        opacity: 0;
+        transition: all .6s;
+    }
+
+    .profile-action > a {
+        display: block;
+        padding: 5px 0 5px 10px;
+        color: #fff;
+        border-radius: 5px;
+        pointer-events: none;
+    }
+
+    .profile-action > a:hover {
+        background: linear-gradient(to bottom, #333, #4d4d4d);
+    }
+
+    #profile__toggle:checked ~ .profile-action {
+        opacity: 1;
+    }
+
+    #profile__toggle:checked ~ .my-profile__arrow-down-icon {
+        transform: rotateX(180deg);
+        top: 2px;
+    }
+    #profile__toggle:checked ~ .profile-action > a {
+        pointer-events: initial;
     }
 }
 
@@ -194,17 +233,18 @@ menu > li > a {
 
 @media (max-width: 924px) {
     main {
+        min-height: calc(100vh - 48px);
         margin: 80px 0 20px 0;
     }
 
     header {
         position: fixed;
         width: calc(100% - 20px);
-        height: 92%;
-        left: -100%;
+        height: 100%;
+        left: calc(100% + 20px);
         top: 0;
-        padding: 40px 10px 0 10px;
-        z-index: 1;
+        padding: 40px 30px 0 10px;
+        z-index: 3;
         background: #1b1b1c;
         overflow: hidden;
         transition: .3s;
@@ -228,11 +268,11 @@ menu > li > a {
     header a,
     menu li a {
         margin: 5px 0;
-        padding: 10px 5px;
+        padding: 10px 15px 10px 5px;
         border-radius: 5px;
     }
     header a.sign-out {
-        margin-bottom: 40px;
+        margin-bottom: 70px;
     }
     header a:hover {
         background: linear-gradient(to bottom, #333, #4d4d4d);
@@ -246,6 +286,10 @@ menu > li > a {
         font-size: 22px;
         margin: 10px 0 10px 5px;
         padding-bottom: 5px;
+    }
+
+    .my-profile__arrow-down-icon {
+        display: none;
     }
 
     menu *,
@@ -262,16 +306,11 @@ menu > li > a {
     }
     #menu__toggle {
         opacity: 0;
-        top: 12px;
-        left: 14px;  
-        width: 26px;
-        height: 26px;
     }
     #menu__toggle,
     .menu__btn {
         position: fixed;
     }
-
     
     .menu__btn > span,
     .menu__btn > span::before,
@@ -283,31 +322,20 @@ menu > li > a {
         display: grid;
         align-items: center;
         top: 12px;
-        left: 14px;  
+        right: 14px;  
         width: 26px;
         height: 26px;  
         cursor: pointer;
         z-index: 1;
-        transition: .3s;
     }
-    /* .menu__btn:hover {
-        background: #1a1a1a;
-        padding: 10px;
-        margin: 0 auto;
-    } 
-
-    .menu__btn:hover > span,
-    .menu__btn:hover > span::before,
-    .menu__btn:hover > span::after {
-        background-color: #f2f2f2;
-    } */
     .menu__btn > span,
     .menu__btn > span::before,
     .menu__btn > span::after {
         display: block;
         position: absolute;  
         width: 26px;
-        height: 2px;  
+        height: 2px;
+        transition: .2s;
     }
     .menu__btn > span::before {
         content: '';
@@ -348,11 +376,14 @@ menu > li > a {
     }
 }
 
+@media screen and (max-width: 924px) {}
+
 /* Кнопка */
 .btn {
     background: none;
     cursor: pointer;
     text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.5);
     font-size: 14px;
     font-weight: 600;
     line-height: 20px;
@@ -364,29 +395,26 @@ menu > li > a {
     position: relative;
     z-index: 1;
     letter-spacing: 1px;
+    min-width: 270px;
 }
 .btn:hover {
     color: #fff;
     outline: none;
 }
 .btn::before {
-    content: '';
     transform: scaleX(0);
-    left: 0;
+    left: 50%;
 }
 .btn::after {
-    left: 100%;
+    left: 50%;
     transform: scaleX(0);
 }
 .btn::before,
 .btn::after {
     content: '';
-    width: 55%;
-    background: linear-gradient(45deg, rgb(224, 113, 113),rgb(227, 51, 51));
+    width: 50%;
+    background: linear-gradient(45deg, #71c2c2,#7cd3d3);
     position: absolute;
-    display: grid;
-    align-items: center;
-    text-transform: uppercase;
     top: 0;
     height: 100%;
     transition: transform 0.5s;
@@ -395,22 +423,18 @@ menu > li > a {
     outline: none;
 }
 
-.btn::before,
-.btn:hover::before {
-    border-radius: 12px;
+.btn::before {
+    border-radius: 0 12px 12px 0;
 }
 .btn:hover::before{
     transform: scaleX(1);
-    text-align: right;
     z-index: -1;
 }
-.btn::after,
-.btn:hover::after {
-    border-radius: 12px;
+.btn::after {
+    border-radius: 0 12px 12px 0;
 }
 .btn:hover::after{
     transform: scaleX(-1);
-    text-align: right;
     z-index: -1;
 }
 
@@ -423,12 +447,17 @@ menu > li > a {
     margin-top: 20px;
 }
 .material-design-input {
-    width: 100%;
-    padding: 20px 0 5px 0px;
+    width: calc(100% - 25px);
+    padding: 25px 0 8px 25px;
     outline: none;
     border: none;
     min-width: 310px;
+    font-size: 19px;
+    color: black;
+    z-index: 1;
+    background: none;
 }
+
 .material-design-label-for-input {
     position: absolute;
     bottom: 0;
@@ -436,8 +465,16 @@ menu > li > a {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid rgba(99, 98, 98, 0.54);
+    border-radius: 5px 5px 0 0;
+    background: rgba(244, 242, 242, 0.96);
+    transition: .3s;
 }
+.material-design-input:hover + .material-design-label-for-input {
+    background: rgba(226, 226, 226, 0.96);
+    border-bottom: 1px solid rgba(22, 22, 22, 0.54);
+}
+
 .material-design-label-for-input::after {
     content: '';
     position: absolute;
@@ -450,13 +487,16 @@ menu > li > a {
 }
 .material-design-label-for-input span {
     position: absolute;
-    bottom: 5px;
+    bottom: 15px;
     left: 0;
-    transition: all .3s ease;
+    transition: .3s;
+    color: rgba(0,0,0,.54);
+    padding-left: 23px;
+    font-size: 19px;
 }
 .material-design-input:focus + .material-design-label-for-input span,
 .material-design-input:valid + .material-design-label-for-input span {
-    transform: translateY(-120%);
+    transform: translateY(-90%);
     font-size: 14px;
     color: rgb(224, 113, 113);
 }
@@ -465,8 +505,13 @@ menu > li > a {
     transform: translateX(0%);
     transition: transform .5s ease;
 }
-/* Выпадающий список material design */
 
+.material-design-input:valid + .material-design-label-for-input::after {
+    border-bottom: 2px solid rgb(104, 219, 104);
+}
+.material-design-input:valid + .material-design-label-for-input span {
+    color: rgb(104, 219, 104);
+}
 
 /* Адаптивная таблица прототип */
 table.table_adaptive {
@@ -495,11 +540,6 @@ table.table_adaptive tr {
 table.table_adaptive tr:hover {
     background: #71c2c2;
     color: #fff;
-}
-
-table.table_adaptive tr:hover a {
-    color: #fff;
-    border-bottom: 1px dashed #fff;
 }
 
 table.table_adaptive th,
@@ -551,10 +591,10 @@ table.table_adaptive tr.subhead {
     font-weight: bold;
 }
 table.table_adaptive tr.subhead:hover {
-  background: #24c5c5;
-  color: #fff;
+    background: #24c5c5;
+    color: #fff;
 }
-@media screen and (max-width: 800px) {
+@media (max-width: 800px) {
     table.table_adaptive {
         border: 0 !important;
     }
@@ -591,5 +631,32 @@ table.table_adaptive tr.subhead:hover {
         content: attr(data-label);
         float: left;
         font-weight: bold;
+    }
+}
+
+@media (max-width: 499px) {
+    .form {
+        max-width: 270px;
+    }
+    .form h1 {
+        max-width: 270px;
+    }
+    .form .submit-button-wrap {
+        max-width: 270px;
+    }
+    .form .submit-button {
+        min-width: 270px;
+        max-width: 300px;
+    } 
+
+    .material-design-input {
+        min-width: 210px;
+        max-width: 252px;
+    }
+    .material-design-label-for-input {
+        max-width: 270px;
+    }
+    .material-design-label-for-input::after {
+        width: 100%;
     }
 }

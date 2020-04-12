@@ -3,10 +3,18 @@ main {
     width: 80%;
 }
 
+.product-name {
+    font-size: 22px;
+    margin: 10px 0;
+}
+
 .product-wrapper {
     background: #fff;
     display: grid;
     grid-template-columns: minmax(100px, 150px) 1fr 1fr;
+    box-shadow: 02px 2px 0px 0px rgba(48, 47, 46, 0.3);
+    padding: 30px 20px;
+    border-radius: 10px;
 }
 
 .product-price {
@@ -21,27 +29,4 @@ main {
 .product-image-wrap img {
     max-width: 150px;
     height: auto;
-}
-
-.fa-warehouse {
-    position: relative;
-    transition: 0.25s;
-}
-
-.fa-warehouse:hover::after {
-    content: attr(data-title);
-    position: absolute;
-    left: -30px;
-    top: 19px;
-    z-index: 1; 
-    background:rgb(224, 93, 93);
-    font-family: Arial, sans-serif;
-    font-size: 11px;
-    padding: 5px 0;
-    border-radius: 5px;
-    width: 80px;
-    color: #fff;
-    font-size: 12px;
-    text-align: center;
-    font-weight: normal;
 }

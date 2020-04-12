@@ -1,0 +1,51 @@
+.icon-download {
+    width: 25px;
+    height: 30px;
+}
+
+.field-wrapper {
+    width: 100%;
+    position: relative;
+    margin-top: 20px;
+    text-align: center;
+}
+ 
+.field__file {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+ 
+.field__file-wrapper {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 80px;
+    justify-content: space-between;
+    align-items: center;
+}
+ 
+.field__file-fake {
+    height: 54px;
+    display: grid;
+    align-items: center;
+    border: 1px solid #71c2c2;
+    border-radius: 3px 0 0 3px;
+    border-right: none;
+}
+ 
+.field__file-button {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: 56px;
+    background: #71c2c2;
+    color: #fff;
+    font-size: 1.125rem;
+    font-weight: 700;
+    border-radius: 0 3px 3px 0;
+    cursor: pointer;
+}
+
+.field__file-button:hover {
+    background: #65aaaa;
+}

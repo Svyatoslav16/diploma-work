@@ -5,16 +5,18 @@ for (let i = 0; i < selectBox.length; i++) {
   const optionsContainer = selectBox[i].getElementsByClassName("options-container");
   const optionsList = selectBox[i].getElementsByClassName("option");
   
-  for (let i = 0; i < selected.length; i++) {
-    selected[i].addEventListener("click", () => {
-      optionsContainer[0].classList.toggle("active");
-    });
+  for (let j = 0; j < selected.length; j++) {
+    if(optionsContainer[0].children.length > 0) {
+      selected[j].addEventListener("click", () => {     
+        optionsContainer[0].classList.toggle("active");
+      });
+    }
   }
 
-  for (let i = 0; i < optionsList.length; i++) {
-    optionsList[i].addEventListener("click", () => {
-      optionsList[i].children[0].checked = 'true';
-      selected[0].innerHTML = optionsList[i].children[1].innerHTML;
+  for (let k = 0; k < optionsList.length; k++) {
+    optionsList[k].addEventListener("click", () => {
+      optionsList[k].children[0].checked = 'true';
+      selected[0].innerHTML = optionsList[k].children[1].innerHTML;
       optionsContainer[0].classList.remove("active");
     });
   }

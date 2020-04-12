@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/signIn.css">
+    <script src="javascript/signIn.js" defer></script>
+    <title>Вход</title>
+</head>
+<body>
+    <main>
+        <div class="wrap">
+            <form action="/signIn" method="POST" class="form sign-in-form">
+                <h1>Вход</h1>
+                <div class="login material-design-input-wrap">
+                    <input type="text" class="material-design-input" name="login" required/>
+                    <label for="login" class="login-label material-design-label-for-input">
+                        <span class="content-login">Email или номер телефона</span>
+                    </label>
+                    <object type="image/svg+xml" data="images/cross.svg" class="cross-icon"></object>
+                    <object type="image/svg+xml" data="images/correct_gray.svg" class="correct-icon"></object>
+                </div>
+                <div class="password material-design-input-wrap">
+                    <input type="password" class="material-design-input" name="password" required>
+                    <label for="password" class="password-label material-design-label-for-input">
+                        <span class="content-password">Пароль</span>
+                    </label>
+                    <object type="image/svg+xml" data="images/cross.svg" class="cross-icon"></object>
+                    <object type="image/svg+xml" data="images/correct_gray.svg" class="correct-icon"></object>
+                </div>
+                if(error)
+                    <div class="error-sign-in">
+                        | #{error}
+                    </div>
+                <div class="submit-button-wrap signIn-button-wrap">
+                    <button class="btn submit-button signIn-button">Войти</button>
+                </div> 
+            </form>
+            <div class="account-action">
+                <a href="signUp">Создайте новый аккаунт</a>
+                <a class="passwordReset" href="resetPassword"> Забыли пароль?</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,6 +1,5 @@
 main {
-    height: auto;
-    width: 90%;
+    /* display: grid; */
 }
 
 h1 {
@@ -8,13 +7,12 @@ h1 {
 }
 
 .order-items {
-    grid-area: order-items;
     display: grid;
+    justify-content: center;
 }
 
 
 .total-amount {
-    grid-area: total-amount;
 }
 
 .product {
@@ -25,18 +23,19 @@ h1 {
 
 .product {
     display: grid;
-    padding: 30px 20px;
+    padding: 30px 10px 30px 0;
     border: 1px solid #fff;
     transition: 0.25s ease-in;
     margin: 5px 10px;
     background:#fff;
-    border-radius: 5px;
+    border-radius: 10px;
+    -webkit-box-shadow: 2px 2px 0px 0px rgba(48, 47, 46, 0.3);
+    -moz-box-shadow:    2px 2px 0px 0px rgba(48, 47, 46, 0.3);
+    box-shadow:         2px 2px 0px 0px rgba(48, 47, 46, 0.3);
 }
 
 .product:hover {
-    -webkit-box-shadow: 0px 0px 0px 5px rgba(212,210,212,1);
-    -moz-box-shadow: 0px 0px 0px 5px rgba(212,210,212,1);
-    box-shadow: 0px 0px 0px 5px rgba(212,210,212,1);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 .product > div {
@@ -51,12 +50,11 @@ h1 {
 .product-image-wrap img {
     width: 100%;
     height: auto;
-    margin: 5px;
 }
 
 .product-property {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(max-content, 0.5fr));
+    grid-template-columns: repeat(auto-fit, minmax(max-content, .5fr));
 }
 
 .product-name {
@@ -64,13 +62,28 @@ h1 {
     /* height: 45px; */
     margin-bottom: 40px;
     color: #333;
-    width: max-content;
 }
 
 .product-name:hover {
     color: #777;
 }
 
-.order-items {
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+@media (min-width: 925px) {
+    .order-items {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 450px));
+    }
+}
+@media (min-width: 350px) and (max-width: 924px) {
+    .order-items {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 420px));
+    }
+}
+@media (max-width: 349px) {
+    .order-items {
+        grid-template-columns: repeat(auto-fit, minmax(270px, 320px));
+    }
+
+    .product-image-wrap {
+        max-width: 80px;
+    }
 }

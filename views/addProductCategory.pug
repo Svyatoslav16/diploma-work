@@ -8,7 +8,7 @@
 <body>
     include layout/menu.pug
     <main>
-        <form action="/addProductCategory" method="post" class="add-category-form">
+        <form action="/addProductCategory" method="post" class="form add-category-form">
             <h1>Добавить категорию</h1>
             <div class="material-design-input-wrap">
                 <input type="text" class="material-design-input" name="categoryName" required autocomplete="off"/>
@@ -16,8 +16,8 @@
                     <span class="content-categoryName">Наименование категории</span>
                 </label>
             </div>
-            <div class="add-category-button-wrap">
-                <button class="btn add-category-button">Добавить категорию</button>
+            <div class="submit-button-wrap add-category-button-wrap">
+                <button class="btn submit-button add-category-button">Добавить категорию</button>
             </div> 
         </form>
     </main>

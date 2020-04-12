@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/arrivalOfGoods.css">
+    <link rel="stylesheet" href="styles/module/customSelect.css">
+    <script src="javascript/customSelect.js" defer></script>
+    <script src="javascript/arrivalOfGoods.js" defer></script>
+    <title>Приход</title>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        <form action="/arrivalOfGoods" method="post" class="add-count-product-form form">
+            <h1>Приход товара</h1>
+            <div class="categories">
+                <div class="select-box">
+                    <div class="options-container">
+                        each category in categories
+                            <div class="option">
+                                <input type="radio" class="radio" id="#{category.name}" name="categoryId" value="#{category.id}" required/>
+                                <label for="#{category.name}">#{category.name}</label>
+                            </div>
+                    </div>
+                    <div class="selected" name="categories">
+                        | Выберите категорию
+                    </div>
+                </div>
+            </div>
+            <div class="products">
+                <div class="select-box">
+                    <div class="options-container">
+                    </div>
+                    <div class="selected" name="categories">
+                        | Выберите товар
+                    </div>
+                </div>
+            </div>
+            <div class="material-design-input-wrap">
+                <input type="number" id="amount" class="material-design-input" name="amount" required>
+                <label for="amount" class="name-label material-design-label-for-input">
+                    <span class="content-amount">Закупочная цена</span>
+                </label>
+            </div>
+            <div class="material-design-input-wrap">
+                <input type="number" id="count" class="material-design-input" name="count" required>
+                <label for="count" class="material-design-label-for-input">
+                    <span class="content-count">Закуплено штук</span>
+                </label>
+            </div>
+            <div class="add-count-product-button-wrap">
+                <button class="btn add-count-product-button">Обновить данные</button>
+            </div> 
+        </form>
+    </main>
+    include layout/footer.pug
+</body>
+</html>

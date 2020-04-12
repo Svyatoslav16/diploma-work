@@ -5,26 +5,20 @@
     <link rel="stylesheet" href="styles/addWorker.css">
     <link rel="stylesheet" href="styles/module/customSelect.css">
     <script src="javascript/customSelect.js" defer></script>
-    <title>Главная</title>
+    <title>Добавить нового сотрудника</title>
 </head>
 <body>
     include layout/menu.pug
     <main>
-        <form action="/addWorker" method="post" class="add-worker-form">
+        <form action="/addWorker" method="post" class="form add-worker-form">
             <h1>Добавить нового сотрудника</h1>
-            <div class="material-design-input-wrap">
-                <input type="number" class="material-design-input" name="workerId" required autocomplete="off"/>
-                <label for="workerId" class="login-label material-design-label-for-input">
-                    <span class="content-login">Код сотрудника</span>
-                </label>
-            </div>
-            <div class="position material-design-select-wrap">
+            <div class="position">
                 <div class="select-box">
                     <div class="options-container">
                         each position in positions
                             <div class="option">
-                                <input type="radio" class="radio" name="#{position.position_name}" value="#{position.position_id}"/>
-                                <label for="#{position.position_name}">#{position.position_name}</label>
+                                <input type="radio" class="radio" id="#{position.name}" name="position" value="#{position.id}" required/>
+                                <label for="#{position.name}">#{position.name}</label>
                             </div>
                     </div>
                     <div class="selected" name="position">
@@ -68,8 +62,8 @@
                     <span class="content-password">Пароль</span>
                 </label>
             </div>
-            <div class="add-worker-button-wrap">
-                <button class="btn add-worker-button">Войти</button>
+            <div class="submit-button-wrap add-worker-button-wrap">
+                <button class="btn submit-button add-worker-button">Войти</button>
             </div> 
         </form>
     </main>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/editProductProperties.css">
+    <link rel="stylesheet" href="styles/module/customSelect.css">
+    <link rel="stylesheet" href="styles/module/customInputFile.css">
+    <script src="javascript/customSelect.js" defer></script>
+    <script src="javascript/customInputFile.js" defer></script>
+    <title>#{product.product_name}</title>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        <form action="/editProductProperties" method="post" class="form edit-product-properties-form" enctype="multipart/form-data">
+            <input type="text" name="productId" value="#{product.product_id}" hidden>
+            <div class="material-design-input-wrap">
+                <input type="text" class="material-design-input" id="product-name" name="productName" value="#{product.product_name}" required>
+                <label for="product-name" class="material-design-label-for-input">
+                    <span class="content-product-name">Название товара</span>
+                </label>
+            </div>
+            <div class="field-wrapper">
+                <input type="file" name="filedata" accept="image/png" id="field__file" class="field field__file">
+                <label class="field__file-wrapper" for="field__file">
+                    <div class="field__file-fake">Файл не выбран</div>
+                    <div class="field__file-button">
+                        <object type="image/svg+xml" data="images/download.svg" class="icon-download">Выбрать</object>
+                    </div>
+                </label>
+            </div>
+            <div class="material-design-input-wrap">
+                <input type="number" class="material-design-input" id="product-count" name="productCount" value="#{product.product_count_stock}" required>
+                <label for="product-count" class="material-design-label-for-input">
+                    <span class="content-product-count">Количество товара</span>
+                </label>
+            </div>
+            <div class="material-design-input-wrap">
+                <input type="number" class="material-design-input" id="product-amount" name="productAmount" value="#{product.product_amount}">
+                <label for="product-amount" class="material-design-label-for-input">
+                    <span class="content-product-amount">Стоимость товара</span>
+                </label>
+            </div>
+            <div class="categories">
+                <div class="select-box">
+                    <div class="options-container">
+                        each category in categories
+                            <div class="option">
+                                <input type="radio" class="radio" id="#{category.name}" name="category" value="#{category.id}"/>
+                                <label for="#{category.name}">#{category.name}</label>
+                            </div>
+                    </div>
+                    <div class="selected" name="categories">
+                        | Категория
+                    </div>
+                </div>
+            </div>
+            <div class="material-design-textarea-wrap">
+                <textarea class="material-design-textarea" id="product-desctiption" name="productDescription" required>
+                    | #{product.product_description}
+                </textarea>
+                <label for="product-desctiption" class="material-design-label-for-textarea">
+                    <span class="content-product-desctiption">Описание товара</span>
+                </label>
+            </div>
+            <div class="submit-button-wrap save-changes-button-wrap">
+                <button class="btn submit-button save-changes-button">Сохранить</button>
+            </div>
+        </form>
+    </main>
+    include layout/footer.pug
+</body>
+</html>

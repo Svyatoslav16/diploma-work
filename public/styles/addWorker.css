@@ -6,10 +6,6 @@ main {
     height: auto;
 }
 
-.add-worker-form h1 {
-    text-align: center;
-}
-
 .add-worker-form {
     background: #fff;
     width: 100%;
@@ -24,11 +20,17 @@ main {
     width: 100%;
     text-align: center;
 }
-.add-worker-button {
-    min-width: 300px;
-    max-width: 400px;
-}
 
 .position {
     padding: 20px 0 5px 0px;
+}
+
+.btn {
+    min-width: 300px;
+}
+
+@media (min-width: 500px) and (max-width: 800px) {
+    .add-worker-form {
+        width: 400px;
+    }
 }

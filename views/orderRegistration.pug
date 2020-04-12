@@ -8,14 +8,32 @@
 <body>
     include layout/menu.pug
     <main>
-        if(productList)
-            <div class="order-info">
-                <div class="user-data">
-                    <!-- Сюда вставить данные о заказе потом -->
+        <form action="/orderRegistration" method="post" class="order-info-form">
+            <h1>Заказ № #{orderData.id}</h1>
+            if(productList)
+                <div class="contact-info">
+                    <h5>Контактная информация</h5>
+                    <div class="address">
+                        <span class="address-title">Адрес доставки: </span>
+                        <p>
+                            | #{orderData.address}
+                            <a href="/changeAddressDelivery">
+                                <img src="images/pencil.svg" class="pencil-icon" alt="Изменить"/>
+                            </a>
+                        </p>
+                    </div>
+                    <div>
+                        <span class="telephone-title">Телефон для связи:</span>
+                        <p>
+                            | #{orderData.telephone}
+                            <a href="/changeTelephone">
+                                <img src="images/pencil.svg" class="pencil-icon" alt="Изменить"/>
+                            </a>
+                        </p>
+                    </div>
                 </div>
-                <div class="order-items">
-                    <table class="productList">
-                        <caption>Список товаров</caption>
+                <div class="product-list-wrap">
+                    <table class="product-list">
                         <thead>
                             <tr>
                                 <th></th>
@@ -33,28 +51,24 @@
                                         | #{product.product_amount}
                                         <img src="images/ruble.svg" alt="ruble" class="ruble-icon" width="15px" height="15px">
                                     </td>
-                                    <td>#{product.product_count}</td>
+                                    <td>#{product.count}</td>
                                 </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="order-total">
-                <h2 class="order-heading">Ваш заказ:</h2>
-                <div class="total-amount-label">
-                    <div class="total-amount-count">#{total_count} товар(a)</div>
-                    <div class="price">на 
+                <div class="order-total">
+                    <div class="total-count">
+                        <span>Товаров: </span> #{total_count} шт.
+                    </div>
+                    <div class="price">Итого:
                         <span class="price-value">#{total_amount}</span>
-                        <img src="images/ruble.svg" alt="ruble" class="ruble-icon" width="15px" height="15px">
+                        <img src="images/ruble.svg" alt="ruble" class="ruble-icon">
+                    </div>
+                    <div class="order-button-wrap">
+                        <button class="order-button" type="submit">Оформить заказ</button>
                     </div>
                 </div>
-                <div class="order-button-wrap">
-                    form(action="/orderRegistration", method="POST")
-                        <button class="order-button" type="submit">
-                            | Оформить заказ
-                        </button>
-                </div>
-            </div>   
+        </form>
     </main>
     include layout/footer.pug
 </body>

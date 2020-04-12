@@ -1,0 +1,12 @@
+.icon-ruble__white { /* icon должно быть в конце */
+    fill: white;
+}
+
+.icon-download { /* icon должно быть в конце */
+    fill: white;
+    pointer-events: none;
+}
+
+.correct_gray-icon, .cross-icon {
+    fill: rgba(0,0,0,.54);   
+}

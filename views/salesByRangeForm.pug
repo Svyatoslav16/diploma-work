@@ -8,12 +8,17 @@
 <body>
     include layout/menu.pug
     <main>
-        <form action="/getSalesByRange" method="POST" class="sales-range">
+        <form action="/salesByRange" method="POST" class="form sales-range">
+            <h1 class="title">Продажи за период</h1>
             <label for="startDate">Введите начало периода</label>
-            <input type="date" id="startDate" name="startDate" min="2019-01-01" max="2025-01-01">
+            <input type="date" id="startDate" name="startDate">
             <label for="endDate">Введите конец периода</label>
-            <input type="date" id="endDate" name="endDate" min="2019-01-01" max="2025-01-01">
-            <input type="submit" value="Показать продажи за период">
+            <input type="date" id="endDate" name="endDate">
+            if(error)
+                <div>#{error}</div>
+            <div class="submit-button-wrap">
+                <button class="btn submit-button">Показать</button>
+            </div>
         </form>
     </main>
     include layout/footer.pug

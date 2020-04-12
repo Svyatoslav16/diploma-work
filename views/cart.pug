@@ -33,18 +33,19 @@
                                 <div>
                                     <div class="count-buttons">
                                         <button class="button-action button-minus" data-product_id=#{product.product_id}><i>-</i></button>
-                                        <input type="number" class="count-value" value="#{product.product_count}" min="1" max="99" data-product_id="#{product.product_id}" >
+                                        <input type="number" class="count-value" value="#{product.count}" min="1" max="99" data-product_id="#{product.product_id}" >
                                         <button class="button-action button-plus" data-product_id=#{product.product_id}><i>+</i></button>
                                     </div>
                                 </div>
                                 <div class="product-price">
                                     <div class="price-block">
                                         <span class="price-current">#{product.product_amount}</span> 
+                                        //- Переделать на object
                                         <img src="images/ruble.svg" alt="ruble" class="ruble-icon" width="20px" height="20px">
                                     </div>
                                     <div class="product-remains-wrap">
                                         <span class="product-remains">В наличии: #{product.product_count_stock}</span> 
-                                        <img src="images/warehouse.svg" alt="warehouse" width="20px" height="20px">
+                                        <object type="image/svg+xml" data="images/boxes.svg" class="icon-boxes">шт.</object>
                                     </div>
                                 </div>
                             </div>
@@ -59,8 +60,8 @@
                         </div>
                     </div>
                     <div class="total-amount-button">
-                        <button class="buy-button">
-                            <a href='/orderRegistration'>Перейти к оформлению заказа</a>
+                        <button class="buy-button" onclick="document.location.href='/orderRegistration'">
+                            |Перейти к оформлению заказа
                         </button>
                     </div>
                 </div>

@@ -1,51 +1,94 @@
-main {
-    width: 100%;
-    margin-top: 10%;
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-}
-
 a {
     color:#0366d6;
     text-decoration: none;
 }
 
-.login-form {
+a:hover {
+    text-decoration: underline;
+}
+
+main {
+    width: 100%;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    height: auto;
+    margin: 0;
+}
+
+.add-product-form {
+    display: grid;
     background: #fff;
     width: 100%;
-    padding: 20px;
-    border: 1px solid #d8dee2;
-    border-radius: 12px;
-    display: grid;
 }
 
-.login-form h1 {
-    text-align: center;
-}
-
-.signIn-button-wrap {
-    width: 100%;
-    text-align: center;
-}
 .signIn-button {
     min-width: 300px;
-    max-width: 400px;
-    outline: none;
 }
 
 .account-action {
+    display: grid;
+    align-items: center;
     background: #fff;
     width: 100%;
-    padding: 20px;
     margin-top: 10px;
     border: 1px solid #d8dee2;
     border-radius: 12px;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(max-content, 0.5fr));
 }
 
-.account-action .passwordReset {
+.error-sign-in {
     text-align: right;
+    padding-top: 5px;
+}
+
+.cross-icon,
+.correct-icon {
+    position: absolute;
+    top: 20.5px;
+    right: 23px;
+    width: 0; /* самый простой способ сделать иконку невидимой*/
+    height: 15px;
+    transition: width .2s ease-out;
+}
+
+.active {
+    width: 15px;
+}
+
+.material-design-input:valid + .material-design-label-for-input::after {
+    border-bottom: 2px solid rgb(224, 113, 113);
+}
+
+.material-design-input:valid + .material-design-label-for-input span {
+    color: rgb(224, 113, 113);
+}
+
+.material-design-input:valid + .material-design-label-for-input.valid::after  {
+    border-bottom: 2px solid rgb(104, 219, 104);
+}
+.material-design-input:valid + .material-design-label-for-input.valid span {
+    color: rgb(104, 219, 104);
+}
+
+@media (min-width: 500px) {
+    .account-action {
+        grid-template-columns: repeat(2, minmax(max-content, 0.5fr));
+        padding: 20px;
+    }
+
+    .account-action .passwordReset {
+        text-align: right;
+    }
+}
+
+@media (max-width: 499px) {
+    .account-action {
+        padding: 20px 0;
+        justify-content: center;
+    }
+
+    .account-action a:first-child {
+        margin-bottom: 10px;
+    }
 }

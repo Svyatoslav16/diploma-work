@@ -4,7 +4,7 @@
   "description": "\"сайт для диплома\"",
   "main": "express.js",
   "scripts": {
-    "test": "public/index.html"
+    "start": "nodemon express.js"
   },
   "author": "Maryuha Svyatoslav",
   "license": "ISC",

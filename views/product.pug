@@ -7,11 +7,12 @@
 </head>
 <body>
     include layout/menu.pug
-    <main>
+    <main>  
+        <div class="product-name">#{product.product_name}</div>
         <div class="product-wrapper">
             <div class="product-image-wrap">
                 <img src="#{product.product_url_img}" />
-            </div>  
+            </div>
             <div class="product-description">#{product.product_description}</div>
             <div>
                 <div class="product-price">
@@ -20,7 +21,7 @@
                 </div> 
                 <div class="product-count-stock">
                     <span>#{product.product_count_stock}</span>
-                    <img src="images/warehouse.svg" alt="warehouse" width="20px" height="20px">
+                    <span>шт.</span>
                 </div>
             </div>
              

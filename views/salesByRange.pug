@@ -8,42 +8,27 @@
 <body>
     include layout/menu.pug
     <main>
-        <div class="date-range">
-            <span>#{startDate}</span>
-            <span>#{endDate}</span>
-        </div>
-        <table class="sales">
+        <h1 class="product-report-title">Отчёт по товарам</h1>
+        <table class="table_adaptive products">
             <thead>
                 <tr>
-                    <th>Наименование товара</th>
-                    <th>Количество</th>
-                    <th>Цена</th>
+                    <th>Наименование</th>
                     <th>Категория</th>
-                    <th>Покупатель</th>
-                    <th>Время</th>
+                    <th>Описание</th>
+                    <th>Цена</th>
+                    <th>Клиент</th>
+                    <th>Дата</th>
                 </tr>
             </thead>
             <tbody>
                 each sale in salesByRange
-                    <tr>
-                        <td>
-                            | #{sale.product_name}
-                        </td>
-                        <td>
-                            | #{sale.product_count}
-                        </td>
-                        <td>
-                            | #{sale.product_amount}
-                        </td>
-                        <td>
-                            | #{sale.category_name}
-                        </td>
-                        <td>
-                            | #{sale.user_name}
-                        </td>
-                        <td>
-                            | #{sale.order_date}
-                        </td>
+                    <tr class="product">
+                        <td data-label="Наим.">#{sale.product}</td>
+                        <td data-label="Кат.">#{sale.category}</td>
+                        <td data-label="Цена">#{sale.amount}</td>
+                        <td data-label="Кол-во">#{sale.count}</td>
+                        <td data-label="Клиент">#{sale.user}</td>
+                        <td data-label="Дата">#{sale.date}</td>
                     </tr>
             </tbody>
         </table>

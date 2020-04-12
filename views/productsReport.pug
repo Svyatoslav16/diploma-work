@@ -2,14 +2,16 @@
 <html lang="en">
 <head>
     include layout/header.pug
-    <title>Отчёт по товарам</title>
+    <link rel="stylesheet" href="styles/productsReport.css">
+    <script src="javascript/productsReport.js" defer></script>
+    <title>Товары</title>
 </head>
 <body>
     include layout/menu.pug
     <main>
-        <h1 class="product-report-title">Отчёт по товарам</h1>
-        <table class="products table_adaptive">
-            <tbody>
+        <h1 class="product-report-title">Товары</h1>
+        <table class="table_adaptive products">
+            <thead>
                 <tr>
                     <th>Наименование</th>
                     <th>Категория</th>
@@ -17,15 +19,23 @@
                     <th>Цена</th>
                     <th>В наличии</th>
                 </tr>
-            </tbody>
+            </thead>
+            <tbody>
                 each product in products
-                    <tr class="product">
-                        <td data-label="Наименование">#{product.product_name}</td>
-                        <td data-label="Категория">#{product.category_name}</td>
-                        <td data-label="Описание">#{product.product_description}</td>
+                    <tr class="product" data-product_id = "#{product.product_id}">
+                        <td data-label="Наим.">#{product.product_name}</td>
+                        <td data-label="Кат.">#{product.category}</td>
+                        <td data-label="Опис." class="product-description"><div>#{product.product_description}</div></td>
                         <td data-label="Цена">#{product.product_amount}</td>
-                        <td data-label="В наличии">#{product.product_count_stock}</td>
+                        <td data-label="В нал.">
+                            | #{product.product_count_stock}
+                            <div class="action">
+                                <span><a href="deleteProductById?productId=#{product.product_id}">Удалить</a></span>
+                                <span><a href="editProductProperties?productId=#{product.product_id}">Редактировать</a></span>
+                            </div>
+                        </td>
                     </tr>
+            </tbody>
         </table>
     </main>
     include layout/footer.pug

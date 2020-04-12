@@ -15,18 +15,20 @@
                     <th>Код прихода</th>
                     <th>Наименование</th>
                     <th>Категория</th>
-                    <th>Стоимость</th>
+                    <th>Закупочная цена</th>
                     <th>Количество</th>
+                    <th>Дата</th>
                 </tr>
             </thead>
             <tbody>
                 each product in supplyOfProducts
                     <tr>
-                        <td data-label="Код прихода">#{product.income_id}</td>
-                        <td data-label="Наименование">#{product.product_name}</td>
-                        <td data-label="Категория">#{product.category_name}</td>
-                        <td data-label="Количество">#{product.product_amount}</td>
-                        <td data-label="Стоимость">#{product.count}</td>
+                        <td data-label="Код">#{product.id}</td>
+                        <td data-label="Наим.">#{product.product_name}</td>
+                        <td data-label="Кат.">#{product.name}</td>
+                        <td data-label="Зак.цена">#{product.amount}</td>
+                        <td data-label="Кол.">#{product.count}</td>
+                        <td data-label="Дата">#{product.date}</td>
                     </tr>
             </tbody>
         </table>

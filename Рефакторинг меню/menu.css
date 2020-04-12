@@ -1,0 +1,317 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+header {
+    background: linear-gradient(to bottom, #4d4d4d 0%, #1a1a1a 100%);
+    font-size: 17px;
+}
+
+menu {
+    list-style-type: none;
+}
+
+.submenu ul {
+    list-style-type: none;
+}
+
+header li {
+    color: #fff;
+}
+
+header li > a {
+    color: #fff;
+    outline: none;
+    text-decoration: none;
+}
+
+.my-profile-wrap {
+    color: #fff;
+}
+
+@media (min-width: 700px) {
+    header {
+        display: grid;
+        grid-template-columns: 1fr minmax(200px, 300px);
+        margin: 0 0 20px 0;
+        position: relative;
+    }
+
+    menu {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(50px, max-content));
+    }
+
+    .menu__btn {
+        position: absolute;
+    }
+
+    menu > li {
+        padding: 15px 0;
+        position: relative;
+        background: linear-gradient(to bottom, #4d4d4d 0%, #1a1a1a 100%); 
+        border-right: 1px solid #333333;
+        border-left: 1px solid #5a5a5a;
+        cursor: pointer;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+    }
+
+    menu > li:first-child {
+        margin-left: 20px;
+    }
+
+    menu > li > a {
+        padding: 15px 17px;
+    }
+
+    menu > li:last-child {
+        border-right: 1px solid #5a5a5a;
+    }
+
+    menu > li:hover {
+        background: linear-gradient(to bottom, #333, #4d4d4d);
+    }
+
+    .submenu {
+        padding: 15px 35px 15px 17px;
+        position: relative;
+        background: linear-gradient(to bottom, #4d4d4d 0%, #1a1a1a 100%); 
+    }
+
+    .submenu .icon-arrow-down {
+        position: absolute;
+        pointer-events: none;
+        transition: all 0.4s;
+        bottom: 15px;
+    }
+
+    .submenu.active ul {
+        position: absolute;
+        text-align: left;
+        width: max-content;
+        transition: .4s;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .submenu ul li {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .submenu ul li a {
+        pointer-events: none;
+    }
+
+    .submenu.active ul {
+        left: 0;
+        top: 60px;
+        background: linear-gradient(to bottom, #4d4d4d 0%, #1a1a1a 100%);
+        border-radius: 10px;
+        padding: 10px 0;
+        cursor: initial;
+    }
+
+    .submenu.active ul li{
+        opacity: 1;
+    }
+
+    .submenu.active ul li{
+        pointer-events: none;
+        width: 100%;
+        height: auto;
+    }
+
+    .submenu.active ul li a {
+        display: block;
+        pointer-events: initial;
+        padding: 5px 20px;
+    }
+
+    .submenu.active ul li a:hover {
+        background: linear-gradient(to bottom, #333, #4d4d4d);
+    }
+
+    .submenu.active .icon-arrow-down {
+        transform: rotateX(180deg);
+        bottom: 11px;
+    }
+
+    .my-profile-wrap {
+        padding: 15px 60px 15px 0;
+        text-align: right;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        cursor: pointer;
+    }
+
+    .my-profile-wrap.active ul {
+        left: initial;
+        right: 30px;
+    }
+}
+
+@media (max-width: 699px) {
+    header {
+        overflow: hidden;
+        overflow-y: scroll;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        display: grid;
+        grid-template-areas: 
+        'profile'
+        'menu';
+        grid-template-rows: max-content max-content;
+        padding: 40px 0 0 0;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        transition: .3s;
+        transform: translateX(100%);
+    }
+
+    header.active {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    menu {
+        grid-area: menu;
+    }
+
+    .submenu {
+        cursor: pointer;
+    }
+
+    .my-profile-wrap {
+        grid-area: profile;
+    }
+
+    header li {
+        width: 100%;
+    }
+
+    menu li a,
+    .submenu li a,
+    .submenu span {
+        padding-left: 10px;
+    }
+
+    li a,
+    .submenu {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    header li a {
+        display: block;
+    }
+
+    header li a:hover {
+        background: linear-gradient(to bottom, #333, #4d4d4d);
+    }
+
+    menu li:last-child {
+        margin-bottom: 100px;
+    }
+
+    .my-profile-wrap {
+        position: relative;
+    }
+
+    .submenu {
+        position: relative;
+    }
+
+    .submenu ul {
+        padding-left: 10px;
+        position: relative;
+        height: 0;
+        overflow: hidden;
+        transition: .3s;
+        opacity: 0;
+    }
+
+    .submenu .icon-arrow-down {
+        position: absolute;
+        pointer-events: none;
+        transition: 0.4s;
+        top: 10px;
+    }
+    
+    .submenu.active .icon-arrow-down {
+        top: 14px;
+    }
+
+    .submenu.active .icon-arrow-down {
+        transform: rotateX(180deg);
+    }
+
+    .submenu.active ul {
+        height: auto;
+        opacity: 1;
+    }
+
+    .menu__btn > span,
+    .menu__btn > span::before,
+    .menu__btn > span::after {
+        background-color: black; 
+    }
+
+    .menu__btn {
+        position: fixed;
+        display: grid;
+        align-items: center;
+        top: 12px;
+        right: 14px;  
+        width: 26px;
+        height: 26px;  
+        cursor: pointer;
+        z-index: 1;
+    }
+    .menu__btn > span,
+    .menu__btn > span::before,
+    .menu__btn > span::after {
+        display: block;
+        position: absolute;  
+        width: 26px;
+        height: 2px;
+        transition: .2s;
+    }
+    .menu__btn > span::before {
+        content: '';
+        top: -8px;
+    }
+    .menu__btn > span::after {
+        content: '';
+        top: 8px;
+    }
+
+    .menu__btn.active > span,
+    .menu__btn.active > span::before,
+    .menu__btn.active > span::after {
+        background-color: #f2f2f2;
+    }
+    .menu__btn.active > span {
+        transform: rotate(45deg);
+    }
+    .menu__btn.active > span::before {
+        top: 0;
+        transform: rotate(0);
+    }
+    .menu__btn.active > span::after {
+        top: 0;
+        transform: rotate(90deg);
+    }
+}

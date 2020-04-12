@@ -1,0 +1,52 @@
+.product {
+    position: relative;
+}
+
+.product-description {
+    max-height: 50px;
+    text-overflow: ellipsis;
+}
+
+.product .action {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: -100%;
+    background: #19a5a5;
+    width: 100%;
+    height: calc(100% - 1px);
+    opacity: 0;
+    transition: .3s;
+    border-top: .5px solid #f2f2f2;
+    border-bottom: .5px solid #f2f2f2;
+
+}
+
+.action span {
+    display: block;
+    text-align: center;
+}
+
+.action span a {
+    text-decoration: none;
+    border: none;
+    color: black;
+}
+
+.active {
+    opacity: 1 !important;
+    left: 0 !important;
+}
+
+.product-description > div {
+    overflow: hidden;
+    max-height: 100px;
+}
+
+@media (max-width: 924px) {
+    .product-description > div {
+        max-height: 50px;
+    }
+}

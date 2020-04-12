@@ -1,0 +1,10 @@
+main {
+    width: 100%;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-address-delivery {
+    display: grid;
+}

@@ -3,11 +3,6 @@ main {
     display: grid;
     justify-content: center;
     align-items: center;
-    height: auto;
-}
-
-.add-position-form h1 {
-    text-align: center;
 }
 
 .add-position-form {
@@ -20,11 +15,17 @@ main {
     margin-bottom: 20px;
 }
 
+.add-position-form h1 {
+    text-align: center;
+}
+
 .add-position-button-wrap {
     width: 100%;
     text-align: center;
 }
-.add-position-button {
-    min-width: 300px;
-    max-width: 400px;
-}
+
+/* @media (max-width: 600px) {
+    .add-position-form {
+        max-width: 269px;
+    }
+} */
