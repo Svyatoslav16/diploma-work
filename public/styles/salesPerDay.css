@@ -1,0 +1,37 @@
+@media (min-width: 900px) {
+    .custom-table__head,
+    .custom-table__body .row {
+        grid-template-columns: [name] minmax(200px, 1fr) 
+                               [category] minmax(200px,1fr) 
+                               [count] minmax(110px, 1fr) 
+                               [amount] minmax(60px,1fr) 
+                               [client] minmax(180px, 1fr);
+    }
+}
+
+@media (min-width: 700px) and (max-width: 900px) {
+    .custom-table__head,
+    .custom-table__body .row {
+        grid-template-columns: [name] minmax(200px, 1fr) 
+                               [category] minmax(200px,1fr) 
+                               [count] 50px
+                               [amount] 60px
+                               [client] minmax(180px, 1fr) 
+    }
+
+    .custom-table__head .head__data.count {
+        width: 31px;
+        overflow: hidden;
+    }
+
+    .custom-table__head .head__data.amount {
+        width: 55px;
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 699px) {
+    main {
+        margin-top: 70px;
+    }
+}

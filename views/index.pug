@@ -2,13 +2,29 @@
 <html lang="en">
 <head>
     include layout/header.pug
+    <link rel="stylesheet" href="styles/home.css">
     <title>Главная</title>
 </head>
 <body>
     include layout/menu.pug
     <main>
-        
+        if(afterSignIn)
+            - var time = new Date().getHours();
+            - var firstName = userName.split(' ')[0]; 
+            <div class="hello screen-saver">
+            if(time >= 18 && time <= 24)
+                <span>Добрый вечер,<br/> #{firstName}!</span>
+            else if(time >= 0 && time < 4)
+                <span>Доброй ночи,<br/> #{firstName}!</span>
+            else if(time > 3 && time < 18)
+                <span>Доброе утро,<br/> #{firstName}!</span>
+            </div>
+        if(afterSignOut && signOutUserName)
+            <div class="goodbye screen-saver">
+                <span>До свидания, <br> #{signOutUserName.split(' ')[0]}!</span>
+            </div>
     </main>
     include layout/footer.pug
+    <script src="javascript/home.js" defer></script>
 </body>
 </html>

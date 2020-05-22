@@ -4,6 +4,7 @@ main {
     justify-content: center;
     align-items: center;
     height: auto;
+    margin-top: 80px;
 }
 
 .edit-product-properties-form {

@@ -44,8 +44,7 @@
                                         <img src="images/ruble.svg" alt="ruble" class="ruble-icon" width="20px" height="20px">
                                     </div>
                                     <div class="product-remains-wrap">
-                                        <span class="product-remains">В наличии: #{product.product_count_stock}</span> 
-                                        <object type="image/svg+xml" data="images/boxes.svg" class="icon-boxes">шт.</object>
+                                        <span class="product-remains">В наличии: #{product.product_count_stock} шт.</span> 
                                     </div>
                                 </div>
                             </div>
@@ -53,15 +52,15 @@
                 </div>
                 <div class="total-amount">
                     <div class="total-amount-label">
-                        <div class="total-amount-count">Итого: #{total_count} товар(a) на</div>
+                        <div class="total-amount-count">Итого: #{total_count} товар(a) на </div>
                         <div class="price">
-                            <span class="price-value">#{total_amount}</span>
+                            | #{total_amount}
                             <img src="images/ruble.svg" alt="ruble" class="ruble-icon" width="20px" height="20px">
                         </div>
                     </div>
                     <div class="total-amount-button">
                         <button class="buy-button" onclick="document.location.href='/orderRegistration'">
-                            |Перейти к оформлению заказа
+                            | Перейти к оформлению заказа
                         </button>
                     </div>
                 </div>

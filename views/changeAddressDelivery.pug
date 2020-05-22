@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/changeAddressDelivery.css">
+    <title>Изменение адреса доставки</title>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        <form action="/changeAddressDelivery" method="POST" class="form add-address-delivery-form">
+            <h1>Изменение адреса доставки</h1>
+            <div class="material-design-input-wrap">
+                <input type="text" class="material-design-input" name="address" required value="#{address}"/>
+                <label for="categoryName" class="categoryName-label material-design-label-for-input">
+                    <span class="content-address">Адрес доставки</span>
+                </label>
+            </div>
+            <div class="submit-button-wrap add-address-button-wrap">
+                <button class="btn submit-button add-address-button">Изменить адрес</button>
+            </div>
+        </form>
+    </main>
+    include layout/footer.pug
+</body>
+</html>

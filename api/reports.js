@@ -11,10 +11,10 @@ const orderStatus = ['Подтверждён', 'Не подтверждён'];
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 
 /* Для диплома. Покажет форму для выбора промежутка продаж */
-router.get('/salesByRangeForm', (req, res) => {
+router.get('/salesByRange', (req, res) => {
   if (req.session.isWorker === true && 
       req.session.successAuthentication === true) {
-    res.render('salesByRangeForm', {
+    res.render('salesByRange', {
       userName: req.session.userName,
       successAuthentication: req.session.successAuthentication,
       isWorker: req.session.isWorker
@@ -67,26 +67,25 @@ router.get('/editProductProperties', (req, res) => {
 router.get('/salesPerDay', (req, res) => {
   if (req.session.isWorker === true && 
       req.session.successAuthentication === true) {
-      conn.query(`SELECT  products.product_name,
-                          products.product_amount,
-                          product_category.name,
+      conn.query(`SELECT  products.product_name as 'name',
+                          products.product_amount as 'amount',
+                          product_category.name as 'category',
                           order_product.count,
                           users.user_name,
-                          users.user_surname,
-                          users.user_patronymic
+                          users.user_surname
                   FROM users INNER JOIN orders
                   ON users.user_id = orders.user_id INNER JOIN order_product
                   ON orders.id = order_product.order_id INNER JOIN products
                   ON order_product.product_id = products.product_id INNER JOIN product_category
                   ON products.product_category_id = product_category.id 
                   WHERE date_format(orders.date, '%d.%m.%Y') = date_format(CURDATE(), '%d.%m.%Y')
-                  AND orders.status = '${orderStatus[0]}';`, (err, salesPerDay) => {
+                  AND orders.status = '${orderStatus[0]}';`, (err, sales) => {
           if(err) {throw err;}
           res.render('salesPerDay', {
               userName: req.session.userName,
               successAuthentication: req.session.successAuthentication,
               isWorker: req.session.isWorker,
-              salesPerDay
+              sales
           });
       });
   } else {
@@ -98,29 +97,74 @@ router.get('/salesPerDay', (req, res) => {
 router.get('/supplyOfProducts', (req, res) => {
   if (req.session.isWorker === true && 
       req.session.successAuthentication === true) {
-      conn.query(`SELECT  income.id,
+      conn.query(`SELECT  income.id as 'income',
                           date_format(income.date, '%d.%m.%Y %H:%i') as 'date',
-                          income.total,
-                          products.product_id,
                           income_product.count,
                           income_product.amount,
                           products.product_name,
-                          products.product_description,
-                          products.product_count_stock,
-                          product_category.name
-                  FROM income INNER JOIN income_product
+                          product_category.name as 'category',
+                          worker.worker_name,
+                          worker.worker_surname,
+                          worker.worker_patronymic
+                  FROM worker INNER JOIN income
+                  ON worker.worker_id = income.worker_id INNER JOIN income_product
                   ON income.id = income_product.income_id INNER JOIN products
                   ON income_product.product_id = products.product_id INNER JOIN product_category
                   ON products.product_category_id = product_category.id
-                  ORDER BY date;`, (err, supplyOfProducts) => {
+                  ORDER BY income.date`, (err, incomes) => {
           if(err) {throw err;}
-          if(supplyOfProducts.length > 0) {
-              res.render('supplyOfProducts', {
-                  userName: req.session.userName,
-                  successAuthentication: req.session.successAuthentication,
-                  isWorker: req.session.isWorker,
-                  supplyOfProducts
-              });
+          if(incomes.length > 0) {
+            let incomeList = [];
+            for (let i = 0; i < incomes.length; i++) {
+              if(incomeList.length > 0) {
+                for (let j = 0; j < incomeList.length; j++) {
+                  if(incomes[i].income === incomeList[j].income) {
+                    incomeList[j].productList.push({
+                      name: incomes[i].product_name,
+                      category: incomes[i].category,
+                      count: incomes[i].count,
+                      amount: incomes[i].amount
+                    });
+                    break;
+                  } else if(j === incomeList.length - 1) {
+                    incomeList.push({
+                      income: incomes[i].income,
+                      productList: [{
+                        name: incomes[i].product_name,
+                        category: incomes[i].category,
+                        count: incomes[i].count,
+                        amount: incomes[i].amount
+                      }],
+                      date: incomes[i].date,
+                      worker: `${incomes[i].worker_surname} ${incomes[i].worker_name} ${incomes[i].worker_patronymic}`
+                    });
+                    break;
+                  }
+                }
+              } else if(incomeList.length === 0) {
+                incomeList.push({
+                  income: incomes[i].income,
+                  productList: [{
+                    name: incomes[i].product_name,
+                    category: incomes[i].category,
+                    count: incomes[i].count,
+                    amount: incomes[i].amount
+                  }],
+                  date: incomes[i].date,
+                  worker: `${incomes[i].worker_surname} ${incomes[i].worker_name} ${incomes[i].worker_patronymic}`
+                });
+              }
+            }
+            for (let i = 0; i < incomeList.length; i++) {
+              console.table(incomeList[i]);
+              
+            }
+            res.render('supplyOfProducts', {
+              userName: req.session.userName,
+              successAuthentication: req.session.successAuthentication,
+              isWorker: req.session.isWorker,
+              incomeList
+            });
           }
           
       });
@@ -129,65 +173,112 @@ router.get('/supplyOfProducts', (req, res) => {
   }
 });
 
+// router.get('/reportOnEmployees', (req, res) => {
+//   if(req.session.isWorker === true && req.session.successAuthentication === true) {
+    
+//   } else {
+//     res.redirect(302, '/');
+//   }
+// });
+
 // Отчёт по всем товарам
 router.get('/productsReport', (req, res) => {
-    if(req.session.isWorker === true && req.session.successAuthentication === true) {
-        conn.query(`SELECT  products.product_id,
-                            products.product_name,
-                            product_category.name as 'category',
-                            products.product_name,
-                            products.product_description,
-                            products.product_amount,  
-                            products.product_count_stock  
-                    FROM products INNER JOIN product_category
-                    ON products.product_category_id = product_category.id
-                    ORDER BY category`, (err, products) => {
-            if (err) {throw err;}
-            res.render('productsReport', {
-                userName: req.session.userName,
-                successAuthentication: req.session.successAuthentication,
-                isWorker: req.session.isWorker,
-                products
-            }); 
-        });
-    } else {
-        res.redirect(302, '/');
-    }
+  if (req.session.isWorker === true && 
+      req.session.successAuthentication === true) {
+    conn.query(`SELECT  products.product_id,
+                        products.product_name,
+                        product_category.name as 'category',
+                        products.product_name,
+                        products.product_description,
+                        products.product_amount,  
+                        products.product_count_stock  
+                FROM products INNER JOIN product_category
+                ON products.product_category_id = product_category.id
+                ORDER BY category`, (err, products) => {
+      if (err) {throw err;}
+      res.render('productsReport', {
+        userName: req.session.userName,
+        successAuthentication: req.session.successAuthentication,
+        isWorker: req.session.isWorker,
+        products
+      }); 
+    });
+  } else {
+    res.redirect(302, '/');
+  }
+});
+
+// Отчет по сотрудникам
+router.get('/personnel', (req, res) => {
+  if (req.session.isWorker === true && 
+      req.session.successAuthentication === true) {
+    conn.query(`SELECT  worker.worker_id,
+                        worker.worker_name as 'name',
+                        worker.worker_surname as 'surname',
+                        worker.worker_patronymic as 'patronymic',
+                        worker.email,
+                        worker.telephone,
+                        position.name as 'position'
+                FROM worker INNER JOIN position 
+                ON worker.worker_position = position.id
+                ORDER BY worker.worker_surname`, (err, workerList) => {
+      if (err) {throw err;}
+      res.render('personnel', {
+        userName: req.session.userName,
+        successAuthentication: req.session.successAuthentication,
+        isWorker: req.session.isWorker,
+        workerList
+      });
+    });
+  } else {
+    res.redirect(302, '/');
+  }
 });
 
 // Продажи за период
-router.post('/salesByRange', urlencodedParser, (req, res) => {
-  if (isNaN(Date.parse(req.body.startDate)) === false &&
-      isNaN(Date.parse(req.body.endDate)) === false )  {
+router.post('/salesByRange', (req, res) => {
+  if (req.session.isWorker === true && 
+      req.session.successAuthentication === true )  {
+    let dateRange = '';
+
+    if (req.body.startDate.match(/^[0-9]{4}.[0-9]{2}.[0-9]{2}$/) &&
+        req.body.endDate.match(/^[0-9]{4}.[0-9]{2}.[0-9]{2}$/)) {
+      dateRange = (`WHERE orders.date >= str_to_date('${req.body.startDate} 00:00', '%Y-%m-%d %H:%i')
+                    AND orders.date <= str_to_date('${req.body.endDate} 23:59', '%Y-%m-%d %H:%i')`).replace(/\n/g, '')
+                                                                                                   .replace(/\)\s{1,}AND/g, ') AND');
+    } else if(req.body.startDate.match(/^[0-9]{4}.[0-9]{2}.[0-9]{2}$/) &&
+              !req.body.endDate.match(/^[0-9]{4}.[0-9]{2}.[0-9]{2}$/)) {
+      dateRange = `WHERE orders.date >= str_to_date('${req.body.startDate} 00:00', '%Y-%m-%d %H:%i')`;
+    } else if(!req.body.startDate.match(/^[0-9]{4}.[0-9]{2}.[0-9]{2}$/) &&
+              req.body.endDate.match(/^[0-9]{4}.[0-9]{2}.[0-9]{2}$/)) {
+      dateRange = `WHERE orders.date <= str_to_date('${req.body.endDate} 23:59', '%Y-%m-%d %H:%i')`;
+    }
+
     conn.query(`SELECT  products.product_name as 'product',
                         products.product_amount as 'amount',
                         product_category.name as 'category',
                         order_product.count as 'count',
-                        users.user_name as 'user',
-                        date_format(orders.date, '%d.%m.%Y %H:%i') as 'date'
+                        users.user_name as 'first_name',
+                        users.user_surname as 'surname',
+                        orders.date
                 FROM users INNER JOIN orders
                 ON users.user_id = orders.user_id INNER JOIN order_product
                 ON orders.id = order_product.order_id INNER JOIN products
                 ON order_product.product_id = products.product_id INNER JOIN product_category
                 ON products.product_category_id = product_category.id 
-                WHERE date >= '${req.body.startDate}' 
-                AND date <= '${req.body.endDate}'
-                ORDER BY date;`, (err, salesByRange) => {
-      if(err) {throw err;}
-      res.render('salesByRange', {
-        userName: req.session.userName,
-        successAuthentication: req.session.successAuthentication,
-        isWorker: req.session.isWorker,
-        salesByRange
-      });
+                ${dateRange}
+                ORDER BY date;`, (err, sales) => {
+      if(err) {
+        console.log(err);
+        res.send({err: err}).status(500);
+        fs.writeFileSync('api-reports-error-log.txt', 
+          `${fs.readFileSync('api-reports-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+      } else {
+        res.send(sales);
+      }
     });
   } else {
-    res.render('salesByRangeForm', {
-      userName: req.session.userName,
-      successAuthentication: req.session.successAuthentication,
-      isWorker: req.session.isWorker,
-      error: 'Выберите промежуток'
-    });
+    res.redirect(301, '/');
   }
 });
 

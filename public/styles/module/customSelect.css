@@ -66,7 +66,7 @@
 
 .select-box .option,
 .selected {
-    padding: 12px 24px;
+    
     cursor: pointer;
     /* запрет выделения текста */
     -ms-user-select: none;
@@ -75,12 +75,18 @@
     -webkit-user-select: none;
 }
 
+.selected,
+.select-box label {
+    padding: 10px;
+}
+
 .select-box .option:hover {
     background: #64aaaa;
 }
 
 .select-box label {
     cursor: pointer;
+    display: block;
 }
 
 .select-box .option .radio {

@@ -3,41 +3,49 @@
 <head>
     include layout/header.pug
     <link rel="stylesheet" href="styles/productsReport.css">
-    <script src="javascript/productsReport.js" defer></script>
     <title>Товары</title>
 </head>
 <body>
     include layout/menu.pug
     <main>
         <h1 class="product-report-title">Товары</h1>
-        <table class="table_adaptive products">
-            <thead>
-                <tr>
-                    <th>Наименование</th>
-                    <th>Категория</th>
-                    <th>Описание</th>
-                    <th>Цена</th>
-                    <th>В наличии</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="custom-table">
+            <div class="head">
+                <div class="name">Наименование</div>
+                <div class="category">Категория</div>
+                <div>Описание</div>
+                <div>Цена</div>
+                <div>В наличии</div>
+            </div>
+            <div class="body">
                 each product in products
-                    <tr class="product" data-product_id = "#{product.product_id}">
-                        <td data-label="Наим.">#{product.product_name}</td>
-                        <td data-label="Кат.">#{product.category}</td>
-                        <td data-label="Опис." class="product-description"><div>#{product.product_description}</div></td>
-                        <td data-label="Цена">#{product.product_amount}</td>
-                        <td data-label="В нал.">
-                            | #{product.product_count_stock}
-                            <div class="action">
-                                <span><a href="deleteProductById?productId=#{product.product_id}">Удалить</a></span>
-                                <span><a href="editProductProperties?productId=#{product.product_id}">Редактировать</a></span>
-                            </div>
-                        </td>
-                    </tr>
-            </tbody>
-        </table>
+                    <div class="product" data-product_id="#{product.product_id}">
+                        <div class="name" data-label="Наим.">#{product.product_name}</div>
+                        <div class="category" data-label="Кат.">#{product.category}</div>
+                        <div class="description" data-label="Опис.">#{product.product_description}</div>
+                        <div class="amount" data-label="Цена">#{product.product_amount}</div>
+                        <div class="count-stock" data-label="В нал.">#{product.product_count_stock}</div>
+                        <div>
+                            <a href="/editProductProperties?productId=#{product.product_id}">
+                                <img src="images/pencil.svg" alt="Редактировать" class="pencil-icon icon"/>
+                            </a>
+                            <img src="images/trash.svg" alt="Удалить" class="trash-icon icon" data-product_id="#{product.product_id}">
+                        </div>
+                    </div>
+            </div>
+        </div>
     </main>
+    <div class="toolbar top-toolbar">
+        <img src="images/cross-white.svg" class="cross-white-icon icon"/>
+        <span>Выбрано: <span class="selected-count"></span></span>
+        <img src="images/select-all.svg" class="select-all-icon icon"/>
+    </div>
+    <div class="toolbar bottom-toolbar">
+        <img src="images/pencil-white.svg" class="bottom-toolbar__pencil-icon icon"/>
+        <img src="images/pencil.svg" class="bottom-toolbar__pencil-blocked-icon icon"/>
+        <img src="images/trash-white.svg" class="bottom-toolbar__trash-icon icon"/>
+    </div>
     include layout/footer.pug
+    <script src="javascript/productsReport.js" defer></script>
 </body>
 </html>

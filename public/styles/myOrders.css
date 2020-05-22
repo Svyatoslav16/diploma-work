@@ -4,9 +4,8 @@
 }
 
 .ruble-icon {
-    width: 16px;
+    width: 14px;
     height: 14px;
-    margin-top: -2px;
     pointer-events: none;
 }
 
@@ -49,7 +48,7 @@
 
 .total-amount {
     /* height: 70px; */
-    height: 47px;
+    height: 49px;
     background:#19a5a5;
     /* border-radius: 50%; */
     border-radius: 10px;

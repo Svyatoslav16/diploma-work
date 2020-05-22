@@ -1,0 +1,74 @@
+main {
+    display: grid;
+}
+
+.hello {
+    display: grid;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-size: 30px;
+    width: 100%;
+    z-index: 15;
+    text-align: center;
+    color: #fff;
+    opacity: 1;
+    background: linear-gradient(-200deg, #fa709a 0%, #fee140 100%);
+    transition: 1s;
+}
+
+.goodbye {
+    display: grid;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-size: 30px;
+    width: 100%;
+    z-index: 15;
+    text-align: center;
+    color: #fff;
+    opacity: 1;
+    background: linear-gradient(-200deg, #bfe699 0%, #20b5c0 100%);
+    transition: .5s;
+}
+
+@media (max-width: 699px) {
+    .hello,
+    .goodbye {
+        align-content: center;
+        height: 100%
+    }
+}
+
+@media (min-width: 700px) {
+    .hello,
+    .goodbye {
+        padding-top: 60px;
+        height: calc(100% - 60px);
+    }
+}
+
+.hello span,
+.goodbye span {
+    animation: showText .6s;
+}
+
+@keyframes showText {
+    0% {
+        opacity: 0;
+    }
+    25% {
+        opacity: .2;
+    }
+    50% {
+        opacity: .4;
+    }
+    75% {
+        opacity: .7;
+    }
+    100% {
+        opacity: 1;
+    }
+}

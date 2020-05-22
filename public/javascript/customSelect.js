@@ -6,11 +6,9 @@ for (let i = 0; i < selectBox.length; i++) {
   const optionsList = selectBox[i].getElementsByClassName("option");
   
   for (let j = 0; j < selected.length; j++) {
-    if(optionsContainer[0].children.length > 0) {
-      selected[j].addEventListener("click", () => {     
-        optionsContainer[0].classList.toggle("active");
-      });
-    }
+    selected[j].addEventListener("click", () => {     
+      optionsContainer[0].classList.toggle("active");
+    });
   }
 
   for (let k = 0; k < optionsList.length; k++) {

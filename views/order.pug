@@ -29,9 +29,11 @@
                     </div>
                 </div>
         </div>
-        <div class="total">
-            <span class="total-amount">Итого: #{totalAmount}</span> 
-            <i class="fas fa-ruble-sign"></i>
+        <div class="total-wrap">
+            <div class="total">
+                <span class="total-amount">Итого: <strong>#{totalAmount}</strong></span>
+                <object type="image/svg+xml" data="images/ruble.svg" class="ruble-icon">Рубль(я)</object>
+            </div>
         </div>
     </main>
     include layout/footer.pug

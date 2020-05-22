@@ -1,8 +1,3 @@
-* {
-    padding: 0;
-    margin: 0;
-}
-
 header {
     background: linear-gradient(to bottom, #4d4d4d 0%, #1a1a1a 100%);
     font-size: 17px;
@@ -30,6 +25,16 @@ header li > a {
     color: #fff;
 }
 
+.my-profile-wrap .sign-in {
+    display: block;
+    width: 100%;
+}
+
+.my-profile-wrap .sign-in a {
+    color: #fff;
+    display: block;
+}
+
 @media (min-width: 700px) {
     header {
         display: grid;
@@ -43,7 +48,7 @@ header li > a {
         grid-template-columns: repeat(auto-fit, minmax(50px, max-content));
     }
 
-    .menu__btn {
+    .menu__btn-wrap {
         position: absolute;
     }
 
@@ -79,25 +84,41 @@ header li > a {
     .submenu {
         padding: 15px 35px 15px 17px;
         position: relative;
-        background: linear-gradient(to bottom, #4d4d4d 0%, #1a1a1a 100%); 
+        background: linear-gradient(to bottom, #4d4d4d 0%, #1a1a1a 100%);
+        z-index: 3;
+        cursor: pointer;
     }
 
-    .submenu .icon-arrow-down {
-        position: absolute;
-        pointer-events: none;
-        transition: all 0.4s;
-        bottom: 15px;
+    .submenu ul {
+        background: linear-gradient(to bottom, #4d4d4d 0%, #1a1a1a 100%);
+        border-radius: 10px;
+        cursor: initial;
+        top: 65px;
     }
 
     .submenu.active ul {
         position: absolute;
         text-align: left;
         width: max-content;
-        transition: .4s;
+        transition: .2s;
         -ms-user-select: none;
         -moz-user-select: none;
         -khtml-user-select: none;
         -webkit-user-select: none;
+    }
+
+    .submenu.active .triangle {
+        position: absolute;
+        top: -10px;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid #4d4d4d;
+    }
+
+    menu .submenu.active ul .triangle {
+        left: 30px;
     }
 
     .submenu ul li {
@@ -112,18 +133,14 @@ header li > a {
 
     .submenu.active ul {
         left: 0;
-        top: 60px;
-        background: linear-gradient(to bottom, #4d4d4d 0%, #1a1a1a 100%);
-        border-radius: 10px;
         padding: 10px 0;
-        cursor: initial;
     }
 
-    .submenu.active ul li{
+    .submenu.active ul li {
         opacity: 1;
     }
 
-    .submenu.active ul li{
+    .submenu.active ul li {
         pointer-events: none;
         width: 100%;
         height: auto;
@@ -139,9 +156,16 @@ header li > a {
         background: linear-gradient(to bottom, #333, #4d4d4d);
     }
 
+    .submenu .icon-arrow-down {
+        position: absolute;
+        pointer-events: none;
+        transition: all 0.4s;
+        bottom: 16px;
+    }
+
     .submenu.active .icon-arrow-down {
         transform: rotateX(180deg);
-        bottom: 11px;
+        bottom: 12px;
     }
 
     .my-profile-wrap {
@@ -151,22 +175,38 @@ header li > a {
         -moz-user-select: none;
         -khtml-user-select: none;
         -webkit-user-select: none;
+    }   
+
+    .my-profile-wrap span,
+    .my-profile-wrap ul li {
         cursor: pointer;
     }
 
     .my-profile-wrap.active ul {
+        min-width: 200px;
+        max-width: 250px;
         left: initial;
         right: 30px;
     }
+
+    .my-profile-wrap.active ul .triangle {
+        right: 30px;
+    }
+    
 }
 
 @media (max-width: 699px) {
+    .triangle {
+        display: none;
+    }
+
     header {
         overflow: hidden;
         overflow-y: scroll;
         width: 100%;
         height: 100%;
         position: fixed;
+        top: 0;
         display: grid;
         grid-template-areas: 
         'profile'
@@ -178,7 +218,8 @@ header li > a {
         -khtml-user-select: none;
         -webkit-user-select: none;
         transition: .3s;
-        transform: translateX(100%);
+        transform: translateX(-100%);
+        z-index: 3;
     }
 
     header.active {
@@ -198,6 +239,16 @@ header li > a {
         grid-area: profile;
     }
 
+    .my-profile-wrap .sign-in {
+        padding: 0;
+        margin-bottom: -10px;
+    }
+
+    .my-profile-wrap .sign-in a {
+        width: 100%;
+        padding: 10px 0 10px 10px;
+    }
+
     header li {
         width: 100%;
     }
@@ -206,6 +257,10 @@ header li > a {
     .submenu li a,
     .submenu span {
         padding-left: 10px;
+    }
+
+    .submenu li:first-child {
+        margin-top: 10px;
     }
 
     li a,
@@ -218,12 +273,13 @@ header li > a {
         display: block;
     }
 
-    header li a:hover {
+    header li a:hover,
+    .my-profile-wrap .sign-in a:hover {
         background: linear-gradient(to bottom, #333, #4d4d4d);
     }
 
     menu li:last-child {
-        margin-bottom: 100px;
+        margin-bottom: 90px;
     }
 
     .my-profile-wrap {
@@ -239,7 +295,7 @@ header li > a {
         position: relative;
         height: 0;
         overflow: hidden;
-        transition: .3s;
+        transition: .3s ease-in-out;
         opacity: 0;
     }
 
@@ -247,11 +303,11 @@ header li > a {
         position: absolute;
         pointer-events: none;
         transition: 0.4s;
-        top: 10px;
+        top: 11px;
     }
     
     .submenu.active .icon-arrow-down {
-        top: 14px;
+        top: 15px;
     }
 
     .submenu.active .icon-arrow-down {
@@ -261,47 +317,60 @@ header li > a {
     .submenu.active ul {
         height: auto;
         opacity: 1;
+        margin-top: 5px;
     }
 
     .menu__btn > span,
     .menu__btn > span::before,
     .menu__btn > span::after {
-        background-color: black; 
+        background-color: #f2f2f2;
     }
 
-    .menu__btn {
+    .menu__btn-wrap {
         position: fixed;
         display: grid;
         align-items: center;
-        top: 12px;
-        right: 14px;  
-        width: 26px;
-        height: 26px;  
-        cursor: pointer;
-        z-index: 1;
+        top: 0;
+        left: 0;  
+        width: 100%;
+        height: 40px;
+        z-index: 4;
+        padding-left: 10px;
+        background: linear-gradient(to bottom, #4d4d4d 0%, #1a1a1a 100%);
     }
+
+    .menu__btn {
+        cursor: pointer;
+        height: 22px;
+        width: 26px;
+    }
+
     .menu__btn > span,
     .menu__btn > span::before,
     .menu__btn > span::after {
-        display: block;
-        position: absolute;  
+        display: block; 
         width: 26px;
         height: 2px;
         transition: .2s;
     }
+
+    .menu__btn > span {
+        position: relative;
+        margin-top: 10px;
+    }
+
+    .menu__btn > span::before,
+    .menu__btn > span::after {
+        position: absolute;
+    }
+
     .menu__btn > span::before {
         content: '';
         top: -8px;
     }
     .menu__btn > span::after {
         content: '';
-        top: 8px;
-    }
-
-    .menu__btn.active > span,
-    .menu__btn.active > span::before,
-    .menu__btn.active > span::after {
-        background-color: #f2f2f2;
+        top: 7px;
     }
     .menu__btn.active > span {
         transform: rotate(45deg);

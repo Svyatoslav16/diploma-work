@@ -1,40 +1,46 @@
 <header>
-    <input id="menu__toggle" type="checkbox" />
-    <label class="menu__btn" for="menu__toggle">
-        <span></span>
-    </label> 
     <menu>
-        if(successAuthentication)
-            <span class="user-name-show-for-mobile">#{userName}</span>
-        <hr class="show-for-mobile">
         <li><a href="/">Главная</a></li>
         <li><a href="/productList">Каталог товаров</a></li>
-        if(isWorker && successAuthentication)
-            <li><a href="/salesPerDay">Продажи за день</a></li>
-            <li><a href="/productsReport">Товары</a></li>
-            <li><a href="/supplyOfProducts">Приход товаров</a></li>
-        <hr class="show-for-mobile">
+        if(isWorker)
+            <li class="submenu">
+                <span>Отчеты</span>
+                <object data="../images/arrow-down.svg" type="image/svg+xml" class="icon-arrow-down"></object>
+                <ul>
+                    <li class="triangle"></li>
+                    <li><a href="/productsReport">Товары</a></li>
+                    <li><a href="/supplyOfProducts">Приход товаров</a></li>
+                    <li><a href="/salesByRange">Продажи за период</a></li>
+                    <li><a href="/salesPerDay">Продажи за день</a></li>
+                    <li><a href="/personnel">Сотрудники</a></li>
+                </ul>
+            </li>
     </menu>
-    <div class="my-profile-wrap">
-        <div class="my-profile">
-            if(successAuthentication)
-                <span class="user-name-hide-for-mobile">#{userName}</span>
-                <input id="profile__toggle" type="checkbox" />
-                <img src="../images/arrow-down.svg" class="my-profile__arrow-down-icon" alt="" srcset="">
-                <div class="profile-action">
-                    if(isWorker === false)
-                        <a href="myOrders">Мои заказы</a>
-                        <a href="cart1">Корзина</a>
-                    if(isWorker)
-                        <a href="/addProduct">Добавить товар</a>
-                        <a href="/addProductCategory">Добавить категорию</a>
-                        <a href="/addWorker">Добавить сотрудника</a>
-                        <a href="/addPosition">Добавить должность</a>
-                        <a href="/arrivalOfGoods">Приход</a>
-                    <a href="/signOut" class="sign-out">Выйти</a>
-                </div>
-            else
-                <a href="signIn">Войти</a>
-        </div>
+    <div class="my-profile-wrap submenu">
+        if(successAuthentication)
+            <span>#{userName}</span>
+            <object data="../images/arrow-down.svg" type="image/svg+xml" class="icon-arrow-down"></object>
+            <ul class="my-profile">
+                <li class="triangle"></li>
+                if(isWorker)
+                    <li><a href="/addProduct">Добавить товар</a></li>
+                    <li><a href="/addProductCategory">Добавить категорию</a></li>
+                    <li><a href="/addWorker">Добавить сотрудника</a></li>
+                    <li><a href="/addPosition">Добавить должность</a></li>
+                    <li><a href="/arrivalOfGoods">Приход</a></li>
+                else 
+                    <li><a href="/myOrders">Мои заказы</a></li>
+                    <li><a href="/myProfile">Мой профиль</a></li>
+                    <li><a href="/cart">Корзина</a></li>
+                <li><a href="/logOff">Выйти</a></li>
+            </ul>
+        else
+            <span class="sign-in"><a href="/signIn">Войти</a></span>
     </div>
+    <script src="../menu.js"></script>
 </header>
+<div class="menu__btn-wrap">
+    <div class="menu__btn">
+        <span></span>
+    </div>
+</div>

@@ -4,53 +4,92 @@
     include layout/header.pug
     <link rel="stylesheet" href="styles/arrivalOfGoods.css">
     <link rel="stylesheet" href="styles/module/customSelect.css">
-    <script src="javascript/customSelect.js" defer></script>
+    <!-- <script src="javascript/customSelect.js" defer></script> -->
     <script src="javascript/arrivalOfGoods.js" defer></script>
     <title>Приход</title>
 </head>
 <body>
     include layout/menu.pug
     <main>
-        <form action="/arrivalOfGoods" method="post" class="add-count-product-form form">
-            <h1>Приход товара</h1>
-            <div class="categories">
-                <div class="select-box">
-                    <div class="options-container">
-                        each category in categories
-                            <div class="option">
-                                <input type="radio" class="radio" id="#{category.name}" name="categoryId" value="#{category.id}" required/>
-                                <label for="#{category.name}">#{category.name}</label>
+        <form action="/arrivalOfGoods" method="post" class="arrival-of-goods-form">
+            <h1>Приходная накладная</h1>
+            <div class="arrival-date">
+                <label for="arrivalDate">Дата:</label>
+                <div class="input-wrap">
+                    <input type="date" name="arrivalDate" id="arrivalDate" required><input type="time" name="arrivalTime" required>
+                </div>
+            </div>
+            <div class="table">
+                <button class="add-row add-row__desktop" type="button">Добавить</button>
+                <div class="table__head">
+                    <div class="head__data">Категория</div>
+                    <div class="head__data">Наименование</div>
+                    <div class="head__data">Количество</div>
+                    <div class="head__data">Закупочная цена</div>
+                    <div class="head__data">Итог</div>
+                </div>
+                <div class="table__body">
+                    <div class="row">
+                        <div class="row__data select-wrap categories wrap">
+                            <div class="select-box">
+                                <div class="options-container">
+                                    each category in categories
+                                        <div class="option">
+                                            <input type="radio" class="radio" id="#{category.name}" name="category__0" value="#{category.id}"/>
+                                            <label for="#{category.name}">#{category.name}</label>
+                                        </div>
+                                </div>
+                                <div class="selected" name="categories">
+                                    | Категория
+                                </div>
                             </div>
+                        </div>
+                        <div class="row__data select-wrap products wrap">
+                            <div class="select-box">
+                                <div class="options-container">
+                                </div>
+                                <div class="selected" name="products">
+                                    | Товар
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row__data count wrap">
+                            <label>Количество</label>
+                            <input type="number" name="count" min="1" max="99" value="1">
+                        </div>
+                        <div class="row__data amount wrap">
+                            <label>Стоимость</label>
+                            <input type="number" name="amount" min="1" value="1">
+                        </div>
+                        <div class="row__data total-row wrap">
+                            <label>Итог</label>
+                            <input type="text" value="1" readonly />
+                        </div>
+                        <div class="action">
+                            <svg class="cross-icon icon" x="0px" y="0px" viewBox="0 0 492 492" xml:space="preserve">
+                                <path d="M300.188,246L484.14,62.04c5.06-5.064,7.852-11.82,7.86-19.024c0-7.208-2.792-13.972-7.86-19.028L468.02,7.872 c-5.068-5.076-11.824-7.856-19.036-7.856c-7.2,0-13.956,2.78-19.024,7.856L246.008,191.82L62.048,7.872	c-5.06-5.076-11.82-7.856-19.028-7.856c-7.2,0-13.96,2.78-19.02,7.856L7.872,23.988c-10.496,10.496-10.496,27.568,0,38.052 L191.828,246L7.872,429.952c-5.064,5.072-7.852,11.828-7.852,19.032c0,7.204,2.788,13.96,7.852,19.028l16.124,16.116	c5.06,5.072,11.824,7.856,19.02,7.856c7.208,0,13.968-2.784,19.028-7.856l183.96-183.952l183.952,183.952 c5.068,5.072,11.824,7.856,19.024,7.856h0.008c7.204,0,13.96-2.784,19.028-7.856l16.12-16.116 c5.06-5.064,7.852-11.824,7.852-19.028c0-7.204-2.792-13.96-7.852-19.028L300.188,246z"/>
+                            </svg>
+                        </div>
                     </div>
-                    <div class="selected" name="categories">
-                        | Выберите категорию
+                </div>
+                <div class="total">
+                    <label for="total">Итого:</label>
+                    <input type="number" class="total__input" name="total" id="total" value="0" readonly/>
+                </div>
+                <div class="table-action">
+                    <button type="submit" class="hold-button">Провести</button>
+                    <button class="close-button" type="button">Закрыть</button>
+                </div>
+                <div class="table-action__mobile">
+                    <div class="button-wrap">
+                        <button class="add-row add-row__mobile" type="button">Добавить</button>
+                    </div>
+                    <div class="buttons-wrap">
+                        <button type="submit" class="hold-button">Провести</button>
+                        <button class="close-button" type="button">Закрыть</button>
                     </div>
                 </div>
             </div>
-            <div class="products">
-                <div class="select-box">
-                    <div class="options-container">
-                    </div>
-                    <div class="selected" name="categories">
-                        | Выберите товар
-                    </div>
-                </div>
-            </div>
-            <div class="material-design-input-wrap">
-                <input type="number" id="amount" class="material-design-input" name="amount" required>
-                <label for="amount" class="name-label material-design-label-for-input">
-                    <span class="content-amount">Закупочная цена</span>
-                </label>
-            </div>
-            <div class="material-design-input-wrap">
-                <input type="number" id="count" class="material-design-input" name="count" required>
-                <label for="count" class="material-design-label-for-input">
-                    <span class="content-count">Закуплено штук</span>
-                </label>
-            </div>
-            <div class="add-count-product-button-wrap">
-                <button class="btn add-count-product-button">Обновить данные</button>
-            </div> 
         </form>
     </main>
     include layout/footer.pug

@@ -1,0 +1,12 @@
+
+/orderRegistration: Error: Unknown column 'product_req.url_img' in 'field list' 2020-4-17
+/orderRegistration: Error: Unknown column 'product_req.url_img' in 'field list' 2020-4-17
+/orderRegistration: Error: SMTP code:550 msg:550 5.7.1 No such user!
+ 2020-4-25
+/orderRegistration: Error: SMTP code:550 msg:550 5.7.1 No such user!
+ 2020-4-25
+/orderRegistration: Error: SMTP code:550 msg:550 5.7.1 No such user!
+ 2020-4-25
+/orderRegistration: Error: SMTP code:550 msg:550 spam message rejected. Please visit http://help.mail.ru/notspam-support/id?c=R69GDf8YDVT5t-OA3SYJWoapqewSwse-XXxiDa6TDDkCAAAAfvcAANj0yDU~ or  report details to abuse@corp.mail.ru. Error code: 0D46AF47540D18FF80E3B7F95A0926DDECA9A986BEC7C2120D627C5D390C93AE. ID: 000000020000F77E35C8F4D8.
+ 2020-4-30
+/myProfile: Error: Table 'internet_magazine.workers' doesn't exist 2020-5-12

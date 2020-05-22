@@ -11,7 +11,6 @@ document.getElementsByClassName('sign-in-form')[0].addEventListener('submit', fu
 
 document.getElementsByName('login')[0].addEventListener('input', function() {
     if( checkLogin(this.parentNode, this.value) ) {
-        console.log(this.nextElementSibling.nextElementSibling.style);
         this.nextElementSibling.nextElementSibling.className = "cross-icon";
         this.nextElementSibling.nextElementSibling.nextElementSibling.className = "correct-icon active";
         this.nextElementSibling.className = "login-label material-design-label-for-input valid";
@@ -41,25 +40,13 @@ document.getElementsByName('password')[0].addEventListener('input', function() {
 /** Проверка логина по email или номеру*/
 function checkLogin(loginInputWrap, login) {
     if( login.match(/@/g) ) {
-        if( login.match(/^[\w]{1}[\w-\.]*@[\w-]+\.[a-z]{2,10}$/i) ) {
-            return true;
-        } else {
-            return false;
-        }
+        return ( login.match(/^[\w]{1}[\w-\.]*@[\w-]+\.[a-z]{2,10}$/i) ) ? true : false;
     } else {
-        if( login.match(/^8[0-9]{10}$/) ) { 
-            return true;
-        } else {
-            return false;
-        }
+        return ( login.match(/^8[0-9]{10}$/) ) ? true : false;
     }    
 }
 
 /** Проверка пароля на длину > 6, содержание латинских символов и цифр */
 function checkPassword(passwordInput, password) {
-    if( password.match(/(?=.*[0-9]{2,})(?=.*[a-z])[0-9a-z]{6,}/g) ) {
-        return true;
-    } else {
-        return false;
-    }
+    return ( password.match(/(?=.*[0-9]{2,})(?=.*[a-z])[0-9a-z]{6,}/g) ) ? true : false;
 }

@@ -3,32 +3,32 @@
     <head>
         include layout/header.pug
         <title>Продажи за день</title>
+        <link rel="stylesheet" href="styles/module/custom-table.css">
+        <link rel="stylesheet" href="styles/salesPerDay.css">
     </head>
     <body>
         include layout/menu.pug
         <main>
             <h1>Продажи за день</h1>
-            <table class="table_adaptive">
-                <thead>
-                    <tr>
-                        <th>Наименование</th>
-                        <th>Категория</th>
-                        <th>Количество</th>
-                        <th>Стоимость</th>
-                        <th>Покупатель</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    each product in salesPerDay
-                        <tr>
-                            <td data-label="Наим.">#{product.product_name}</td>
-                            <td data-label="Кат.">#{product.name}</td>
-                            <td data-label="Кол.">#{product.count}</td>
-                            <td data-label="Стоим.">#{product.product_amount}</td>
-                            <td data-label="Покуп."> #{product.user_surname} #{product.user_name} #{product.user_patronymic}</td>
-                        </tr>
-                </tbody>
-            </table>
+            <div class="custom-table">
+            <div class="custom-table__head">
+                <div class="head__data">Наименование</div>
+                <div class="head__data">Категория</div>
+                <div class="head__data count">Количество</div>
+                <div class="head__data amount">Стоимость</div>
+                <div class="head__data">Покупатель</div>
+            </div>
+            <div class="custom-table__body">
+                each sale in sales
+                    <div class="row">
+                        <div class="row__data" data-label="Наим.">#{sale.name}</div>
+                        <div class="row__data" data-label="Катег.">#{sale.category}</div>
+                        <div class="row__data count" data-label="Кол-во">#{sale.count}</div>
+                        <div class="row__data" data-label="Стоим.">#{sale.amount}</div>
+                        <div class="row__data" data-label="Покуп">#{sale.user_surname} #{sale.user_name}</div>
+                    </div>
+            </div>
+        </div>
         </main>
         include layout/footer.pug
     </body>

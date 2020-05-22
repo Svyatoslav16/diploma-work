@@ -122,15 +122,15 @@ function changeWithInput() {
 
 /** При изменении кол-ва товара пересчитывает итоговую стоимость корзины пользователя */
 function totalAmount() {
-    let priceValue = document.querySelector('.price-value');
+    let priceValue = document.querySelector('.price').childNodes[0];
     let productList = document.querySelectorAll('.product');
     document.getElementsByClassName('total-amount-count')[0].innerText = `Итого: ${document.getElementsByClassName('product').length} товар(а) на`;
-    priceValue.innerText = 0;
+    priceValue.nodeValue = 0;
     if(productList.length > 0) {    
         productList.forEach(elem => {
-            priceValue.innerText =  parseInt(priceValue.innerText) + 
-                                    (elem.children[1].children[1].children[0].children[1].value * 
-                                     elem.children[1].children[2].children[0].children[0].innerText); 
+            priceValue.nodeValue =  parseInt(priceValue.nodeValue) + 
+                            (elem.children[1].children[1].children[0].children[1].value * 
+                            elem.children[1].children[2].children[0].children[0].innerText); 
         });
     } else if(productList.length == 0) {
         document.getElementsByClassName('cart-items')[0].remove();

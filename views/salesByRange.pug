@@ -2,37 +2,45 @@
 <html lang="en">
 <head>
     include layout/header.pug
+    <link rel="stylesheet" href="styles/module/custom-table.css">
     <link rel="stylesheet" href="styles/salesByRange.css">
+    <script src="javascript/salesByRange.js" defer></script>
     <title>Продажи за период</title>
 </head>
 <body>
     include layout/menu.pug
     <main>
-        <h1 class="product-report-title">Отчёт по товарам</h1>
-        <table class="table_adaptive products">
-            <thead>
-                <tr>
-                    <th>Наименование</th>
-                    <th>Категория</th>
-                    <th>Описание</th>
-                    <th>Цена</th>
-                    <th>Клиент</th>
-                    <th>Дата</th>
-                </tr>
-            </thead>
-            <tbody>
-                each sale in salesByRange
-                    <tr class="product">
-                        <td data-label="Наим.">#{sale.product}</td>
-                        <td data-label="Кат.">#{sale.category}</td>
-                        <td data-label="Цена">#{sale.amount}</td>
-                        <td data-label="Кол-во">#{sale.count}</td>
-                        <td data-label="Клиент">#{sale.user}</td>
-                        <td data-label="Дата">#{sale.date}</td>
-                    </tr>
-            </tbody>
-        </table>
+        <div class="date-range-wrap">
+            <div class="date-input-wrap">
+                <label for="start-date">Начало промежутка</label>
+                <input type="date" class="date-input date-input__start-date" id="start-date">
+            </div>
+            <div class="date-input-wrap">
+                <label for="end-date">Конец промежутка</label>
+                <input type="date" class="date-input date-input__end-date" id="end-date">
+            </div>
+            <button class="update-data">
+                <span class="update-data__button_content">Обновить</span>
+                <svg height="512px" viewBox="0 0 512 512" width="512px" xmlns="http://www.w3.org/2000/svg" class="icon done-icon">
+                    <path d ="m369.164062 174.769531c7.8125 7.8125 7.8125 20.476563 0 28.285157l-134.171874 134.175781c-7.8125 7.808593-20.472657 7.808593-28.285157 0l-63.871093-63.875c-7.8125-7.808594-7.8125-20.472657 0-28.28125 7.808593-7.8125 20.472656-7.8125 28.28125 0l49.730468 49.730469 120.03125-120.035157c7.8125-7.808593 20.476563-7.808593 28.285156 0zm142.835938 81.230469c0 141.503906-114.515625 256-256 256-141.503906 0-256-114.515625-256-256 0-141.503906 114.515625-256 256-256 141.503906 0 256 114.515625 256 256zm-40 0c0-119.394531-96.621094-216-216-216-119.394531 0-216 96.621094-216 216 0 119.394531 96.621094 216 216 216 119.394531 0 216-96.621094 216-216zm0 0"/>
+                </svg>
+            </button>
+        </div>
+        <h1 class="product-report-title">Продажи за период</h1>
+        <div class="custom-table">
+            <div class="custom-table__head">
+                <div class="head__data">Наименование</div>
+                <div class="head__data">Категория</div>
+                <div class="head__data">Цена</div>
+                <div class="head__data count">Количество</div>
+                <div class="head__data">Клиент</div>
+                <div class="head__data">Дата</div>
+            </div>
+            <div class="custom-table__body">
+            </div>
+        </div>
     </main>
+    include layout/toTop.pug
     include layout/footer.pug
 </body>
 </html>

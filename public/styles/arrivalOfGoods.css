@@ -1,38 +1,399 @@
-main {
-    width: 100%;
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-}
-
-.add-count-product-form h1 {
-    text-align: center;
-}
-
-.add-count-product-form {
-    background: #fff;
-    width: 100%;
-    padding: 20px;
-    border: 1px solid #d8dee2;
-    border-radius: 12px;
-    display: grid;
-    margin-bottom: 20px;
-}
-
-.add-count-product-button-wrap {
-    width: 100%;
-    text-align: center;
-}
-
-.product-name {
-    padding: 20px 0 5px 0px;
-}
-
-.categories {
-    margin-bottom: 10px;
-}
-
-.products .selected {
+/* Изменение стилей для кастомного select */
+.select-wrap .selected {
+    padding: 5px 0 5px 5px;
     margin-bottom: 0;
+    background: none;
+    color: rgba(0, 0, 0, .7);
+}
+
+.select-wrap .selected::after {
+    top: 9px;
+    background: url(../../images/arrow-down-black.svg) no-repeat;
+    background-size: contain;
+    height: 15px;
+    width: 15px;
+}
+
+.select-wrap .select-box .options-container.active + .selected::after {
+    top: 8px;
+}
+
+.select-wrap .select-box .options-container {
+    background: rgb(85, 85, 85);
+    top: 35px;
+    border-radius: 0;
+}
+
+.select-wrap .select-box .option:hover {
+    background: rgb(49, 49, 49);
+ }
+/* Изменение стилей для кастомного select */
+
+.cross-icon {
+    /* display: none; */
+}
+
+.arrival-of-goods-form {
+    padding: 20px;
+    background: #fff;
+}
+
+.arrival-date {
+    /* display: grid; */
+    width: max-content;
+    padding: 10px 0;
+    align-items: center;
+    color: rgba(0, 0, 0, .7);
+}
+
+.arrival-date label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.table__head,
+.table__body .row {
+    display: grid;
+}
+
+.input-wrap input {
+    border: none;
+    color: rgba(0, 0, 0, .9);
+    outline: none;
+}
+
+.table,
+.table input {
+    color: rgba(0, 0, 0, .7);
+}
+
+.total__input {
+    display: inline-block;
+    text-align: left;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 16px;
+    padding-left: 3px;
+    cursor: default;
+}
+
+.input-wrap input {
+    cursor: pointer;
+    padding: 10px 0;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+    color: rgba(0, 0, 0, .7);
+    transition: .3s;
+}
+
+.input-wrap input[name="arrivalDate"] {
+    margin-right: 0;
+    border-radius: 5px 0 0 5px;
+    padding-left: 5px;
+    border-left: 1px solid grey;
+}
+
+.input-wrap input[name="arrivalTime"] {
+    margin-left: 0;
+    border-radius: 0 5px 5px 0;
+    border-right: 1px solid grey;
+}
+
+.add-row {
+    border: 1px solid #b0b0b0;
+    outline: none;
+    background: none;
+    padding: 4px;
+    margin: 3px 3px 3px 0;
+    color: #363636;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 2px 1px 1px gray;
+    margin-bottom: 5px;
+}
+
+.table__body .row__data.count input,
+.table__body .row__data.amount input,
+.table__body .row__data.total-row input {
+    background: none;
+    width: calc(100% - 5px);
+    border: none;
+    outline: none;
+    padding: 7px 0 7px 5px;
+    font-size: 15px;
+}
+
+@media (min-width: 1000px) {
+    .input-wrap:hover input[name="arrivalDate"],
+    .input-wrap:hover input[name="arrivalTime"] {
+        background: grey;
+        color: #f5f5f5;
+    }
+
+    .add-row:hover {
+        background: #888;
+        color: #f5f5f5;
+    }
+
+    .table__head {
+        background: rgb(85, 85, 85);
+        color: #f5f5f5;
+        border-radius: 5px 5px 0 0;
+    }
+
+    .table__head > div {
+        padding: 5px 0;
+    }
+
+    .table__head,
+    .table__body .row {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 30px;
+    }
+
+    .table__body .row  {
+        position: relative;
+        border-bottom: 1px solid grey;
+        border-left: 1px solid grey;
+        border-right: 1px solid grey;
+    }
+
+    .table__body .row:last-child {
+        border-radius: 0 0 5px 5px;
+    }
+
+    .table__body .row__data.count label,
+    .table__body .row__data.amount label,
+    .table__body .row__data.total-row label {
+        display: none;
+    }
+
+    .table__body .row .action {
+        display: grid;
+        place-items: center;
+    }
+
+    .table__body .row .action .icon {
+        display: initial;
+        cursor: pointer;
+        width: 15px;
+        height: 15px;
+        padding: 8.25px 8px 8.25px 7px;
+        transition: .3s;
+    }
+
+    .table__body .row .action .icon:hover {
+        background: rgb(223, 221, 221);
+    }
+
+    .table__body .row__data:not(.total-row):hover {
+        background: rgb(223, 221, 221);
+    }
+
+    .table__body .row__data {
+        cursor: text;
+    }
+
+    .table__body .row__data.total-row input {
+        cursor: default;
+    }
+
+    .table__head > .head__data {
+        padding-left: 5px;
+    }
+
+    .table__body .row__data:nth-child(-n+5),
+    .table__head > div:not(:last-child) {
+        border-right: 1px solid rgb(175, 175, 175);
+    }
+
+    .table__body .row__data.category {
+        cursor: pointer;
+    }    
+
+    .table-action button:hover {
+        background: #888;
+        color: #f5f5f5;
+    }
+
+    .table .total {
+        text-align: right;
+        font-size: 18px;
+        padding-right: 30px;
+        color: rgba(0, 0, 0, .9);
+        display: grid;
+        grid-template-columns: 1fr 120px;
+    }
+    
+    .table-action {
+        margin-top: 15px;
+        text-align: right;
+    }
+}
+
+@media (max-width: 999px) {
+    .select-wrap .select-box {
+        min-width: 240px;
+        max-width: none;
+    }
+    
+    .select-wrap .selected {
+        padding: 5px 30px 5px 5px;
+    }
+
+    .table__head {
+        display: none;
+    }
+
+    .table__body {
+        display: grid;
+        
+        padding: 10px 0;
+    }
+
+    .table__body .row {
+        border: 1px solid grey;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        padding: 10px 0 0 0;
+        box-shadow: 2px 2px 4px 0px rgba(115, 115, 115, 0.29);
+    }
+
+    .table__body .row .row__data {
+        padding: 0 10px;
+    }
+
+    .select-wrap .selected {
+        padding-left: 0;
+    }
+    
+    .table__body .row__data.count,
+    .table__body .row__data.amount,
+    .table__body .row__data.total-row {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        align-items: center;
+        /* padding-left: 5px; */
+    }
+
+    .table__body .row__data.count input, 
+    .table__body .row__data.amount input, 
+    .table__body .row__data.total-row input {
+        width: calc(100% - 19px);
+        text-align: right;
+    }
+
+    .table__body .row .action {
+        padding: 2px 0;
+        text-align: center;
+        background: linear-gradient(45deg, rgb(90, 90, 90), rgb(150, 149, 149));
+    }
+
+    .table__body .row .action svg {
+        width: 20px;
+        height: 20px;
+        fill: #f5f5f5;
+    }
+
+    .table__body .row .action {
+        display: grid;
+        place-items: center;
+    }
+
+    .table__body .row .action .icon {
+        display: initial;
+        cursor: pointer;
+        width: 15px;
+        height: 15px;
+        padding: 5px;
+        border-radius: 5px;
+        transition: .3s;
+    }
+}
+
+@media (min-width: 700px) and (max-width: 999px) {
+    .table__body {
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        justify-items: center;
+    }
+}
+
+@media (min-width: 700px) {
+    .arrival-of-goods-form {
+        min-height: calc(100vh - 182px);
+    }
+
+    .table-action button {
+        border: 1px solid #b0b0b0;
+        outline: none;
+        background: none;
+        padding: 4px;
+        margin: 3px 3px 3px 0;
+        color: #363636;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 2px 1px 1px gray;
+    }
+    
+    .table-action__mobile {
+        display: none;
+    }
+}
+
+@media (max-width: 699px) {
+    main {
+        padding-top: 60px;
+        display: grid;
+        align-items: center;
+    }
+
+    .arrival-of-goods-form {
+        /* margin-top: 30px; */
+    }
+
+    h1 {
+        color: #f5f5f5;
+        position: fixed;
+        top: 0;
+        z-index: 4;
+        font-size: 22px;
+        font-weight: normal;
+        left: calc(50% - 101px);
+        padding: 6px 0;
+    }
+
+    .table-action,
+    .table .add-row__desktop {
+        display: none;
+    }
+
+    .hold-button,
+    .close-button,
+    .add-row__mobile {
+        background: rgb(115, 115, 115);
+        padding: 7px 10px;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        box-shadow: inset 0 0 0px 2px #e2e2e2;
+        outline: none;
+        color: #f2f2f2;
+        cursor: pointer;
+    }
+
+    .table-action__mobile {
+        display: grid;
+        grid-template-columns: 1fr 170px;
+        background: rgb(115, 115, 115);
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: calc(100% - 20px);
+        padding: 6px 10px;
+    }
+
+    .table-action__mobile .buttons-wrap button:first-child {
+        margin-right: 5px;
+    }
 }

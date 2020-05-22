@@ -1,0 +1,41 @@
+.arrow-up_wrap {
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    
+    opacity: 0;
+    pointer-events: none;
+    transition: .5s ease-in;
+    border-radius: 50%;
+    /* background: black; */
+}
+
+.arrow-up_wrap.show {
+    opacity: 1;
+    pointer-events: initial;
+}
+
+.arrow-up_wrap svg {
+    width: 40px;
+    height: 40px;
+    transition: .3s;
+}
+
+.arrow-up_wrap:hover svg {
+    fill: grey;
+    cursor: pointer;
+}
+
+@media (min-width: 700px) {
+    .arrow-up_wrap {
+        bottom: 20px;
+        right: 15px;
+    }
+}
+
+@media (max-width: 699px) {
+    .arrow-up_wrap {
+        bottom: 55px;
+        right: 15px;
+    }
+}

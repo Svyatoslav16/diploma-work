@@ -1,0 +1,129 @@
+.income {
+    background: rgba(0, 0, 0, .05);
+    margin-top: 5px;
+    padding: 20px 5px;
+    /* margin-top: 10px; */
+}
+
+.income_id {
+    display: grid;
+    grid-template-columns: 1fr 150px 1fr;
+    /* width: calc(100%; */
+    height: 20px;
+    text-align: center;
+    align-items: center;
+    padding: 0 5px;
+    font-size: 20px;
+    margin-bottom: 10px;
+    /* position: relative; */
+}
+
+.income_id span:first-child,
+.income_id span:last-child {
+    height: 1px;
+    background: #0000003d;
+}
+
+.product_list__wrap {
+    display: grid;
+    place-items: center;
+    text-align: left;
+}
+
+.product_list thead {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.product_list thead th {
+    font-weight: normal;
+}
+
+.product_list tbody {
+    color: rgba(0, 0, 0, .5);
+}
+
+.product_list tr > * {
+    padding: 0 5px;
+}
+
+/* .income_id::before,
+.income_id::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    height: 1px;
+    width: 35%;
+    background: #0000003d;
+} */
+
+/* .income_id::before {
+    left: 10px;
+}
+
+.income_id::after {
+    right: 10px;
+} */
+
+@media (min-width: 700px) {
+    .product_list {
+        min-width: 50%;
+    }
+}
+
+@media (max-width: 699px) {
+    main {
+        margin-top: 40px;
+    }
+
+    .product_list {
+        width: 100%;
+    }
+
+    h1 {
+        position: fixed;
+        top: 4px;
+        left: calc(50% - 91.341px);
+        font-size: 23px;
+        font-weight: normal;
+        margin-bottom: 0;
+        color: rgba(255,255,255,0.92);
+        z-index: 4;
+    }
+
+    .product_list thead {
+        display: none;
+    }
+
+    .product_list tbody tr {
+        display: block;
+        position: relative;
+        padding-top: 15px;
+    }
+
+    .product_list tbody tr:not(:first-child) {
+        margin-top: 10px;
+        border-top: 1px dashed rgba(0, 0, 0, .1);
+    }
+
+    .product_list tbody tr td {
+        display: block;
+        text-align: right;
+        position: relative;
+        margin-top: 5px;
+    }
+
+    .product_list tbody tr td::before {
+        content: attr(aria-label);
+        position: absolute;
+        left: 0;
+        text-align: left;
+    }
+
+    .product_list tbody tr .worker_name {
+        position: absolute;
+        top: -10px;
+        left: 0;
+        width: calc(100% - 10px);
+    }
+}

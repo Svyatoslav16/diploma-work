@@ -46,22 +46,23 @@
                             each product in productList
                                 <tr class="product">
                                     <td class="product-image"><img src='#{product.product_url_img}' /></td>
-                                    <td class="product-name">#{product.product_name}</td>
-                                    <td>
+                                    <td class="product-name" arial-label="Наименование">#{product.product_name}</td>
+                                    <td arial-label="Стоимость">
                                         | #{product.product_amount}
                                         <img src="images/ruble.svg" alt="ruble" class="ruble-icon" width="15px" height="15px">
                                     </td>
-                                    <td>#{product.count}</td>
+                                    <td arial-label="Количество">#{product.count}</td>
                                 </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="order-total">
                     <div class="total-count">
-                        <span>Товаров: </span> #{total_count} шт.
+                        <strong>Товаров: </strong> #{total_count} шт.
                     </div>
-                    <div class="price">Итого:
-                        <span class="price-value">#{total_amount}</span>
+                    <div class="price">
+                        <strong class="price-value">Итого:</strong>
+                        | #{total_amount}
                         <img src="images/ruble.svg" alt="ruble" class="ruble-icon">
                     </div>
                     <div class="order-button-wrap">

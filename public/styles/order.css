@@ -1,5 +1,6 @@
-main {
-    /* display: grid; */
+.ruble-icon {
+    width: 17px;
+    height: 17px;
 }
 
 h1 {
@@ -9,10 +10,6 @@ h1 {
 .order-items {
     display: grid;
     justify-content: center;
-}
-
-
-.total-amount {
 }
 
 .product {
@@ -38,6 +35,10 @@ h1 {
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
+.product-details {
+    font-size: 18px;
+}
+
 .product > div {
     margin: 5px 10px;
 }
@@ -59,7 +60,6 @@ h1 {
 
 .product-name {
     font-size: 20px;
-    /* height: 45px; */
     margin-bottom: 40px;
     color: #333;
 }
@@ -68,22 +68,29 @@ h1 {
     color: #777;
 }
 
-@media (min-width: 925px) {
-    .order-items {
-        grid-template-columns: repeat(auto-fit, minmax(350px, 450px));
-    }
+.order-items {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 450px));
 }
-@media (min-width: 350px) and (max-width: 924px) {
-    .order-items {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 420px));
-    }
-}
-@media (max-width: 349px) {
-    .order-items {
-        grid-template-columns: repeat(auto-fit, minmax(270px, 320px));
-    }
 
+.total-wrap {
+    display: grid;
+    justify-content: center;
+}
+
+.total {
+    background: #fff;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 20px 40px;
+    font-size: 18px;
+}
+
+.total span strong {
+    font-size: 20px;
+}
+
+@media (max-width: 400px) {
     .product-image-wrap {
-        max-width: 80px;
+        max-width: 60px;
     }
 }

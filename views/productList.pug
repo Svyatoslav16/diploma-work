@@ -3,39 +3,33 @@
 <head>
     include layout/header.pug
     <link rel="stylesheet" href="styles/productList.css">
+    <script src="javascript/productList.js" defer></script>
     <title>Каталог товаров</title>
 </head>
 <body>
     include layout/menu.pug
     <aside>
         <ul class="product-categories">
-            each category in categories
-                li(class=(category.name==activeCategory ? 'active' : ''))
-                    <a href="productList?categoryName=#{category.name}">#{category.name}</a>
         </ul>
+        //- <svg class="filter-icon" x="0px" y="0px" viewBox="0 0 335.2 335.2" xml:space="preserve" width="512px" height="512px"><g><g>
+        //-     <g>
+        //-         <path d="M327.6,61.8H194.4C191.2,47,177.6,35.4,162,35.4c-16,0-29.2,11.2-32.4,26.4H7.2C3.2,61.8,0,65,0,69s3.2,7.2,7.2,7.2h122    c3.2,14.8,16.8,26.4,32.4,26.4c16,0,29.2-11.2,32.4-26.4h133.6c4,0,7.2-3.2,7.2-7.2S331.6,61.8,327.6,61.8z M162,88.6    c-10.4,0-19.2-8.4-19.2-19.2s8.4-19.2,19.2-19.2c10.4,0,19.2,8.4,19.2,19.2C181.2,79.8,172.8,88.6,162,88.6z" data-original="#000000" class="active-path" data-old_color="#000000"/>
+        //-     </g>
+        //-     <g>
+        //-         <path d="M328,160.6H126c-3.2-14.8-16.8-26.4-32.4-26.4c-16,0-29.2,11.2-32.4,26.4h-54c-4,0-7.2,3.2-7.2,7.2s3.2,7.2,7.2,7.2h54    c3.2,14.8,16.8,26.4,32.4,26.4c16,0,29.2-11.2,32.4-26.4h202c4,0,7.2-3.2,7.2-7.2S332,160.6,328,160.6z M93.6,187    c-10.4,0-19.2-8.4-19.2-19.2c0-10.4,8.8-19.2,19.2-19.2c10.4,0,19.2,8.4,19.2,19.2C112.8,178.2,104.4,187,93.6,187z" data-original="#000000" class="active-path" data-old_color="#000000"/>
+        //-     </g>
+        //-     <g>
+        //-         <path d="M327.6,259h-62.8c-3.2-14.8-16.8-26.4-32.4-26.4c-16,0-29.2,11.2-32.4,26.4H7.2c-4,0-7.2,3.2-7.2,7.2s3.2,7.2,7.2,7.2    h192.4c3.2,14.8,16.8,26.4,32.4,26.4c16,0,29.2-11.2,32.4-26.4h63.2c4,0,7.2-3.2,7.2-7.2S331.6,259,327.6,259z M232,285.8    c-10.4,0-19.2-8.4-19.2-19.2c0-10.8,8.8-19.2,19.2-19.2c10.4,0,19.2,8.4,19.2,19.2C251.2,277.4,242.8,285.8,232,285.8z" data-original="#000000" class="active-path" data-old_color="#000000"/>
+        //-     </g>
+        //- </svg>
     </aside>
     <main>
         <div class="product-list">
-            each product in productList 
-                <div class="product">
-                    <h3 class="product-name"> <a href="/product?productId=#{product.product_id}" class="product-name-link">#{product.product_name}</a></h3>
-                    <a href="/product?productId=#{product.product_id}"><img src="#{product.product_url_img}"/></a>
-                    <div class="product-price">
-                        <span class="product_amount">#{product.product_amount}</span>
-                        <object type="image/svg+xml" data="images/ruble.svg" class="ruble-icon">Рубль(я)</object>
-                    </div>
-                    if !isWorker
-                        <button class="add-to-cart" data-product_id="#{product.product_id}">
-                            if(successAuthentication) 
-                                | Добавить в корзину
-                            else 
-                                <a href="/signIn">Добавить в корзину</a>
-                        </button>
-                </div> 
-        </div>        
+        </div>
+        <div class="loading-window">
+            <object type="image/svg+xml" data="images/loading_v2.svg" class="loading-icon">Загрузка</object>
+        </div>
     </main>
-    if(successAuthentication)
-        <script src="javascript/addToCart.js" defer></script>
     include layout/footer.pug
 </body>
 </html>
