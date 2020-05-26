@@ -1,3 +1,18 @@
+.cross-icon,
+.correct-icon {
+    position: absolute;
+    top: 20.5px;
+    right: 23px;
+    width: 0; /* самый простой способ сделать иконку невидимой*/
+    height: 15px;
+    transition: width .2s ease-out;
+}
+
+/* размер для иконок в полях */
+.profile_form .active {
+    width: 15px;
+}
+
 main {
     width: 100%;
     display: grid;
@@ -15,28 +30,13 @@ main {
     text-align: center;
 }
 
-.my_profile_form {
+.profile_form {
     background: #fff;
     /* padding: 20px; */
 }
 
-.my_profile_form input {
+.profile_form input {
     color: #000000b8;
-}
-
-.cross-icon,
-.correct-icon {
-    position: absolute;
-    top: 20.5px;
-    right: 23px;
-    width: 0; /* самый простой способ сделать иконку невидимой*/
-    height: 15px;
-    transition: width .2s ease-out;
-}
-
-/* размер для иконок в полях */
-.my_profile_form .active {
-    width: 15px;
 }
 
 .button_wrap {
@@ -53,14 +53,6 @@ main {
     -webkit-user-select: none;
     background: grey;
     box-shadow: inset 0 0 0px 2px #acacac;
-}
-
-.button_wrap__confirm {
-    display: none;
-}
-
-.button_wrap__confirm.show {
-    display: grid;
 }
 
 .button_wrap__button {
@@ -89,36 +81,6 @@ main {
     margin: 2px 0px 2px -2px;
 }
 
-.err__compare_passwords {
-    text-align: right;
-    padding-top: 5px;
-    color: #ff0000a6;
-}
-
-.repeat_password_wrap_readonly {
-    display: none;
-}
-
-.material-design-input__readonly:hover + .material-design-label-for-input {
-    background: rgba(244, 242, 242, 0.96);
-    border-bottom: 1px solid rgba(99, 98, 98, 0.54);
-}
-
-.material-design-input__readonly + .material-design-label-for-input span {
-    transform: translateY(-90%);
-    font-size: 14px;
-}
-
-.material-design-input__readonly:focus + .material-design-label-for-input span,
-.material-design-input__readonly:valid + .material-design-label-for-input span {
-    color: rgba(0,0,0,.54);
-}
-
-.material-design-input__readonly:focus + .material-design-label-for-input::after,
-.material-design-input__readonly:valid + .material-design-label-for-input::after {
-    transform: translateX(-100%);
-}
-
 .material-design-input:valid + .material-design-label-for-input::after {
     border-bottom: 2px solid rgb(224, 113, 113);
 }
@@ -133,6 +95,18 @@ main {
 
 .material-design-input:valid + .material-design-label-for-input.valid span {
     color: rgb(104, 219, 104);
+}
+
+.profile_form .selected {
+    background: rgb(85, 85, 85);
+}
+
+.profile_form .options-container.active {
+    background: rgb(85, 85, 85);
+}
+
+.profile_form .options-container .option:hover {
+    background: rgb(49, 49, 49);
 }
 
 @media (min-width: 700px) {
@@ -161,9 +135,9 @@ main {
 
     h1 {
         position: fixed;
-        top: 4px;
-        left: calc(50% - 69.066px);
-        font-size: 23px;
+        top: 7px;
+        left: calc(50% - 115.1px);
+        font-size: 20px;
         font-weight: normal;
         margin-bottom: 0;
         color: rgba(255,255,255,0.92);

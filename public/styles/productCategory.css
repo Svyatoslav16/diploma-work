@@ -1,58 +1,29 @@
-/* Для темного режима
-body {
-    background: #464545;
-    color: #fff;
-}
-.head {
-    color: rgb(128, 128, 128);
-}
-
-.message {
-    background: rgb(54, 54, 54);
-}
-
-.product:hover {
-    background: #555454;
-}
-
-.product {
-    border-top: 1px solid #f2f2f2;
-}
-
-.product:last-child {
-    border-bottom: 1px solid #f2f2f2;
-}
-*/
 .icon {
     width: 25px;
     height: 25px;
-}
-
-.icon * {
     cursor: pointer;
-}
-
-.white-icon {
-    display: none;
-}
-
-.head,
-.product {
-    display: grid;
 }
 
 .head {
     font-size: 20px;
 }
 
-.product {
-    padding: 20px 0;
+.body {
+    font-size: 17px;
+    color: rgba(0,0,0, 0.7);
+}
+
+.head, .category {
+    display: grid;
+}
+
+.category {
     position: relative;
     /* border-top: 1px solid #55545447; */
 }
 
-.product::before,
-.product:last-child::after {
+.category::before,
+.category:last-child::after {
     content: '';
     position: absolute;
     width: calc(100% - 10px);
@@ -61,11 +32,11 @@ body {
     background: #0000003d;
 }
 
-.product::before {
+.category::before {
     top: 0;
 }
 
-.product:last-child::after {
+.category:last-child::after {
     bottom: 0;
 }
 
@@ -89,71 +60,36 @@ body {
     color: #fff;
 }
 
-@media (min-width: 950px) {
-    .head,
-    .product {
-        grid-template-columns: [name] 207px [category] 150px [description] 1fr [amount] 100px [count-stock] 100px [action] 54px;
-    }
-
-    .head .name {
-        width: 207px;
-    }
-
-    .head .category {
-        width: 200px;
-    }
-}
-
-@media (min-width: 700px) and (max-width: 949px) {
-    .head,
-    .product {
-        grid-template-columns: [name] 150px [category] 150px [description] 1fr [amount] 60px [count-stock] 100px [action] 54px;
-    }
-}
-
 @media (min-width: 700px) {
-    .wrap {
-        padding: 10px;
-    }
-
-    .head,
-    .product {
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    .product:hover {
-        background: rgba(0, 0, 0, 0.1);
-        /* color: #fff; */
-    }
-/* 
-    .product:hover .icon {
-        fill: #fff;
-    } */
-
-    .message-wrap {
-        top: 5px;
-    }
-
     .toolbar {
         display: none;
     }
 
-    .head > div:not(:last-child),
-    .product > div:not(:last-child) {
-        padding-right: 5px;
+    .head, .category {
+        grid-template-columns: .5fr .5fr 60px;
+        padding: 0 10px;
     }
 
     .head > div {
         padding-bottom: 15px;
     }
 
-    .product > div > a {
+    .category {
         padding-top: 10px;
+        padding-bottom: 10px;
     }
 
-    .product > div:last-child img {
-        cursor: pointer;
+    .category .name {
+        white-space: nowrap;
+        line-height: 30px;
+    }
+
+    .category:hover {
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    .message-wrap {
+        top: 5px;
     }
 }
 
@@ -165,50 +101,43 @@ body {
     h1 {
         position: fixed;
         top: 4px;
-        left: calc(50% - 37px);
+        left: calc(50% - 96.2px);
         font-size: 23px;
         font-weight: normal;
         margin-bottom: 0;
         color: rgba(255,255,255,0.92);
         z-index: 4;
     }
-    
+
     .cross-white-icon {
         width: 20px;
         height: 15px;
     }
 
-    .head {
+    .message-wrap {
+        top: 45px;
+    }
+
+    .head,
+    .category > div:last-child {
         display: none;
     }
 
-    .product {
-        position: relative;
-        text-align: left;
-        justify-items: right;
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    .product.active {
+    .category.active {
         background: rgba(0, 0, 0, 0.1);
     }
 
-    .product > div:not(:last-child) {
-        width: 100%;
+    .category > div:not(:last-child) {
+        width: calc(100 - 10px);
         display: grid;
-        grid-template-columns: 50px 1fr;
-        margin: 5px 0;
+        grid-template-columns: 130px 1fr;
+        padding: 5px 5px;
     }
 
-    .product > div:before {
+    .category > div:before {
         content: attr(data-label);
         font-size: 16px;
         text-align: left;
-    }
-
-    .message-wrap {
-        top: 45px;
     }
 
     .toolbar {
@@ -220,10 +149,10 @@ body {
         position: fixed;
         left: 0;
         width: calc(100% - 10px);
-        height: 40px;
         padding: 0 5px;
         z-index: 6;
         transition: .3s;
+        height: 40px;
     }
 
     .top-toolbar {
@@ -232,9 +161,9 @@ body {
     }
 
     .bottom-toolbar {
-        bottom: -50px;
         grid-template-columns: 30px 30px;
         justify-content: center;
+        bottom: -50px;
     }
 
     .bottom-toolbar__pencil-blocked-icon,
@@ -256,9 +185,5 @@ body {
 
     .bottom-toolbar.active {
         bottom: 0;
-    }
-
-    .product .icon {
-        display: none;
     }
 }

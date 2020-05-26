@@ -14,4 +14,4 @@
 /getProductsFromCategory: Error: connect ECONNREFUSED 127.0.0.1:3306 2020-5-9
 /getProductsFromCategory: Error: connect ECONNREFUSED 127.0.0.1:3306 2020-5-9
 /getProductsFromCategory: Error: connect ECONNREFUSED 127.0.0.1:3306 2020-5-9
-/getProductsFromCategory: Error: connect ECONNREFUSED 127.0.0.1:3306 2020-5-9
+/getProductsFromCategory: Error: connect ECONNREFUSED 127.0.0.1:3306 2020-5-91

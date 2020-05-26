@@ -3,5 +3,21 @@ main {
     display: grid;
     justify-content: center;
     align-items: center;
-    margin-top: 80px;
+}
+
+@media (max-width: 699px) {
+    main {
+        margin-top: 70px;
+    }
+
+    h1 {
+        position: fixed;
+        top: 4px;
+        left: calc(50% - 105px);
+        font-size: 23px;
+        font-weight: normal;
+        margin-bottom: 0;
+        color: rgba(255,255,255,0.92);
+        z-index: 4;
+    }
 }

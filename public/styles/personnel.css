@@ -20,6 +20,11 @@
     font-size: 20px;
 }
 
+.body {
+    font-size: 17px;
+    color: rgba(0,0,0, 0.7);
+}
+
 .worker {
     padding: 20px 0;
     position: relative;
@@ -149,12 +154,6 @@
         display: grid;
         grid-template-columns: 50px 1fr;
         margin: 5px 0;
-    }
-
-    .worker > div:last-child {
-        padding: 10px 0 5px 0;
-        width: 100%;
-        text-align: center;
     }
 
     .worker > div:before {

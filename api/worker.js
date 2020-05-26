@@ -1,6 +1,7 @@
 const express = require('express'),
       router = express.Router(),
       bodyParser = require('body-parser'),
+      multer  = require("multer"),
       fs = require("fs"),
       mysql = require('./mySQL');
 
@@ -13,7 +14,27 @@ const urlencodedParser = bodyParser.urlencoded({extended: false});
 // Статусы заказа, в будущем значений может быть больше
 const orderStatus = ['Подтверждён', 'Не подтверждён'];
 
+// Настройки для загрузки картинок товаров 
+const storageConfig = multer.diskStorage({
+  destination: (req, file, cb) =>{
+    cb(null, "public/productImages");
+  },
+  filename: (req, file, cb) =>{
+    cb(null, `${file.originalname}`);
+  }
+});
+
+// Фильтрация файлов для загрузки на сервер с типом png
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/png"){
+    cb(null, true);
+  } else{
+    cb(null, false);
+  }
+ }
+
 router.use(mysql.userSession);
+router.use(multer({storage:storageConfig, fileFilter: fileFilter}).single("filedata"));
 router.use(express.json());
 
 // Форма добавления сотрудника
@@ -24,8 +45,9 @@ router.get("/addWorker", (req, res) => {
                         name
                 FROM position`, (err, positions) => {
       if (err) {
+        fs.writeFileSync('api-worker-error-log.txt', 
+          `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err}  ${new Date().toLocaleDateString()}`);
         res.send(err);
-        fs.writeFileSync('api-worker-error-log.txt', `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err}  ${new Date().toLocaleDateString()}`);
       } else if(!err && positions.length > 0) {
         res.render('addWorker', {
           userName: req.session.userName,
@@ -50,8 +72,9 @@ router.get("/addProduct", (req, res) => {
                         name
                 FROM product_category`, (err, categories) => {
       if (err) {
+        fs.writeFileSync('api-worker-error-log.txt', 
+          `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
         res.send(err);
-        fs.writeFileSync('api-worker-error-log.txt', `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
       } else if(!err && categories.length > 0) {
         res.render('addProduct', {
           userName: req.session.userName,
@@ -89,16 +112,17 @@ router.get("/arrivalOfGoods", (req, res) => {
                         product_count_stock
                 FROM products`, (err, productList) => {
       if (err) {
+        fs.writeFileSync('api-worker-error-log.txt', 
+          `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
         res.send(err);
-        fs.writeFileSync('api-worker-error-log.txt', `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
       } else if (!err && productList.length > 0) {
         conn.query(`SELECT DISTINCT id,name 
                     FROM internet_magazine.product_category INNER JOIN products 
                     ON product_category.id = products.product_category_id;`, (err, categories) => {
           if (err) {
-            res.send(err);
             fs.writeFileSync('api-worker-error-log.txt', 
               `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+            res.send(err);
           } else if(!err && categories.length > 0) {
             res.render('arrivalOfGoods', {
               userName: req.session.userName,
@@ -137,25 +161,74 @@ router.get('/editWorkerProfile', async (req, res) => {
   if (req.session.successAuthentication === true &&
     req.session.isWorker === true &&
     req.query.workerId) {
-    conn.query(`SELECT *
-                FROM worker
-                WHERE worker_id = ${req.session.workerId}`, (err, accountData) => {
+    conn.query(`SELECT  id,
+                        name
+                FROM position`, (err, positions) => {
       if(err) {
-        res.send(err);
         fs.writeFileSync('api-worker-error-log.txt',
           `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
-      } else if(!err && accountData.length > 0) {
-        console.log(accountData[0]);
-        res.render('editWorkerProfile', {
-          userName: req.session.userName,
-          successAuthentication: req.session.successAuthentication,
-          isWorker: req.session.isWorker,
-          accountData: accountData[0]
+        res.send(err);
+      } else if(!err && positions.length > 0) {
+        conn.query(`SELECT  worker_id,
+                            worker_name,
+                            worker_surname,
+                            worker_patronymic,
+                            email,
+                            telephone,
+                            password,
+                            worker_position,
+                            position.name as 'position'
+                    FROM worker INNER JOIN position
+                    ON worker.worker_position = position.id
+                    WHERE worker_id = ${req.query.workerId}`, (err, accountData) => {
+          if(err) {
+            fs.writeFileSync('api-worker-error-log.txt',
+              `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+            res.send(err);
+          } else if(!err && accountData.length > 0) {
+            res.render('editWorkerProfile', {
+              userName: req.session.userName,
+              successAuthentication: req.session.successAuthentication,
+              isWorker: req.session.isWorker,
+              accountData: accountData[0],
+              positions
+            });
+          } else if(!err && accountData.length === 0) {
+            res.send('Сотрудника с таким ID не существует');
+          }
         });
       }
     });
   } else {
-    console.log('redirect');
+    res.redirect(301, '/');
+  }
+});
+
+// Форма редактирования категории
+router.get('/editCategory', async (req, res) => {
+  if (req.session.successAuthentication === true &&
+    req.session.isWorker === true &&
+    req.query.categoryID) {
+    conn.query(`SELECT  id,
+                        name
+                FROM product_category
+                WHERE id = ${req.query.categoryID}`, (err, category) => {
+      if(err) {
+        fs.writeFileSync('api-worker-error-log.txt',
+          `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+        res.send(err);
+      } else if(!err && category.length > 0) {
+        res.render('editCategory', {
+          userName: req.session.userName,
+          successAuthentication: req.session.successAuthentication,
+          isWorker: req.session.isWorker,
+          category: category[0]
+        })
+      } else if(!err && category.length === 0) {
+        res.send('Категории с таким ID не существует');
+      }
+    });
+  } else {
     res.redirect(301, '/');
   }
 });
@@ -203,14 +276,23 @@ router.post('/addWorker', urlencodedParser, (req, res) =>{
 });
 
 router.post("/addProduct", urlencodedParser, (req, res) => {
+  console.log(req.body);
+  console.log(req.file);
+  if (req.body.productName.length === 0 ||
+    !req.file.originalname ||
+    req.body.productCount.length === 0 ||
+    req.body.productAmount.length === 0 ||
+    req.body.productCategoryId.length === 0 ||
+    req.body.productDescription.length === 0) return res.sendStatus(400);
   if (req.session.successAuthentication === true && 
       req.session.isWorker === true) {
     conn.query(`SELECT product_id 
                 FROM products
                 ORDER BY product_id DESC LIMIT 1`, (err, lastProduct) => {
       if (err) {
-        res.send(err);
-        fs.writeFileSync('api-worker-error-log.txt', `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+        fs.writeFileSync('api-worker-error-log.txt', 
+          `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+        res.send({err});
       } else if (!err && lastProduct.length > 0) {
         if (lastProduct.length > 0) {
           conn.query(`INSERT INTO products 
@@ -220,10 +302,11 @@ router.post("/addProduct", urlencodedParser, (req, res) => {
                               '${req.body.productDescription}',
                               '${req.body.productAmount}',
                               '${req.body.productCount}',
-                                ${req.body.productCategoryId})`, err => {
+                              ${req.body.productCategoryId})`, err => {
             if (err) {
-              res.send(err);
-              fs.writeFileSync('api-worker-error-log.txt', `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+              fs.writeFileSync('api-worker-error-log.txt', 
+                `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+              res.send({err});
             } else {
               res.render('index', {
                 userName: req.session.userName,
@@ -245,8 +328,9 @@ router.post("/addProduct", urlencodedParser, (req, res) => {
                           '${req.body.productCountStock}',
                           ${req.body.productCategoryId})`, err => {
           if (err) {
-            res.send(err);
-            fs.writeFileSync('api-worker-error-log.txt', `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+            fs.writeFileSync('api-worker-error-log.txt', 
+              `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+            res.send({err});
           } else {
             res.render('index', {
               userName: req.session.userName,
@@ -271,15 +355,17 @@ router.post('/addPosition', urlencodedParser, (req, res) =>{
             ORDER BY id 
             DESC LIMIT 1;`, (err, lastPositionId) => {
       if (err) {
+        fs.writeFileSync('api-worker-error-log.txt', 
+          `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
         res.send(err);
-        fs.writeFileSync('api-worker-error-log.txt', `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
       } else {
         conn.query(`INSERT INTO position
                     VALUE(${(lastPositionId.length > 0) ? +lastPositionId[0].id + 1: 1},
                         '${req.body.positionName}');`, err => {
           if (err) {
+            fs.writeFileSync('api-worker-error-log.txt', 
+              `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
             res.send(err);
-            fs.writeFileSync('api-worker-error-log.txt', `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
           }
           res.render('index', {
             userName: req.session.userName,
@@ -303,17 +389,17 @@ router.post('/addProductCategory', urlencodedParser, (req, res) =>{
                 ORDER BY id 
                 DESC LIMIT 1;`, (err, lastCategoryId) => {
       if (err) {
-        res.send(err);
         fs.writeFileSync('api-worker-error-log.txt', 
           `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+        res.send(err);
       } else {
         conn.query(`INSERT INTO product_category
                     VALUE(${(lastCategoryId.length > 0) ? +lastCategoryId[0].id + 1 : 1},
                           '${req.body.categoryName}');`, err => {
           if (err) {
-            res.send(err);
             fs.writeFileSync('api-worker-error-log.txt', 
               `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+            res.send(err);
           } else {
             res.render('index', {
               userName: req.session.userName,
@@ -340,10 +426,10 @@ router.post('/arrivalOfGoods', (req, res) => {
                 ORDER BY id 
                 DESC LIMIT 1;`, (err, lastIncomeId) => {
       if (err) {
-        res.sendStatus(500);
         fs.writeFileSync('api-worker-error-log.txt', 
           `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
         console.log(err);
+        res.sendStatus(500);
       } else {
         let incomeID = (lastIncomeId.length > 0) ? +lastIncomeId[0].id + 1: 1;
         conn.query(`INSERT INTO income 
@@ -352,10 +438,10 @@ router.post('/arrivalOfGoods', (req, res) => {
                           0,
                           ${req.session.workerId})`, err => {
           if (err) {
-            res.sendStatus(500);
             fs.writeFileSync('api-worker-error-log.txt', 
               `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
             console.log(err);
+            res.sendStatus(500);
           } else {
             let values = '';
             let productList = req.body.productList;
@@ -367,10 +453,10 @@ router.post('/arrivalOfGoods', (req, res) => {
                               product_amount = ${productList[i].amount * 1.2}
                           WHERE product_id = ${productList[i].id};`, err => {
                 if(err) {
-                  res.sendStatus(500);
                   fs.writeFileSync('api-worker-error-log.txt', 
                     `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
                   console.log(err);
+                  res.sendStatus(500);
                 }
               });
               if(i < productList.length - 1 && productList.length > 1) {
@@ -380,18 +466,18 @@ router.post('/arrivalOfGoods', (req, res) => {
                             VALUES ${values}
                             (${incomeID}, ${productList[i].id}, ${productList[i].count},${productList[i].amount});`, err => {
                   if (err) {
-                    res.sendStatus(500);
                     fs.writeFileSync('api-worker-error-log.txt', 
                       `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
                     console.log(err);
+                    res.sendStatus(500);
                   } else {
                     conn.query(`UPDATE income
                                 SET total = ${total}
                                 WHERE id = ${incomeID}`, err => {
                       if (err) {
-                        res.send(err);
                         fs.writeFileSync('api-worker-error-log.txt', 
                           `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                        res.send(err);
                       } else {
                         res.sendStatus(200);
                       }
@@ -426,9 +512,9 @@ router.post('/editProductProperties', urlencodedParser, (req, res) => {
                         req.body.category.length > 0) ? `,product_category_id = ${req.body.category}` : ''}
                 WHERE product_id = ${req.body.productId};`, err => {
       if (err) {
-        res.send(err);
         fs.writeFileSync('api-worker-error-log.txt', 
           `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+        res.send(err);
       } else {
         res.render('index', {
           userName: req.session.userName,
@@ -457,8 +543,9 @@ router.post('/deleteProductByID', (req, res) => {
     }
     conn.query(sql, err => {
       if (err) {
+        fs.writeFileSync('api-worker-error-log.txt', 
+          `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
         res.json({error: 'Произошла ошибка'});
-        fs.writeFileSync('api-worker-error-log.txt', `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
       } else {
         res.json({message: 'Товар успешно удален'});
       }
@@ -470,27 +557,133 @@ router.post('/deleteProductByID', (req, res) => {
 
 // Удаление сотрудника по id
 router.post('/deleteWorkerByID', (req, res) => {
-  if (req.body.workerID &&
+  if (req.body.workerList &&
       req.session.successAuthentication === true && 
       req.session.isWorker === true) {
-    let sql = '';
-    if(typeof req.body.workerList === 'string') {
-      sql =  `DELETE FROM worker
-              WHERE worker_id = ${req.body.workerID};`;
-    } else if(typeof req.body.workerID === 'object') {
-      sql =  `DELETE FROM worker
-              WHERE worker_id IN(${req.body.workerID.join(',')});`;
-    }
-    conn.query(sql, err => {
+    conn.query(`DELETE FROM worker
+                WHERE worker_id IN(${req.body.workerList.join(',')});`, err => {
       if (err) {
+        console.log(err);
+        fs.writeFileSync('api-worker-error-log.txt', 
+          `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
         res.json({error: 'Произошла ошибка'});
-        fs.writeFileSync('api-worker-error-log.txt', `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
       } else {
-        res.json({message: 'Сотрудник успешно удален'});
+        if(typeof req.body.workerList === 'string') {
+          res.json({message: 'Сотрудник успешно удалён'});
+        } else if(typeof req.body.workerList === 'object') {
+          res.json({message: 'Сотрудники успешно удалёны'});
+        }        
       }
     });
   } else {
     res.json({error: 'Произошла ошибка'});
+  }
+});
+
+router.post('/editWorkerProfile', urlencodedParser,(req, res) => {
+  if (+req.body.position == 'NaN' &&
+      req.body.surname.length === 0 && 
+      req.body.firstname.length === 0 &&
+      req.body.patronymic.length === 0 &&
+      req.body.telephone.length === 0 &&
+      req.body.telephone.length === 0 &&
+      req.body.password.length > 0) {
+    res.sendStatus(500);
+  }
+  if (req.session.successAuthentication === true && 
+    req.session.isWorker === true) {
+    conn.query(`UPDATE worker 
+                SET worker_name = '${req.body.firstname}',
+                worker_surname = '${req.body.surname}',
+                worker_patronymic = '${req.body.patronymic}',
+                email = '${req.body.email}',
+                telephone = ${req.body.telephone},
+                password = '${req.body.password}',
+                worker_position = ${req.body.position}
+                WHERE worker_id = ${req.body.worker_id}`, err => {
+      if (err) {
+        fs.writeFileSync('api-worker-error-log.txt', 
+          `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+        res.json({err});
+      } else {
+        res.render('index', {
+          userName: req.session.userName,
+          successAuthentication: req.session.successAuthentication,
+          isWorker: req.session.isWorker
+        });
+      }
+    });
+  }
+});
+
+router.post('/deleteCategoryByID', (req, res) => {
+  if (req.session.successAuthentication === true && 
+    req.session.isWorker === true &&
+    req.body.categoryID.length > 0) {
+    conn.query(`SELECT product_id
+                FROM products
+                WHERE product_category_id IN (${req.body.categoryID.join(',')});`, (err, products) => {
+      if (err) {
+        console.log(err);
+        fs.writeFileSync('api-worker-error-.txt', 
+          `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+        res.json({error: 'Произошла ошибка'});
+      } else if(!err && products.length === 0) {
+        conn.query(`DELETE FROM product_category
+                    WHERE id IN(${req.body.categoryID.join(',')});`, err => {
+          if (err) {
+            console.log(err);
+            fs.writeFileSync('api-worker-error-log.txt', 
+              `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+            res.json({error: 'Произошла ошибка'});
+          } else {
+            if(req.body.categoryID.length === 1) {
+              res.json({message: 'Категория успешно удалёна'});
+            } else if(req.body.categoryID.length > 1) {
+              res.json({message: 'Категории успешно удалёны'});
+            }        
+          }
+        });
+
+        if(req.body.categoryID.length === 1) {
+          res.json({message: 'Категория успешно удалёна'});
+        } else if(req.body.categoryID.length > 1) {
+          res.json({message: 'Категории успешно удалёны'});
+        } 
+      } else if(!err && products.length > 0) {
+        if(req.body.categoryID.length === 1) {
+          res.json({message: 'В категории присутствуют товары'});
+        } else if(req.body.categoryID.length > 1) {
+          res.json({message: 'В одной из категорий присутствуют товары'});
+        }
+      }
+    });
+  }
+});
+
+router.post('/editCategory', urlencodedParser, (req, res) => {
+  if (req.session.successAuthentication === true && 
+    req.session.isWorker === true &&
+    req.body.categoryName.length > 0 &&
+    req.body.categoryID.length > 0) {
+    conn.query(`UPDATE product_category
+                SET name = '${req.body.categoryName}'
+                WHERE id = ${req.body.categoryID}`, err => {
+      if(err) {
+        console.log(err);
+        fs.writeFileSync('api-worker-error-.txt', 
+          `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+        res.send(err);
+      } else {
+        res.render('index', {
+          userName: req.session.userName,
+          successAuthentication: req.session.successAuthentication,
+          isWorker: req.session.isWorker
+        });
+      }
+    })
+  } else {
+    res.send('Неверно указаны данные или отсутствует доступ')
   }
 });
 

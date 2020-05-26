@@ -1,0 +1,10 @@
+
+/productCategory: Error: Unknown column 'product_category' in 'where clause' 2020-5-26
+/productCategory: Error: Unknown column 'product_category' in 'where clause' 2020-5-26
+/productCategory: Error: Unknown column 'product_category' in 'where clause' 2020-5-26
+/productCategory: Error: Unknown column 'product_category' in 'where clause' 2020-5-26
+/productCategory: Error: Unknown column 'product_category' in 'where clause' 2020-5-26
+/productCategory: Error: Unknown column 'product_category' in 'where clause' 2020-5-26
+/productCategory: Error: Unknown column 'product_category' in 'where clause' 2020-5-26
+/productCategory: Error: Unknown column 'product_category' in 'where clause' 2020-5-26
+/productCategory: Error: Unknown column 'undefined' in 'where clause' 2020-5-26

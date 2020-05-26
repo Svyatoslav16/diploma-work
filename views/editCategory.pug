@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/addProductCategory.css">
+    <title>Редактирование категории</title>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        <form action="/editCategory" method="post" class="form add-category-form">
+            <h1>Редактирование категории</h1>
+            <input type="hidden" name="categoryID" value="#{category.id}">
+            <div class="material-design-input-wrap">
+                <input type="text" class="material-design-input" name="categoryName" value="#{category.name}" required autocomplete="off"/>
+                <label for="categoryName" class="categoryName-label material-design-label-for-input">
+                    <span class="content-categoryName">Наименование категории</span>
+                </label>
+            </div>
+            <div class="submit-button-wrap add-category-button-wrap">
+                <button class="btn submit-button add-category-button">Обновить</button>
+            </div> 
+        </form>
+    </main>
+    include layout/footer.pug
+</body>
+</html>

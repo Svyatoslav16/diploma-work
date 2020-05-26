@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    include layout/header.pug
+    <link rel="stylesheet" href="styles/module/custom-table.css">
+    <link rel="stylesheet" href="styles/productCategory.css">
+    <script src="javascript/productCategory.js" defer></script>
+    <title>Категории товаров</title>
+</head>
+<body>
+    include layout/menu.pug
+    <main>
+        <h1>Категории товаров</h1>
+        <div class="custom-table">
+            <div class="head">
+                <div class="name">Название</div>
+                <div class="product_count_in_category">Товаров в категории</div>
+            </div>
+            <div class="body">
+            each category in categoriesData
+                <div class="category" data-id="#{category.id}">
+                    <div class="name" data-label="Наименование">#{category.name}</div>
+                    <div class="count" data-label="Кол-во товаров">#{category.productCountInCategory}</div>
+                    <div>
+                        <img src="images/pencil.svg" alt="Редактировать" class="pencil-icon icon" data-id="#{category.id}"/>
+                        <img src="images/trash.svg" alt="Удалить" class="trash-icon icon" data-id="#{category.id}">
+                    </div>
+                </div>
+            </div>
+    </main>
+    <div class="toolbar top-toolbar">
+        <img src="images/cross-white.svg" class="cross-white-icon icon"/>
+        <span>Выбрано: <span class="selected-count"></span></span>
+        <img src="images/select-all.svg" class="select-all-icon icon"/>
+    </div>
+    <div class="toolbar bottom-toolbar">
+        <img src="images/pencil-white.svg" class="bottom-toolbar__pencil-icon icon"/>
+        <img src="images/pencil.svg" class="bottom-toolbar__pencil-blocked-icon icon"/>
+        <img src="images/trash-white.svg" class="bottom-toolbar__trash-icon icon"/>
+    </div>
+    include layout/footer.pug
+</body>
+</html>

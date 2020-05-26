@@ -1,9 +1,9 @@
-let workerList = document.getElementsByClassName('worker');
+let categoryList = document.getElementsByClassName('category');
 let topToolBar = document.getElementsByClassName('top-toolbar')[0];
 let bottomToolBar = document.getElementsByClassName('bottom-toolbar')[0];
 
-for (let i = 0; i < workerList.length; i++) {
-  workerList[i].addEventListener('click', function() {
+for (let i = 0; i < categoryList.length; i++) {
+  categoryList[i].addEventListener('click', function() {
     if(screen.width < 900) {
       this.classList.toggle('active');
       if (!topToolBar.classList.contains('active') &&
@@ -19,12 +19,12 @@ for (let i = 0; i < workerList.length; i++) {
 
 function selected() {
   let selectedSpan = document.getElementsByClassName('selected-count')[0];
-  let selectedCount = document.getElementsByClassName('worker active').length;
+  let selectedCount = document.getElementsByClassName('category active').length;
   if(selectedCount >= 1)
     selectedSpan.innerText = selectedCount;
-  for (let i = 0; i < workerList.length; i++) {
-    if(!workerList[i].classList.contains('active')) {
-      if(i === workerList.length - 1) {
+  for (let i = 0; i < categoryList.length; i++) {
+    if(!categoryList[i].classList.contains('active')) {
+      if(i === categoryList.length - 1) {
         topToolBar.classList.remove('active');
         bottomToolBar.classList.remove('active');
       } 
@@ -35,9 +35,9 @@ function selected() {
 }
 
 document.getElementsByClassName('select-all-icon')[0].addEventListener('click', function() {
-  for (let i = 0; i < workerList.length; i++) {
-    if(!workerList[i].classList.contains('active')) {
-      workerList[i].classList.add('active');
+  for (let i = 0; i < categoryList.length; i++) {
+    if(!categoryList[i].classList.contains('active')) {
+      categoryList[i].classList.add('active');
       selected();
       blockedPencil();
     }
@@ -45,9 +45,9 @@ document.getElementsByClassName('select-all-icon')[0].addEventListener('click', 
 });
 
 document.getElementsByClassName('cross-white-icon')[0].addEventListener('click', function() {
-  for (let i = 0; i < workerList.length; i++) {
-    if(workerList[i].classList.contains('active')) {
-      workerList[i].classList.remove('active');
+  for (let i = 0; i < categoryList.length; i++) {
+    if(categoryList[i].classList.contains('active')) {
+      categoryList[i].classList.remove('active');
       topToolBar.classList.remove('active');
       bottomToolBar.classList.remove('active');
     }
@@ -55,34 +55,33 @@ document.getElementsByClassName('cross-white-icon')[0].addEventListener('click',
 });
 
 document.getElementsByClassName('bottom-toolbar__trash-icon')[0].addEventListener('click', function() {
-  let workerID = [];
-  for (let i = 0; i < workerList.length; i++) {
-    if(workerList[i].classList.contains('active')) {
-        workerID.push(workerList[i].dataset.worker_id);
-    }    
+  let categoryID = [];
+  for (let i = 0; i < categoryList.length; i++) {
+    if(categoryList[i].classList.contains('active')) {
+        categoryID.push(categoryList[i].dataset.id);
+    }
   }
-  deleteByID([workerID]);
+  deleteByID(categoryID);
 });
 
 document.getElementsByClassName('bottom-toolbar__pencil-icon')[0].addEventListener('click', function() {
-  window.location.href = `${window.location.origin}/editWorkerProfile?workerId=${document.getElementsByClassName('worker active')[0].dataset.worker_id}`;
+  window.location.href = `${window.location.origin}/editCategory?categoryID=${document.getElementsByClassName('category active')[0].dataset.id}`;
 });
 
 document.querySelectorAll('.trash-icon').forEach(el => {
   el.addEventListener('click', () => {
-    deleteByID(el.dataset.worker_id);
+    deleteByID([el.dataset.id]);
   });
 });
 
 
-function deleteByID(workerList) {
-    console.log(workerList);
-  fetch('/deleteWorkerByID', {
+function deleteByID(categoryID) {
+  fetch('/deleteCategoryByID', {
     method: 'POST',
-    body: JSON.stringify({workerList}),
+    body: JSON.stringify({categoryID}),
     headers: {
-        'Accept' : 'application/json',
-        'Content-Type' : 'application/json'
+      'Accept' : 'application/json',
+      'Content-Type' : 'application/json'
     }
   }).then(res => {
     return res.json();
@@ -91,32 +90,35 @@ function deleteByID(workerList) {
         messageWrap.className = 'message-wrap';
     let message = document.createElement('div');
         message.className = 'message';
-        
     if(!res.err) {
-      if(workerList.length === 1) {
-        for (let i = 0; i < workerList.length; i++) {
-          if(workerList[i].dataset.worker_id === workerList[0]) {
-            workerList[i].remove();
-            message.innerText = 'Сотрудник успешно удален';
+      if(categoryID.length === 1) {
+        if(res.message !== 'В категории присутствуют товары') {
+          for (let i = 0; i < categoryList.length; i++) {
+            if(categoryList[i].dataset.id === categoryID[0]) {
+                categoryList[i].remove();
+            }
           }
         }
-      } else if(workerList.length > 1) {
-        for (let i = 0; i < workerList.length; i++) {
-          for (let j = 0; j < workerList.length; j++) {
-            if(workerList[i] === workerList[j].dataset.worker_id) {
-              workerList[j].remove();
-              message.innerText = 'Сотрудники успешно удалены';
-            }            
-          }          
+      } else if(categoryID.length > 1) {
+        if(res.message != 'В одной из категорий присутствуют товары') {
+          for (let i = 0; i < categoryList.length; i++) {
+            for (let j = 0; j < categoryList.length; j++) {
+              if(categoryID[i] === categoryList[j].dataset.id) {
+                categoryList[j].remove();
+              }            
+            }          
+          }
         }
       }
+
+      message.innerText = res.message;
     } else {
       message.innerText = res.error;
     }
 
     messageWrap.append(message);
     document.querySelector('body').append(messageWrap);
-    workerList = document.getElementsByClassName('worker');
+    categoryList = document.getElementsByClassName('category');
     topToolBar.classList.remove('active');
     bottomToolBar.classList.remove('active');
 
@@ -127,16 +129,16 @@ function deleteByID(workerList) {
 }
 
 function blockedPencil() {
-  let workerActive = 0;
+  let categoryActive = 0;
   let pencilIconClassList = document.getElementsByClassName('bottom-toolbar__pencil-icon')[0].classList;
 
-  for (let i = 0; i < workerList.length; i++) {
-    if(workerList[i].classList.contains('active')) {
-        workerActive++;
+  for (let i = 0; i < categoryList.length; i++) {
+    if(categoryList[i].classList.contains('active')) {
+      categoryActive++;
     }    
   }
 
-  if(workerActive > 1) {
+  if(categoryActive > 1) {
     if(!pencilIconClassList.contains('blocked')) {
       pencilIconClassList.add('blocked');
     }

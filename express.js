@@ -2,31 +2,11 @@ const path = require('path'),
       express = require('express'),
       bodyParser = require('body-parser'),
       cookieParser = require('cookie-parser'),
-      multer  = require("multer"),
       app = express(),
       fs = require("fs"),
       mysql = require('./api/mySQL');
 
 const conn = mysql.conn;
-
-// Настройки для загрузки картинок товаров 
-const storageConfig = multer.diskStorage({
-  destination: (req, file, cb) =>{
-    cb(null, "public/productImages");
-  },
-  filename: (req, file, cb) =>{
-    cb(null, `${file.originalname}`);
-  }
-});
-
-// Фильтрация файлов для загрузки на сервер с типом png
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype === "image/png"){
-    cb(null, true);
-  } else{
-    cb(null, false);
-  }
- }
 
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 
@@ -34,7 +14,6 @@ const urlencodedParser = bodyParser.urlencoded({extended: false});
 const orderStatus = ['Подтверждён', 'Не подтверждён'];
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(multer({storage:storageConfig, fileFilter: fileFilter}).single("filedata"));
 app.use(cookieParser());
 app.use(express.json());
 app.use(mysql.userSession);
@@ -91,10 +70,10 @@ app.get('/getProductInCart', (req, res) => {
                 WHERE user_id = ${req.session.userId}
                 AND status = '${orderStatus[1]}'`, (err, productCategory) => {
       if (err) {
-        res.send(err);
         fs.writeFileSync('express-error-log.txt', 
           `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
         console.log(err);
+        res.send(err);
       } else
         res.json(productCategory);
     });
@@ -122,8 +101,9 @@ app.get("/logOff", urlencodedParser, (req, res) => {
   let signOutUserName = req.session.userName;
   req.session.destroy(err => {
     if (err) {
+      fs.writeFileSync('express-error-log.txt', 
+        `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
       res.send(err);
-      fs.writeFileSync('express-error-log.txt', `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
     } else {
       res.render('index', {
         afterSignOut: true,
@@ -162,9 +142,9 @@ app.post('/getProductsFromCategory', (req, res) => {
               ${choseCategory};`, (err, products) => {
     if(err) {
       console.log(err);
-      res.send({err: err});
       fs.writeFileSync('express-error-log.txt', 
         `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+      res.send({err: err});
     } else if(!err && products) {
       res.send(products);
     }
@@ -177,9 +157,9 @@ app.post("/getCategories", (req, res) => {
               FROM product_category INNER JOIN products
               ON product_category.id = products.product_category_id`, (err, categories) => {
     if(err) {
-      res.send({err: err});
       fs.writeFileSync('express-error-log.txt', 
         `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+      res.send({err: err});
     } else if(!err && categories.length > 0) {
       res.send(categories);
     }
@@ -194,9 +174,9 @@ app.post("/getProductByCategoryId", (req, res) => {
               ON product_category.id = products.product_category_id
               WHERE product_category.id = ${req.body.id};`, (err, product) => {
     if(err) {
-      res.send({err: err});
       fs.writeFileSync('express-error-log.txt', 
         `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+      res.send({err: err});
     } else if(!err && product.length > 0) {
       res.send(product);
     }
@@ -211,9 +191,9 @@ app.get('/product', (req, res) => {
                 FROM products
                 WHERE product_id = ${req.query.productId}`, (err, product) => {
       if(err) {
-        res.send(err);
         fs.writeFileSync('express-error-log.txt', 
           `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+        res.send(err);
       } else if(!err && product.length > 0) {
         res.render('product', {
           userName: req.session.userName,
@@ -246,9 +226,9 @@ app.post("/signUp", urlencodedParser, (req, res) => {
                   WHERE telephone = ${req.body.telephone} 
                   OR email = '${req.body.email}' `, (err, existingUser) => {
         if (err) {
-          res.send(err);
           fs.writeFileSync('express-error-log.txt', 
             `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+          res.send(err);
         } else if (!err && existingUser.length === 0) {
           conn.query(`INSERT INTO users 
                       VALUE(${(lastUser.length !== 0) ? +lastUser[0].user_id + 1 : 1}, 
@@ -260,9 +240,9 @@ app.post("/signUp", urlencodedParser, (req, res) => {
                             '${req.body.password}',
                             '')`, (err) => {
             if (err) {
-              res.send(err);
               fs.writeFileSync('express-error-log.txt', 
                 `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+              res.send(err);
             } else
               res.render('index', {
                 successAuthentication: false
@@ -298,9 +278,9 @@ app.post("/signIn", urlencodedParser, (req, res) => {
                       AND password='${req.body.password}'`,
                 (err, users) => {
     if (err) {
-      res.send(err);
       fs.writeFileSync('express-error-log.txt', 
         `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+      res.send(err);
     } else if (!err && users.length > 0) {
       req.session.userName = `${users[0].user_name} ${users[0].user_surname}`;
       req.session.isWorker = false;
@@ -321,9 +301,9 @@ app.post("/signIn", urlencodedParser, (req, res) => {
                                                                     : `email='${req.body.login}'`}) 
                   AND password='${req.body.password}'`, (err, worker) => {
         if (err) {
-          res.send(err);
           fs.writeFileSync('express-error-log.txt', 
             `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+          res.send(err);
         } else if (!err && typeof worker[0] === "object" && worker[0] !== undefined) {
           req.session.userName = `${worker[0].worker_name} ${worker[0].worker_surname}`;
           req.session.isWorker = true;
@@ -352,9 +332,9 @@ app.post("/resetPassword", urlencodedParser, (req, res) => {
               FROM users 
               WHERE email='${req.body.email}'`, (err, userData) => {
     if (err) {
-      res.send(err);
       fs.writeFileSync('express-error-log.txt', 
         `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+      res.send(err);
     } else if (!err && 
       typeof userData[0] === "object" && 
       userData[0] !== undefined) {
@@ -378,9 +358,9 @@ app.post("/resetPassword", urlencodedParser, (req, res) => {
                     </p>`
             }, (err, reply) => {
             if (err) {
-              res.send(err);
               fs.writeFileSync('express-error-log.txt', 
                 `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+              res.send(err);
             } else
               res.render('index', {
                 userName: req.session.userName,

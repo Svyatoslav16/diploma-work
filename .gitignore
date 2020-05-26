@@ -9,3 +9,9 @@ not_added_pictures_of_the_goods
 
 .git
 КопияБД.rar
+api-worker-error-log.txt
+api-user-error-log.txt
+api-worker-error-log.txt
+express-error-log.txt
+
+package-lock.json
