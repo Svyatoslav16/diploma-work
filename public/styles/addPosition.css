@@ -24,8 +24,21 @@ main {
     text-align: center;
 }
 
+.message {
+    text-align: right;
+    margin-top: 5px;
+    color: #ff000094;
+    font-size: 18px;
+}
+
 /* @media (max-width: 600px) {
     .add-position-form {
         max-width: 269px;
     }
 } */
+
+@media (max-width: 699px) {
+    .add-position-form {
+        margin-top: 70px;
+    } 
+}

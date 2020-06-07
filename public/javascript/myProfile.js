@@ -2,7 +2,7 @@ let message = document.querySelector('.message');
 
 if(message !== null) {
     setTimeout(() => {
-        message.remove();
+        // message.remove();
     }, 2000);
 }
 

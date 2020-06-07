@@ -31,7 +31,7 @@ const fileFilter = (req, file, cb) => {
   } else{
     cb(null, false);
   }
- }
+}
 
 router.use(mysql.userSession);
 router.use(multer({storage:storageConfig, fileFilter: fileFilter}).single("filedata"));
@@ -80,7 +80,13 @@ router.get("/addProduct", (req, res) => {
           userName: req.session.userName,
           successAuthentication: req.session.successAuthentication,
           isWorker: req.session.isWorker,
-          categories 
+          categories,
+          productData: {
+            name: '',
+            count: '',
+            amount: '',
+            description: ''
+          }
         });
       }
     });
@@ -263,7 +269,8 @@ router.post('/addWorker', urlencodedParser, (req, res) =>{
               res.render('index', {
                 userName: req.session.userName,
                 successAuthentication: req.session.successAuthentication,
-                isWorker: req.session.isWorker
+                isWorker: req.session.isWorker,
+                message: 'Сотрудник успешно добавлен'
               });
             });
           }
@@ -276,8 +283,6 @@ router.post('/addWorker', urlencodedParser, (req, res) =>{
 });
 
 router.post("/addProduct", urlencodedParser, (req, res) => {
-  console.log(req.body);
-  console.log(req.file);
   if (req.body.productName.length === 0 ||
     !req.file.originalname ||
     req.body.productCount.length === 0 ||
@@ -286,56 +291,70 @@ router.post("/addProduct", urlencodedParser, (req, res) => {
     req.body.productDescription.length === 0) return res.sendStatus(400);
   if (req.session.successAuthentication === true && 
       req.session.isWorker === true) {
-    conn.query(`SELECT product_id 
+    conn.query(`SELECT product_id
                 FROM products
-                ORDER BY product_id DESC LIMIT 1`, (err, lastProduct) => {
+                WHERE product_name = '${req.body.productName}'`, (err, existProduct) => {
       if (err) {
         fs.writeFileSync('api-worker-error-log.txt', 
           `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
         res.send({err});
-      } else if (!err && lastProduct.length > 0) {
-        if (lastProduct.length > 0) {
-          conn.query(`INSERT INTO products 
-                      VALUE(${(lastProduct.length > 0) ? +lastProduct[0].product_id + 1 : 1}, 
-                              '${req.body.productName}', 
-                              '${"productImages/" + req.file.originalname}',
-                              '${req.body.productDescription}',
-                              '${req.body.productAmount}',
-                              '${req.body.productCount}',
-                              ${req.body.productCategoryId})`, err => {
-            if (err) {
-              fs.writeFileSync('api-worker-error-log.txt', 
-                `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
-              res.send({err});
-            } else {
-              res.render('index', {
-                userName: req.session.userName,
-                successAuthentication: req.session.successAuthentication,
-                isWorker: req.session.isWorker
-              });
-            }
-          });
-        } else {
-          res.sendStatus(500);
-        }
-      } if (!err && lastProduct.length === 0) {
-        conn.query(`INSERT INTO products
-                    VALUE(1, 
-                          '${req.body.productName}', 
-                          '${"productImages/" + req.file.originalname}',
-                          '${req.body.descriptionProduct}',
-                          '${req.body.productAmount}',
-                          '${req.body.productCountStock}',
-                          ${req.body.productCategoryId})`, err => {
+      } else if (!err && existProduct.length === 0) {
+        conn.query(`SELECT product_id 
+                    FROM products
+                    ORDER BY product_id DESC LIMIT 1`, (err, lastProduct) => {
           if (err) {
             fs.writeFileSync('api-worker-error-log.txt', 
               `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
             res.send({err});
-          } else {
-            res.render('index', {
+          } else if (!err && lastProduct.length > 0) {
+            if (lastProduct.length > 0) {
+              conn.query(`INSERT INTO products 
+                          VALUE(${(lastProduct.length > 0) ? +lastProduct[0].product_id + 1 : 1}, 
+                                  '${req.body.productName}', 
+                                  '${"productImages/" + req.file.originalname}',
+                                  '${req.body.productDescription}',
+                                  '${req.body.productAmount}',
+                                  '${req.body.productCount}',
+                                  ${req.body.productCategoryId})`, err => {
+                if (err) {
+                  fs.writeFileSync('api-worker-error-log.txt', 
+                    `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                  res.send({err});
+                } else {
+                  res.render('index', {
+                    userName: req.session.userName,
+                    successAuthentication: req.session.successAuthentication,
+                    isWorker: req.session.isWorker,
+                    message: 'Товар успешно добавлен'
+                  });
+                }
+              });
+            } else {
+              res.sendStatus(500);
+            }
+          }
+        });
+      } else if (!err && existProduct.length > 0) {
+        conn.query(`SELECT  id,
+                            name
+                    FROM product_category`, (err, categories) => {
+          if (err) {
+            fs.writeFileSync('api-worker-error-log.txt', 
+              `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+            res.send(err);
+          } else if(!err && categories.length > 0) {
+            res.render('addProduct', {
               userName: req.session.userName,
               successAuthentication: req.session.successAuthentication,
-              isWorker: req.session.isWorker
+              isWorker: req.session.isWorker,
+              categories,
+              productData: {
+                name: req.body.productName,
+                count: req.body.productCount,
+                amount: req.body.productAmount,
+                description: req.body.productDescription
+              },
+              message: 'Такой товар уже существует'
             });
           }
         });
@@ -351,27 +370,45 @@ router.post('/addPosition', urlencodedParser, (req, res) =>{
   if (req.session.successAuthentication === true && 
       req.session.isWorker === true) {
     conn.query(`SELECT id
-            FROM position
-            ORDER BY id 
-            DESC LIMIT 1;`, (err, lastPositionId) => {
+                FROM position
+                WHERE name = '${req.body.positionName}'`, (err, existPosition) => {
       if (err) {
         fs.writeFileSync('api-worker-error-log.txt', 
           `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
         res.send(err);
-      } else {
-        conn.query(`INSERT INTO position
-                    VALUE(${(lastPositionId.length > 0) ? +lastPositionId[0].id + 1: 1},
-                        '${req.body.positionName}');`, err => {
+      } else if(!err && existPosition.length === 0) {
+        conn.query(`SELECT id
+                    FROM position
+                    ORDER BY id 
+                    DESC LIMIT 1;`, (err, lastPositionId) => {
           if (err) {
             fs.writeFileSync('api-worker-error-log.txt', 
               `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
             res.send(err);
+          } else {
+            conn.query(`INSERT INTO position
+                        VALUE(${(lastPositionId.length > 0) ? +lastPositionId[0].id + 1: 1},
+                            '${req.body.positionName}');`, err => {
+              if (err) {
+                fs.writeFileSync('api-worker-error-log.txt', 
+                  `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                res.send(err);
+              }
+              res.render('index', {
+                userName: req.session.userName,
+                successAuthentication: req.session.successAuthentication,
+                isWorker: req.session.isWorker,
+                message: 'Должность успешно добавлена'
+              });
+            });
           }
-          res.render('index', {
-            userName: req.session.userName,
-            successAuthentication: req.session.successAuthentication,
-            isWorker: req.session.isWorker
-          });
+        });
+      } else if(!err && existPosition.length > 0) {
+        res.render('addPosition', {
+          userName: req.session.userName,
+          successAuthentication: req.session.successAuthentication,
+          isWorker: req.session.isWorker,
+          message: 'Такая должность уже существует'
         });
       }
     });
@@ -384,29 +421,47 @@ router.post('/addProductCategory', urlencodedParser, (req, res) =>{
   if (!req.body) return res.sendStatus(400);
   if (req.session.successAuthentication === true && 
       req.session.isWorker === true) {
-    conn.query(`SELECT  id
+    conn.query(`SELECT id
                 FROM product_category
-                ORDER BY id 
-                DESC LIMIT 1;`, (err, lastCategoryId) => {
+                WHERE name = '${req.body.categoryName}'` ,(err, existCategory) => {
       if (err) {
         fs.writeFileSync('api-worker-error-log.txt', 
           `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
         res.send(err);
-      } else {
-        conn.query(`INSERT INTO product_category
-                    VALUE(${(lastCategoryId.length > 0) ? +lastCategoryId[0].id + 1 : 1},
-                          '${req.body.categoryName}');`, err => {
+      } else if (!err && existCategory.length === 0) {
+        conn.query(`SELECT  id
+                    FROM product_category
+                    ORDER BY id 
+                    DESC LIMIT 1;`, (err, lastCategoryId) => {
           if (err) {
             fs.writeFileSync('api-worker-error-log.txt', 
               `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
             res.send(err);
           } else {
-            res.render('index', {
-              userName: req.session.userName,
-              successAuthentication: req.session.successAuthentication,
-              isWorker: req.session.isWorker
+            conn.query(`INSERT INTO product_category
+                        VALUE(${(lastCategoryId.length > 0) ? +lastCategoryId[0].id + 1 : 1},
+                              '${req.body.categoryName}');`, err => {
+              if (err) {
+                fs.writeFileSync('api-worker-error-log.txt', 
+                  `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                res.send(err);
+              } else {
+                res.render('index', {
+                  userName: req.session.userName,
+                  successAuthentication: req.session.successAuthentication,
+                  isWorker: req.session.isWorker,
+                  message: 'Категория успешно добавлена'
+                });
+              }
             });
           }
+        });
+      } else if(!err && existCategory.length > 0) {
+        res.render('addProductCategory', {
+          userName: req.session.userName,
+          successAuthentication: req.session.successAuthentication,
+          isWorker: req.session.isWorker,
+          message: 'Такая категория уже существует'
         });
       }
     });
@@ -543,10 +598,12 @@ router.post('/deleteProductByID', (req, res) => {
     }
     conn.query(sql, err => {
       if (err) {
+        console.log(err);
         fs.writeFileSync('api-worker-error-log.txt', 
           `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
-        res.json({error: 'Произошла ошибка'});
+        res.json({err: `Произошла ошибка. Код ошибки: ${err.errno}`});
       } else {
+        console.log('success')
         res.json({message: 'Товар успешно удален'});
       }
     });
@@ -566,7 +623,7 @@ router.post('/deleteWorkerByID', (req, res) => {
         console.log(err);
         fs.writeFileSync('api-worker-error-log.txt', 
           `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
-        res.json({error: 'Произошла ошибка'});
+        res.json({err: 'Произошла ошибка'});
       } else {
         if(typeof req.body.workerList === 'string') {
           res.json({message: 'Сотрудник успешно удалён'});
@@ -576,7 +633,7 @@ router.post('/deleteWorkerByID', (req, res) => {
       }
     });
   } else {
-    res.json({error: 'Произошла ошибка'});
+    res.json({err: 'Произошла ошибка'});
   }
 });
 
@@ -637,19 +694,9 @@ router.post('/deleteCategoryByID', (req, res) => {
               `${fs.readFileSync('api-worker-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
             res.json({error: 'Произошла ошибка'});
           } else {
-            if(req.body.categoryID.length === 1) {
-              res.json({message: 'Категория успешно удалёна'});
-            } else if(req.body.categoryID.length > 1) {
-              res.json({message: 'Категории успешно удалёны'});
-            }        
+            res.json({message: 'Успешно удалено'});
           }
         });
-
-        if(req.body.categoryID.length === 1) {
-          res.json({message: 'Категория успешно удалёна'});
-        } else if(req.body.categoryID.length > 1) {
-          res.json({message: 'Категории успешно удалёны'});
-        } 
       } else if(!err && products.length > 0) {
         if(req.body.categoryID.length === 1) {
           res.json({message: 'В категории присутствуют товары'});

@@ -44,6 +44,7 @@ main {
 .error-sign-in {
     text-align: right;
     padding-top: 5px;
+    color: #ff000094;
 }
 
 .cross-icon,

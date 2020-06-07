@@ -539,67 +539,250 @@ router.post('/addAddressDelivery', urlencodedParser, (req, res) => {
 
 // Добавление товара в корзину при нажатии клавиши "Добавить в корзину"
 router.post('/addToCart', (req, res) => {
-  if (req.body.product_id !== undefined && 
-      req.session.isWorker === false) {
-    conn.query(`SELECT id 
-                FROM orders
-                WHERE user_id = ${req.session.userId}
-                AND status = '${orderStatus[1]}'`, (err, orderID) => {
+  if (req.session.successAuthentication === true &&
+    req.body.product_id !== undefined && 
+    req.session.isWorker === false) {
+    conn.query(`SELECT product_count_stock as 'stock'
+                FROM products
+                WHERE product_id = ${req.body.product_id}`, (err, inStock) => {
       if (err) {
         console.log(err);
-        res.send(err);
-        fs.writeFileSync('api-user-error-log.txt', `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
-      }
-      if (orderID.length > 0) {
-        conn.query(`SELECT order_product.count 
-                    FROM order_product INNER JOIN orders 
-                    ON order_product.order_id = orders.id
-                    WHERE orders.id = ${orderID[0].id} 
-                    AND product_id = ${req.body.product_id}
-                    AND orders.status = '${orderStatus[1]}'`, (err, productCount) => {
+        fs.writeFileSync('api-user-error-log.txt', 
+          `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+        res.send({err});
+      } else if (!err && inStock.length > 0) {
+        conn.query(`SELECT id 
+                    FROM orders
+                    WHERE user_id = ${req.session.userId}
+                    AND status = '${orderStatus[1]}'`, (err, orderID) => {
           if (err) {
             console.log(err);
-            res.send(err);
-            fs.writeFileSync('api-user-error-log.txt', `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
-          } else if (!err && productCount.length === 0) {
-            conn.query(`INSERT INTO order_product 
-                        VALUE(${orderID[0].id},
-                              ${req.body.product_id},
-                              1)`, (err) => {
-              if (err) {throw err;}
-              res.sendStatus(200);
+            fs.writeFileSync('api-user-error-log.txt', 
+              `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+            res.send({err});
+          } else if (!err && orderID.length > 0) {
+            conn.query(`SELECT order_product.count 
+                        FROM order_product INNER JOIN orders 
+                        ON order_product.order_id = orders.id
+                        WHERE orders.id = ${orderID[0].id} 
+                        AND product_id = ${req.body.product_id}
+                        AND orders.status = '${orderStatus[1]}'`, (err, productCount) => {
+              if (err) {
+                console.log(err);
+                fs.writeFileSync('api-user-error-log.txt', 
+                  `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                res.send({err});
+              } else if (!err && productCount.length === 0) {
+                if(inStock[0].stock >= 1) {
+                  conn.query(`INSERT INTO order_product 
+                              VALUE(${orderID[0].id},
+                                    ${req.body.product_id},
+                                    1)`, (err) => {
+                    if (err) {
+                      console.log(err);
+                      fs.writeFileSync('api-user-error-log.txt', 
+                        `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                      res.send({err: 'Не удалось добавить товар'});
+                    } else {
+                      res.send({buttonText: 'Товар добавлен'});
+                    }
+                  });
+                }
+              } else {
+                res.send({buttonText: 'Уже в корзине'});
+              }
             });
-          } else {
-            res.sendStatus(204);
+          } else if (orderID.length === 0) {
+            if(inStock[0].stock >= 1) {
+              conn.query(`SELECT  id, 
+                                  user_id 
+                          FROM orders
+                          ORDER BY id DESC LIMIT 1`, (err, lastCart) => {
+                if (err) {
+                  console.log(err);
+                  fs.writeFileSync('api-user-error-log.txt', 
+                    `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                  res.send({err: 'Не удалось добавить товар'});
+                } else {
+                  conn.query(`INSERT INTO orders
+                              VALUE(${(lastCart.length !== 0) ? +lastCart[0].id + 1 : 1},
+                                    ${req.session.userId},
+                                    null,
+                                    0,
+                                    '${orderStatus[1]}')`, (err) => {
+                    if (err) {
+                      console.log(err);
+                      fs.writeFileSync('api-user-error-log.txt', 
+                        `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                      res.send({err: 'Не удалось добавить товар'});
+                    } else {
+                      conn.query(`INSERT INTO order_product
+                                  VALUE(${(lastCart.length !== 0) ? +lastCart[0].id + 1 : 1},
+                                        ${req.body.product_id},
+                                        1)`, (err) => {
+                        if (err) {
+                          console.log(err);
+                          fs.writeFileSync('api-user-error-log.txt', 
+                            `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                          res.send({err: 'Не удалось добавить товар'});
+                        } else {
+                          res.send({buttonText: 'Товар добавлен'});
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            } else {
+              res.send({buttonText: 'Нет в наличии'});
+            }
           }
-        });
-      } else if (orderID.length === 0) {
-        conn.query(`SELECT  id, 
-                            user_id 
-                    FROM orders
-                    ORDER BY id DESC LIMIT 1`, (err, lastCart) => {
-          if (err) {throw err;}
-          conn.query(`INSERT INTO orders
-                      VALUE(${(lastCart.length !== 0) ? +lastCart[0].id + 1 : 1},
-                            ${req.session.userId},
-                            null,
-                            0,
-                            '${orderStatus[1]}')`, (err) => {
-            if (err) {throw err;}
-            conn.query(`INSERT INTO order_product
-                        VALUE(${(lastCart.length !== 0) ? +lastCart[0].id + 1 : 1},
-                              ${req.body.product_id},
-                              1)`, (err) => {
-              if (err) {throw err;}
-              res.sendStatus(200);
-            });
-          });
         });
       }
     });
   } else {
     res.sendStatus(400);
   }
+});
+
+// Добавление товара в корзину при нажатии клавиши "В корзину" на странице товара
+router.post('/addToCartWithQuantity', (req, res) => {
+  if (req.session.successAuthentication === true &&
+    (req.body.product && typeof req.body.product === 'object') && 
+    req.session.isWorker === false) {
+    conn.query(`SELECT product_count_stock as 'in_stock'
+                FROM products
+                WHERE product_id = ${req.body.product.id};`, (err, inStock) => {
+      if (err) {
+        console.log(err);
+        fs.writeFileSync('api-user-error-log.txt', 
+          `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+        res.send({
+          message: 'Не удалось добавить товар',
+          buttonText: 'Ошибка'
+        });
+      } else if(!err && inStock.length > 0) {
+        if(inStock[0].in_stock >= req.body.product.count) {
+          conn.query(`SELECT id
+                      FROM orders
+                      WHERE user_id = ${req.session.userId}
+                      AND status = '${orderStatus[1]}';`, (err, existingOrder) => {
+            if (err) {
+              console.log(err);
+              fs.writeFileSync('api-user-error-log.txt', 
+                `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+              res.send({
+                message: 'Не удалось добавить товар',
+                buttonText: 'Ошибка'
+              });
+            } else if(!err && existingOrder.length > 0) {
+              conn.query(`SELECT product_id
+                          FROM order_product
+                          WHERE order_id = ${existingOrder[0].id};`, (err, existingProductInCart) => {
+                if (err) {
+                  console.log(err);
+                  fs.writeFileSync('api-user-error-log.txt', 
+                    `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                  res.send({
+                    message: 'Не удалось добавить товар',
+                    buttonText: 'Ошибка'
+                  });
+                } else if(!err && existingProductInCart.length > 0) {
+                  res.send({
+                    message: 'Товар уже присутствует в корзине, для редактирования количества перейдите в корзину',
+                    buttonText: 'Уже в корзине'
+                  });
+                } else if(!err && existingProductInCart.length === 0) {
+                  conn.query(`INSERT INTO order_product
+                              VALUE(${existingOrder[0].id},
+                                    ${req.body.product.id},
+                                    ${req.body.product.count});`, err => {
+                    if (err) {
+                      console.log(err);
+                      fs.writeFileSync('api-user-error-log.txt', 
+                        `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                      res.send({
+                        message: 'Не удалось добавить товар',
+                        buttonText: 'Ошибка'
+                      });
+                    } else {
+                      res.send({
+                        message: 'Товар успешно добавлен в корзину',
+                        buttonText: 'В корзине'
+                      });
+                    }
+                  });
+                }
+              });
+            } else if(!err && existingOrder.length === 0) {
+              conn.query(`SELECT id 
+                          FROM orders
+                          ORDER BY id 
+                          DESC LIMIT 1;`, (err, lastOrder) => {
+                if (err) {
+                  console.log(err);
+                  fs.writeFileSync('api-user-error-log.txt', 
+                    `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                  res.send({
+                    message: 'Не удалось добавить товар',
+                    buttonText: 'Ошибка'
+                  });
+                } else {
+                  conn.query(`INSERT INTO orders
+                              VALUE(${(lastOrder.length > 0) ? lastOrder[0].id + 1 : 1},
+                                    ${req.session.userId},
+                                    NULL,
+                                    0,
+                                    '${orderStatus[1]}');`, err => {
+                    if (err) {
+                      console.log(err);
+                      fs.writeFileSync('api-user-error-log.txt', 
+                        `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                      res.send({
+                        message: 'Не удалось добавить товар',
+                        buttonText: 'Ошибка'
+                      });
+                    } else {
+                      conn.query(`INSERT INTO order_product
+                                  VALUE(${(lastOrder.length > 0) ? lastOrder[0].id + 1 : 1},
+                                        ${req.body.product.id},
+                                        ${req.body.product.count});`, err => {
+                        if(err) {
+                          console.log(err);
+                          fs.writeFileSync('api-user-error-log.txt', 
+                            `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+                          res.send({
+                            message: 'Не удалось добавить товар',
+                            buttonText: 'Ошибка'
+                          });
+                        } else {
+                          res.send({
+                            message: 'Товар успешно добавлен в корзину',
+                            buttonText: 'В корзине'
+                          });
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }       
+          });
+        } else {
+          res.send({
+            message: 'Спрос превышает предложение. Уменьшите количество и повторите снова',
+            buttonText: 'Добавить в корзину',
+            tooMuch: true
+          });
+        }
+      } else if(!err && inStock.length === 0) {
+        res.send({
+          message: 'Товара с таким идентификационным кодом не существует',
+          buttonText: 'Ошибка'
+        });
+      }
+    });
+  } 
 });
 
 // Изменение кол-ва товара в корзине при помощи соотв. кнопок
@@ -615,8 +798,9 @@ router.post('/changeCountByButton', (req, res) => {
                 AND order_product.product_id = ${req.body.product_id}`, (err, cart) => {
       if (err) {
         console.log(err);
+        fs.writeFileSync('api-user-error-log.txt', 
+          `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
           res.send(err);
-          fs.writeFileSync('api-user-error-log.txt', `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
       } else if (!err && cart.length > 0) {
         if (req.body.action === 'plus' && 
             req.body.nodeName === 'BUTTON') {
@@ -923,7 +1107,8 @@ function updateOrder(session, productID, orderDate, totalAmount, productsInOrder
               res.render('index', {
                 userName: session.userName,
                 successAuthentication: session.successAuthentication,
-                isWorker: session.isWorker
+                isWorker: session.isWorker,
+                message: 'Заказ подтверждён'
               });
           });
         }

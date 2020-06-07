@@ -113,8 +113,9 @@ router.get('/supplyOfProducts', (req, res) => {
                 ON income_product.product_id = products.product_id INNER JOIN product_category
                 ON products.product_category_id = product_category.id
                 ORDER BY income.date`, (err, incomes) => {
-      if(err) {throw err;}
-      if(incomes.length > 0) {
+      if(err) {
+        throw err;
+      } else {
         let incomeList = [];
         for (let i = 0; i < incomes.length; i++) {
           if(incomeList.length > 0) {
@@ -156,6 +157,7 @@ router.get('/supplyOfProducts', (req, res) => {
             });
           }
         }
+
         res.render('supplyOfProducts', {
           userName: req.session.userName,
           successAuthentication: req.session.successAuthentication,
@@ -168,14 +170,6 @@ router.get('/supplyOfProducts', (req, res) => {
     res.redirect(302, '/');
   }
 });
-
-// router.get('/reportOnEmployees', (req, res) => {
-//   if(req.session.isWorker === true && req.session.successAuthentication === true) {
-    
-//   } else {
-//     res.redirect(302, '/');
-//   }
-// });
 
 // Отчёт по всем товарам
 router.get('/productsReport', (req, res) => {

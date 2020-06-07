@@ -35,6 +35,17 @@ header li > a {
     display: block;
 }
 
+.my-profile li {
+    position: relative;
+}
+
+.my-profile li object {
+    position: absolute;
+    background-image: url(../images/gear_white.svg);
+    width: 20px;
+    height: 20px;
+}
+
 @media (min-width: 700px) {
     header {
         display: grid;
@@ -175,7 +186,14 @@ header li > a {
         -moz-user-select: none;
         -khtml-user-select: none;
         -webkit-user-select: none;
-    }   
+    }
+
+    .my-profile li object {
+        display: none;
+        /* top: 2px;
+        right: 20px;
+        padding: 5px 0; */
+    }
 
     .my-profile-wrap span,
     .my-profile-wrap ul li {
@@ -237,6 +255,12 @@ header li > a {
 
     .my-profile-wrap {
         grid-area: profile;
+    }
+
+    .my-profile li object {
+        top: 1px;
+        right: 30px;
+        padding: 10px 0;
     }
 
     .my-profile-wrap .sign-in {

@@ -267,15 +267,16 @@ app.post("/signUp", urlencodedParser, (req, res) => {
 });
 
 app.post("/signIn", urlencodedParser, (req, res) => {
+  let login = `${(req.body.login.match(/^\d+$/) !== null) ? 
+              `telephone=${req.body.login}` : 
+              `email='${req.body.login}'`}`;
   if (!req.body) return res.sendStatus(403);
   conn.query(`SELECT  user_id,
                       user_name, 
                       user_surname 
               FROM users 
-              WHERE (${(req.body.login.match(/^\d+$/) !== null) ? 
-                    `telephone=${req.body.login}` : 
-                    `email='${req.body.login}'`}) 
-                      AND password='${req.body.password}'`,
+              WHERE (${login}) 
+                    AND password='${req.body.password}'`,
                 (err, users) => {
     if (err) {
       fs.writeFileSync('express-error-log.txt', 
@@ -297,14 +298,13 @@ app.post("/signIn", urlencodedParser, (req, res) => {
                           worker_name, 
                           worker_surname 
                   FROM worker 
-                  WHERE (${(req.body.login.match(/^\d+$/) !== null) ? `telephone=${req.body.login}` 
-                                                                    : `email='${req.body.login}'`}) 
+                  WHERE (${login}) 
                   AND password='${req.body.password}'`, (err, worker) => {
         if (err) {
           fs.writeFileSync('express-error-log.txt', 
             `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
           res.send(err);
-        } else if (!err && typeof worker[0] === "object" && worker[0] !== undefined) {
+        } else if (!err && worker.length > 0) {
           req.session.userName = `${worker[0].worker_name} ${worker[0].worker_surname}`;
           req.session.isWorker = true;
           req.session.successAuthentication =  true;
@@ -316,8 +316,25 @@ app.post("/signIn", urlencodedParser, (req, res) => {
             afterSignIn: true
           });
         } else {
-          res.render('signIn', {
-            error: 'Неверный логин или пароль'
+          conn.query(`SELECT worker.worker_id 
+                      FROM worker WHERE (${login})
+                      UNION
+                      SELECT users.user_id FROM users WHERE (${login});`, (err, existUser) => {
+            if (err) {
+              fs.writeFileSync('express-error-log.txt', 
+                `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+              res.send(err);
+            } else if (!err && existUser.length > 0) {
+              res.render('signIn', {
+                error: 'Неверный логин или пароль',
+                login: req.body.login
+              });
+            } else if(!err && existUser.length === 0) {
+              res.render('signIn', {
+                error: 'Пользователя с таким логином нет',
+                login: req.body.login
+              });
+            }
           });
         }                                                                  
       });

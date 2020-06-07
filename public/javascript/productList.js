@@ -54,10 +54,7 @@ function getProductsFromCategory(category) {
             'Content-Type': 'application/json'
         }
     }).then(res => {
-        if(res.ok)
-            return res.json();
-        else 
-            alert(res.err);
+        return res.json();
     }).then(body => {
         if(body) {
             productListElem.innerHTML = ''; // Очищение списка товаров из прошлой активной категории
@@ -141,13 +138,9 @@ function getProductsFromCategory(category) {
                 }
                 productList.push(product);
                 if(i === body.length - 1) {
-                    console.log(document.querySelectorAll('.add-to-cart'));
-                    
-
                     productInCart();
                 }
             }
-
             
             for (let i = 0; i < productList.length; i++) {
                 productListElem.append(productList[i]);
@@ -157,9 +150,7 @@ function getProductsFromCategory(category) {
                 el.onclick = addToCart;
             });
             
-            // setTimeout(() => {
             loadingWindowElem.classList.remove('active');
-            // }, 1000);
         }
     });
 }
@@ -173,11 +164,26 @@ function addToCart() {
             'Accept' : 'application/json',
             'Content-Type' : 'application/json'
         }
-    }).then((res) => {
-        if(res.status == '200') {
-            this.innerText = 'Товар добавлен';
-        } else if(res.status == '204') {
-            this.innerText = 'Уже в корзине';
+    }).then(res => {
+        return res.json();
+    }).then(res => {
+        if(!res.err) {
+            this.innerText = res.buttonText;
+            if(res.buttonText === 'Нет в наличии')
+                this.disabled;
+        } else {
+            let messageWrap = document.createElement('div');
+                messageWrap.className = 'message-wrap';
+            let message = document.createElement('div');
+                message.className = 'message';
+                message.innerText = res.err;
+                
+            messageWrap.append(message);
+            document.querySelector('body').append(messageWrap);
+
+            setTimeout(() => {
+                document.querySelector('.message-wrap').remove();
+            }, 2000);
         }
     });
 }

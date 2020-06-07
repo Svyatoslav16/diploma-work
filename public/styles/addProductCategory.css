@@ -5,6 +5,13 @@ main {
     align-items: center;
 }
 
+.message {
+    text-align: right;
+    margin-top: 5px;
+    color: #ff000094;
+    font-size: 18px;
+}
+
 @media (max-width: 699px) {
     main {
         margin-top: 70px;

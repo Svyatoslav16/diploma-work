@@ -7,3 +7,10 @@ setTimeout(() => {
         }, 1000);
     }
 }, 2000);
+
+let messageWrap = document.querySelector('.message-wrap');
+if(messageWrap) {
+    setTimeout(() => {
+        messageWrap.remove();
+    }, 2000);
+}

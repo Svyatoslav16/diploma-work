@@ -61,7 +61,8 @@ document.getElementsByClassName('bottom-toolbar__trash-icon')[0].addEventListene
         workerID.push(workerList[i].dataset.worker_id);
     }    
   }
-  deleteByID([workerID]);
+  console.log(workerID);
+  deleteByID(workerID);
 });
 
 document.getElementsByClassName('bottom-toolbar__pencil-icon')[0].addEventListener('click', function() {
@@ -70,16 +71,18 @@ document.getElementsByClassName('bottom-toolbar__pencil-icon')[0].addEventListen
 
 document.querySelectorAll('.trash-icon').forEach(el => {
   el.addEventListener('click', () => {
-    deleteByID(el.dataset.worker_id);
+    deleteByID([el.dataset.worker_id]);
   });
 });
 
 
-function deleteByID(workerList) {
-    console.log(workerList);
+function deleteByID(workerListID) {
+  console.log('--------');
+  console.log(workerListID);
+  console.log('--------');
   fetch('/deleteWorkerByID', {
     method: 'POST',
-    body: JSON.stringify({workerList}),
+    body: JSON.stringify({workerList: workerListID}),
     headers: {
         'Accept' : 'application/json',
         'Content-Type' : 'application/json'
@@ -93,25 +96,27 @@ function deleteByID(workerList) {
         message.className = 'message';
         
     if(!res.err) {
-      if(workerList.length === 1) {
+      if(workerListID.length === 1) {
         for (let i = 0; i < workerList.length; i++) {
-          if(workerList[i].dataset.worker_id === workerList[0]) {
+          if(workerList[i].dataset.worker_id === workerListID[0]) {
             workerList[i].remove();
             message.innerText = 'Сотрудник успешно удален';
           }
         }
       } else if(workerList.length > 1) {
         for (let i = 0; i < workerList.length; i++) {
-          for (let j = 0; j < workerList.length; j++) {
-            if(workerList[i] === workerList[j].dataset.worker_id) {
-              workerList[j].remove();
-              message.innerText = 'Сотрудники успешно удалены';
+          for (let j = 0; j < workerListID.length; j++) {
+            console.log(workerList[i]);
+            console.log(workerListID[j]);
+            if(workerList[i].dataset.worker_id === workerListID[j]) {
+              workerList[i].remove();
             }            
           }          
         }
+        message.innerText = 'Сотрудники успешно удалены';
       }
     } else {
-      message.innerText = res.error;
+      message.innerText = res.err;
     }
 
     messageWrap.append(message);

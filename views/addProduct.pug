@@ -16,7 +16,7 @@
         <form action="/addProduct" method="POST" class="form add-product-form" enctype="multipart/form-data">
             <h1>Добавить товар</h1>
             <div class="material-design-input-wrap">
-                <input type="text" class="material-design-input" id="product-name" name="productName" required>
+                <input type="text" class="material-design-input" id="product-name" name="productName" value="#{productData.name}" required>
                 <label for="product-name" class="material-design-label-for-input">
                     <span class="content-product-name">Название товара</span>
                 </label>
@@ -31,13 +31,18 @@
                 </label>
             </div>
             <div class="material-design-input-wrap">
-                <input type="number" class="material-design-input" id="product-count" name="productCount" required min="0" max="99">
+                <input type="number" 
+                    | class="material-design-input" id="product-count" 
+                    | name="productCount" required min="0" max="99"
+                    | value="#{productData.count}">
                 <label for="product-count" class="material-design-label-for-input">
                     <span class="content-product-count">Количество товара</span>
                 </label>
             </div>
             <div class="material-design-input-wrap">
-                <input type="number" class="material-design-input" id="product-amount" name="productAmount" required min="0">
+                <input type="number" 
+                    | class="material-design-input" id="product-amount" 
+                    | name="productAmount" min="0" value="#{productData.amount}" required>
                 <label for="product-amount" class="material-design-label-for-input">
                     <span class="content-product-amount">Стоимость товара</span>
                 </label>
@@ -47,7 +52,9 @@
                     <div class="options-container">
                         each category in categories
                             <div class="option">
-                                <input type="radio" class="radio" id="#{category.name}" name="productCategoryId" value="#{category.id}" required/>
+                                <input type="radio" 
+                                    | class="radio" id="#{category.name}" name="productCategoryId" 
+                                    | value="#{category.id}" required/>
                                 <label for="#{category.name}">#{category.name}</label>
                             </div>
                     </div>
@@ -57,15 +64,19 @@
                 </div>
             </div>
             <div class="material-design-textarea-wrap">
-                <textarea class="material-design-textarea" id="product-desctiption" name="productDescription" required>
+                <textarea class="material-design-textarea" 
+                    | id="product-desctiption" name="productDescription" 
+                    | value="#{productData.name}" required>
                 </textarea>
                 <label for="product-desctiption" class="material-design-label-for-textarea">
                     <span class="content-product-desctiption">Описание товара</span>
                 </label>
             </div>
+            if(message)
+                <div class="message">#{message}</div>
             <div class="submit-button-wrap add-product-button-wrap">
                 <button class="btn submit-button add-product-button">Добавить товар</button>
-            </div> 
+            </div>
         </form>
     </main>
     include layout/footer.pug

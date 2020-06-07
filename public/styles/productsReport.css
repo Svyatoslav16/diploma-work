@@ -69,26 +69,6 @@ body {
     bottom: 0;
 }
 
-.message-wrap {
-    display: grid;
-    justify-content: center;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 40px;
-    text-align: center;
-    z-index: 10;
-}
-
-.message {
-    width: 250px;
-    border-radius: 10px;
-    padding: 10px;
-    text-align: center;
-    background: #555454;
-    color: #fff;
-}
-
 @media (min-width: 950px) {
     .head,
     .product {
@@ -130,10 +110,6 @@ body {
     .product:hover .icon {
         fill: #fff;
     } */
-
-    .message-wrap {
-        top: 5px;
-    }
 
     .toolbar {
         display: none;
@@ -205,10 +181,6 @@ body {
         content: attr(data-label);
         font-size: 16px;
         text-align: left;
-    }
-
-    .message-wrap {
-        top: 45px;
     }
 
     .toolbar {

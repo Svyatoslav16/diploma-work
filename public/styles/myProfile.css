@@ -139,6 +139,7 @@ main {
     .message {
         width: calc(100% - 20px);
         padding: 20px 10px;
+        top: 0;
     }
 
     .button_wrap {

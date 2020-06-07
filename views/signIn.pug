@@ -12,7 +12,7 @@
             <form action="/signIn" method="POST" class="form sign-in-form">
                 <h1>Вход</h1>
                 <div class="login material-design-input-wrap">
-                    <input type="text" class="material-design-input" name="login" required/>
+                    <input type="text" class="material-design-input" name="login" value="#{login}" required/>
                     <label for="login" class="login-label material-design-label-for-input">
                         <span class="content-login">Email или номер телефона</span>
                     </label>
@@ -20,7 +20,7 @@
                     <object type="image/svg+xml" data="images/correct_gray.svg" class="correct-icon"></object>
                 </div>
                 <div class="password material-design-input-wrap">
-                    <input type="password" class="material-design-input" name="password" required>
+                    <input type="password" class="material-design-input" name="password" required autocomplete="off">
                     <label for="password" class="password-label material-design-label-for-input">
                         <span class="content-password">Пароль</span>
                     </label>

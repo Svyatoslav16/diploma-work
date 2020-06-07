@@ -1,4 +1,8 @@
 @media (min-width: 700px) {
+    main {
+        min-height: calc(100vh - 122px);
+    }
+
     .date-range-wrap {
         display: grid;
         grid-template-columns: 160px 150px 100px;
@@ -62,7 +66,7 @@
     }
 }
 
-@media (min-width: 890px) {
+@media (min-width: 850px) {
     .custom-table__head,
     .custom-table__body .row {
         grid-template-columns: [name] minmax(200px, 1fr) 
@@ -74,20 +78,47 @@
     }
 }
 
-@media (min-width: 830px) and (max-width: 889px) {
-    .custom-table__head,
-    .custom-table__body .row {
-        grid-template-columns: [name] minmax(200px, 1fr) 
-                               [category] minmax(200px,1fr) 
-                               [amount] 60px
-                               [count] 45px
-                               [client] minmax(180px, 1fr) 
-                               [date] 112px;
+@media (min-width: 700px) and (max-width: 849px) {
+    .custom-table__head {
+        display: none;
     }
 
-    .custom-table__head .head__data.count {
-        width: 31px;
-        overflow: hidden;
+    .custom-table__body {
+        display: grid;
+        grid-template-columns: .5fr .5fr;
+    }
+
+    .custom-table__body .row {
+        text-align: right;
+        justify-items: right;
+        padding: 20px 10px;
+    }
+
+    .custom-table__body .row:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: 5px;
+        width: calc(100% - 10px);
+        height: 1px;
+        background: #0000003d;
+        bottom: 0;
+    }
+
+    .custom-table__body .row__data {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        margin: 5px 0;
+    }
+
+    .custom-table__body .row__data:last-child {
+        margin-right: 5px;
+    }
+
+    .custom-table__body .row__data::before {
+        content: attr(data-label);
+        font-size: 16px;
+        text-align: left;
     }
 }
 
@@ -105,6 +136,10 @@
         margin-bottom: 0;
         color: rgba(255,255,255,0.92);
         z-index: 4;
+    }
+
+    .custom-table__body .row {
+        padding: 20px 5px;
     }
 
     .date-range-wrap {

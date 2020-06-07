@@ -391,6 +391,7 @@
         left: 0;
         width: calc(100% - 20px);
         padding: 6px 10px;
+        z-index: 3;
     }
 
     .table-action__mobile .buttons-wrap button:first-child {

@@ -110,7 +110,7 @@ function deleteByID(productID) {
         }
       }
     } else {
-      message.innerText = res.error;
+      message.innerText = res.err;
     }
 
     messageWrap.append(message);

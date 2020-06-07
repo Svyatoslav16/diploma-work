@@ -22,7 +22,7 @@
                     <div class="name" data-label="Наименование">#{category.name}</div>
                     <div class="count" data-label="Кол-во товаров">#{category.productCountInCategory}</div>
                     <div>
-                        <img src="images/pencil.svg" alt="Редактировать" class="pencil-icon icon" data-id="#{category.id}"/>
+                        <a href="/editCategory?categoryID=#{category.id}"><img src="images/pencil.svg" alt="Редактировать" class="pencil-icon icon" data-id="#{category.id}"/></a>
                         <img src="images/trash.svg" alt="Удалить" class="trash-icon icon" data-id="#{category.id}">
                     </div>
                 </div>

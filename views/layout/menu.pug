@@ -30,10 +30,22 @@
                     <li><a href="/addPosition">Добавить должность</a></li>
                     <li><a href="/arrivalOfGoods">Приход</a></li>
                 else 
-                    <li><a href="/myOrders">Мои заказы</a></li>
-                    <li><a href="/myProfile">Мой профиль</a></li>
-                    <li><a href="/cart">Корзина</a></li>
-                <li><a href="/logOff">Выйти</a></li>
+                    <li>
+                        <a href="/myOrders">Мои заказы</a>
+                        <object data="../images/list.svg" type="image/svg+xml"></object>
+                    </li>
+                    <li>
+                        <a href="/myProfile">Мой профиль</a>
+                        <object data="../images/settings_white.svg" type="image/svg+xml"></object>
+                    </li>
+                    <li>
+                        <a href="/cart">Корзина</a>
+                        <object data="../images/shopping-cart.svg" type="image/svg+xml"></object>
+                    </li>
+                <li class="log_off">
+                    <a href="/logOff">Выйти</a>
+                    <object data="../images/logout.svg" type="image/svg+xml"></object>
+                </li>
             </ul>
         else
             <span class="sign-in"><a href="/signIn">Войти</a></span>

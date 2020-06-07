@@ -79,8 +79,50 @@
     font-size: 16px;
 }
 
+.empty_orders_list_wrap {
+    display: grid;
+    place-items: center;
+}
+
+.empty_orders_list {
+    margin-top: 20px;
+    width: 150px;
+    fill: #aaa;
+}
+
 @media (min-width: 925px) {
     .orders {
         grid-template-columns: repeat(auto-fit, minmax(300px, 400px));
+    }
+}
+
+@media (min-width: 700px) {
+    .empty_orders_list_wrap {
+        height: calc(100vh - 250px);
+    }
+}
+
+@media (max-width: 699px) {
+    main {
+        margin-top: 40px;
+    }
+
+    h1 {
+        color: #f5f5f5;
+        position: fixed;
+        top: 0;
+        z-index: 4;
+        font-size: 22px;
+        font-weight: normal;
+        left: calc(50% - 61px);
+        padding: 6px 0;
+    }
+
+    .empty_orders_list_wrap {
+        height: calc(100vh - 150px);
+    }
+
+    .empty_orders_list {
+        width: 50px;
     }
 }

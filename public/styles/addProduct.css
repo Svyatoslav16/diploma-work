@@ -16,6 +16,13 @@ main {
     margin-bottom: 20px;
 }
 
+.message {
+    text-align: right;
+    margin-top: 5px;
+    color: #ff000094;
+    font-size: 18px;
+}
+
 .categories {
     margin-top: 20px;
 }

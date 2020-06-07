@@ -3,36 +3,58 @@
 <head>
     include layout/header.pug
     <link rel="stylesheet" href="styles/product.css">
+    <script src="javascript/product.js" defer></script>
     <title>#{product.product_name}</title>
 </head>
 <body>
     include layout/menu.pug
-    <main>  
-        <div class="product-wrapper">
-            <div class="product-image-wrap">
-                <img src="#{product.product_url_img}" />
-            </div>
-            
-        </div>
-        <div class="about-product">
-            <h3 class="product-name">#{product.product_name}</h3>
-            <div class="product-description">#{product.product_description}</div>
-            <div class="bottom-block">
-                <div class="product-price">
-                    <span class="price-current">#{product.product_amount}</span> 
-                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 330 330" class="ruble-icon">
-                        <path id="XMLID_449_" d="M180,170c46.869,0,85-38.131,85-85S226.869,0,180,0c-0.183,0-0.365,0.003-0.546,0.01h-69.434 c-0.007,0-0.013-0.001-0.019-0.001c-8.284,0-15,6.716-15,15v0.001V155v45H80c-8.284,0-15,6.716-15,15s6.716,15,15,15h15v85 c0,8.284,6.716,15,15,15s15-6.716,15-15v-85h55c8.284,0,15-6.716,15-15s-6.716-15-15-15h-55v-30H180z M180,30.01 c0.162,0,0.324-0.003,0.484-0.008C210.59,30.262,235,54.834,235,85c0,30.327-24.673,55-55,55h-55V30.01H180z"/>
-                    </svg>
+    <main>
+        <div class="wrap">
+            <div class="product_wrapper">
+                <div class="product-image-wrap">
+                    <img src="#{product.product_url_img}" />
                 </div>
-                if !isWorker
-                    <div class="add-to-cart-button">
-                        <button class="add-to-cart" data-product_id="#{product.product_id}">
-                            if(successAuthentication) 
-                                | Добавить в корзину
-                            else 
-                                <a href="/signIn">Добавить в корзину</a>
-                        </button>
+            </div>
+            <div class="about_product">
+                <div class="about_product__top_block">
+                    <h3 class="product_name">#{product.product_name}</h3>
+                    <div class="in_stock">В наличии: <span>#{product.product_count_stock}</span></div>
+                    <div class="product_price">
+                        <span class="product_price__price-current">#{product.product_amount}</span> 
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 330 330" class="ruble-icon">
+                            <path id="XMLID_449_" d="M180,170c46.869,0,85-38.131,85-85S226.869,0,180,0c-0.183,0-0.365,0.003-0.546,0.01h-69.434 c-0.007,0-0.013-0.001-0.019-0.001c-8.284,0-15,6.716-15,15v0.001V155v45H80c-8.284,0-15,6.716-15,15s6.716,15,15,15h15v85 c0,8.284,6.716,15,15,15s15-6.716,15-15v-85h55c8.284,0,15-6.716,15-15s-6.716-15-15-15h-55v-30H180z M180,30.01 c0.162,0,0.324-0.003,0.484-0.008C210.59,30.262,235,54.834,235,85c0,30.327-24.673,55-55,55h-55V30.01H180z"/>
+                        </svg>
                     </div>
+                </div>
+                <div class="middle_block">
+                    <div class="product_description">#{product.product_description}</div>
+                    <div class="quantity">
+                        <div class="quantity__title">Количество</div>
+                        <div class="quantity_wrap">
+                            <button class="quantity_wrap__minus quantity_wrap_button">-</button>
+                            <input type="number" name="quantity__input" class="quantity__input" value="1" min="1" max="99">
+                            <button class="quantity_wrap__plus quantity_wrap_button">+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom_block">
+                    <div class="bottom_block__total_amount_title">Итого</div>
+                    <div class="total_amount">
+                        <span class="total_amount__span">#{product.product_amount}</span> 
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 330 330" class="ruble-icon">
+                            <path id="XMLID_449_" d="M180,170c46.869,0,85-38.131,85-85S226.869,0,180,0c-0.183,0-0.365,0.003-0.546,0.01h-69.434 c-0.007,0-0.013-0.001-0.019-0.001c-8.284,0-15,6.716-15,15v0.001V155v45H80c-8.284,0-15,6.716-15,15s6.716,15,15,15h15v85 c0,8.284,6.716,15,15,15s15-6.716,15-15v-85h55c8.284,0,15-6.716,15-15s-6.716-15-15-15h-55v-30H180z M180,30.01 c0.162,0,0.324-0.003,0.484-0.008C210.59,30.262,235,54.834,235,85c0,30.327-24.673,55-55,55h-55V30.01H180z"/>
+                        </svg>
+                    </div>
+                    if !isWorker
+                        <div class="button_wrap">
+                            <button class="button_wrap__add_to_cart_button" data-product_id="#{product.product_id}">
+                                if(successAuthentication) 
+                                    <span>В корзину</span>
+                                else 
+                                    <a href="/signIn">В корзину</a>
+                            </button>
+                        </div>
+                </div>
             </div>
         </div>
     </main>

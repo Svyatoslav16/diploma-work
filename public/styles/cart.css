@@ -199,6 +199,14 @@ main {
 
 .total-amount-label .price {
     font-weight: 501;
+    display: grid;
+    grid-template-columns: 1fr 20px;
+    align-items: center;
+}
+
+.total-amount-label .price span {
+    max-width: 75px;
+    overflow: hidden;
 }
 
 .total-amount-label .price .ruble-icon {
@@ -215,15 +223,28 @@ main {
     line-height: 20px;
     width: 100%;
     border: none;
-    /* border: 1px solid rgba(27,31,35,.2); */
     border-radius: 10px;
     height: 47px;
-    /* pointer-events: none; */
+    box-shadow: 0px 2px 0 #09090938;
 }
 
 .buy-button:hover {
-    background: #19a5a5;
-    box-shadow: inset 0 -3px 0 0 rgba(0,0,0,0.1);
+    background: #71c2c2b9;
+}
+
+.buy-button:active {
+    background: #6bb6b6;
+}
+
+.empty_cart_wrap {
+    display: grid;
+    place-items: center;
+}
+
+.empty_cart {
+    margin-top: 20px;
+    width: 150px;
+    fill: #aaa;
 }
 
 @media (min-width: 1001px) {
@@ -241,6 +262,10 @@ main {
 
     .product-property {
         grid-template-columns: 1fr 93px 155px;
+    }
+
+    .empty_cart_wrap {
+        height: calc(100vh - 250px);
     }
 }
 
@@ -277,6 +302,7 @@ main {
 
     .count-buttons {
         justify-content: right;
+        margin-top: -4px;
     }
 
     .product-remains-wrap span {
@@ -299,6 +325,14 @@ main {
         font-weight: normal;
         left: calc(50% - 41px);
         padding: 6px 0;
+    }
+
+    .empty_cart_wrap {
+        height: calc(100vh - 150px);
+    }
+
+    .empty_cart {
+        width: 50px;
     }
 }
 
