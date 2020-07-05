@@ -113,12 +113,6 @@ app.get("/logOff", urlencodedParser, (req, res) => {
   });
 });
 
-app.get("/resetPassword", (req, res) => {
-  if(!req.session.isWorker) {
-    res.sendFile(`${__dirname}/public/html/resetPassword.html`);
-  }
-});
-
 app.get("/productList", (req, res) => {
   res.render('productList', {
     userName: req.session.userName,
@@ -337,55 +331,6 @@ app.post("/signIn", urlencodedParser, (req, res) => {
             }
           });
         }                                                                  
-      });
-    }
-  });
-});
-
-app.post("/resetPassword", urlencodedParser, (req, res) => {
-  if (!req.body.email && req.session.isWorker === false) return res.sendStatus(503);
-  conn.query(`SELECT  user_name, 
-                      email 
-              FROM users 
-              WHERE email='${req.body.email}'`, (err, userData) => {
-    if (err) {
-      fs.writeFileSync('express-error-log.txt', 
-        `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
-      res.send(err);
-    } else if (!err && 
-      typeof userData[0] === "object" && 
-      userData[0] !== undefined) {
-      let newPassword = generatePassword.generatePassword();
-      conn.query(`UPDATE users SET password = '${newPassword}' 
-                  WHERE email = '${req.body.email}'`, (err) => {
-        if (err) {
-          res.send(err);
-          fs.writeFileSync('express-error-log.txt', 
-            `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
-        } else {
-          sendMail({
-            from: 'internet-magazine@domain.com',
-            to: `${req.body.email}`,
-            subject: 'Восстановление пароля',
-            html: ` <p  style="font-family: Arial, Helvetica, sans-serif; background-color: #4c84c7;color: #fff;">
-                        Здраствуйте, ${userData[0].user_name}! Это письмо для восстановление пароля
-                    </p>
-                    <p style="font-family: Arial, Helvetica, sans-serif; background-color: #4c84c7; color: #fff;">
-                        Ваш новый пароль: <strong>${newPassword}</strong>
-                    </p>`
-            }, (err, reply) => {
-            if (err) {
-              fs.writeFileSync('express-error-log.txt', 
-                `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
-              res.send(err);
-            } else
-              res.render('index', {
-                userName: req.session.userName,
-                successAuthentication: req.session.successAuthentication,
-                isWorker: req.session.isWorker
-              });
-          });
-        }
       });
     }
   });

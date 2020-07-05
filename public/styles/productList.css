@@ -233,17 +233,14 @@ footer {
     }
 
     aside {
-        /* position: fixed; */
-        /* top: 40px;*/
         margin-top: 50px;
-        /* background: linear-gradient(45deg, #4d4d4d 0%, #1a1a1a 100%); */
     }
 
     .product-categories {
         width: 100vw;
         overflow-x: scroll;
-        /* height: 50px; */
         padding: 10px 0;
+        text-align: center;
     }
 
     .product-categories > .product-categories__category {

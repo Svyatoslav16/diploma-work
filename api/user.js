@@ -4,6 +4,7 @@ const express = require('express'),
       sendMail = require('sendmail')(),
       router = express.Router(),
       fs = require("fs"),
+      generatePassword = require('../public/javascript/module/generatePassword');
       mysql = require('./mySQL');
 
 const conn = mysql.conn;
@@ -14,6 +15,12 @@ const urlencodedParser = bodyParser.urlencoded({extended: false});
 const orderStatus = ['Подтверждён', 'Не подтверждён'];
 
 router.use(mysql.userSession);
+
+router.get("/resetPassword", (req, res) => {
+  if(!req.session.isWorker) {
+    res.render('resetPassword');
+  }
+});
 
 router.get('/cart', (req, res) => {    
   if (req.session.successAuthentication === true && 
@@ -467,8 +474,7 @@ router.post('/orderRegistration', (req, res) => {
       if (err) {
         res.send(err);
         fs.writeFileSync('api-user-error-log.txt', `${fs.readFileSync('api-user-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
-      }
-      if (productID.length > 0) {
+      } else if (!err && productID.length > 0) {
         let dateNow = new Date(); 
         let prepDate = {
           day: (dateNow.getDate() < 10) ? `0${dateNow.getDate()}` : dateNow.getDate(),
@@ -535,6 +541,57 @@ router.post('/addAddressDelivery', urlencodedParser, (req, res) => {
   } else {
     res.send('Этот адрес доступен только зарегистрированным пользователям');
   }
+});
+
+// Восстановление пароля для пользователя, новый пароль отправляется на почту
+router.post("/resetPassword", urlencodedParser, (req, res) => {
+  if (!req.body.email && !req.session.isWorker) return res.sendStatus(503);
+  conn.query(`SELECT  user_name, 
+                      email 
+              FROM users 
+              WHERE email='${req.body.email}'`, (err, userData) => {
+    if (err) {
+      fs.writeFileSync('express-error-log.txt', 
+        `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+      res.send(err);
+    } else if (!err && 
+      typeof userData[0] === "object" && 
+      userData[0] !== undefined) {
+      let newPassword = generatePassword.generatePassword();
+      conn.query(`UPDATE users SET password = '${newPassword}' 
+                  WHERE email = '${req.body.email}'`, (err) => {
+        if (err) {
+          res.send(err);
+          fs.writeFileSync('express-error-log.txt', 
+            `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+        } else {
+          sendMail({
+            from: 'internet-magazine@domain.com',
+            to: `${req.body.email}`,
+            subject: 'Восстановление пароля',
+            html: ` <p  style="font-family: Arial, Helvetica, sans-serif; background-color: #4c84c7;color: #fff;">
+                        Здраствуйте, ${userData[0].user_name}! Это письмо для восстановление пароля
+                    </p>
+                    <p style="font-family: Arial, Helvetica, sans-serif; background-color: #4c84c7; color: #fff;">
+                        Ваш новый пароль: <strong>${newPassword}</strong>
+                    </p>`
+            }, (err, reply) => {
+            if (err) {
+              fs.writeFileSync('express-error-log.txt', 
+                `${fs.readFileSync('express-error-log.txt')}\n${req.url}: ${err} ${new Date().toLocaleDateString()}`);
+              res.send(err);
+            } else
+              res.render('index', {
+                userName: req.session.userName,
+                successAuthentication: req.session.successAuthentication,
+                isWorker: req.session.isWorker,
+                message: 'Новый пароль успешно сгенерирован и отправлен вам на почту'
+              });
+          });
+        }
+      });
+    }
+  });
 });
 
 // Добавление товара в корзину при нажатии клавиши "Добавить в корзину"
@@ -1021,16 +1078,17 @@ function updateOrder(session, productID, orderDate, totalAmount, productsInOrder
               AND status = '${orderStatus[1]}';`, err => {
     if (err) {
       res.send(err);
-      fs.writeFileSync('api-user-error-log.txt', `${fs.readFileSync('api-user-error-log.txt')}\n${url}: ${err} ${new Date().toLocaleDateString()}`);
+      fs.writeFileSync('api-user-error-log.txt', 
+        `${fs.readFileSync('api-user-error-log.txt')}\n${url}: ${err} ${new Date().toLocaleDateString()}`);
     } else {
       conn.query(`SELECT email
                   FROM users
                   WHERE user_id = ${session.userId};`, (err, email) => {
         if (err) {
           res.send(err);
-          fs.writeFileSync('api-user-error-log.txt', `${fs.readFileSync('api-user-error-log.txt')}\n${url}: ${err} ${new Date().toLocaleDateString()}`);
-        } else if (!err && 
-                    email.length > 0) {
+          fs.writeFileSync('api-user-error-log.txt', 
+            `${fs.readFileSync('api-user-error-log.txt')}\n${url}: ${err} ${new Date().toLocaleDateString()}`);
+        } else if (!err && email.length > 0) {
           sendMail({
             from: 'internet-magazine@domain.com',
             to: `${email[0].email}`,
@@ -1100,9 +1158,15 @@ function updateOrder(session, productID, orderDate, totalAmount, productsInOrder
                   </div>`
           }, err => {
             if (err) {
-              res.send('Произошла ошибка отправления чека на электронную почту, заказ успешно подтверждён');
-              fs.writeFileSync('api-user-error-log.txt', `${fs.readFileSync('api-user-error-log.txt')}\n${url}: ${err} ${new Date().toLocaleDateString()}`);
+              fs.writeFileSync('api-user-error-log.txt', 
+                `${fs.readFileSync('api-user-error-log.txt')}\n${url}: ${err} ${new Date().toLocaleDateString()}`);
               console.log(err);
+              res.render('index', {
+                userName: session.userName,
+                successAuthentication: session.successAuthentication,
+                isWorker: session.isWorker,
+                message: 'Произошла ошибка отправления чека на электронную почту, заказ успешно подтверждён'
+              });
             } else 
               res.render('index', {
                 userName: session.userName,

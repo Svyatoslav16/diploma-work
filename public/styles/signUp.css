@@ -49,4 +49,3 @@ main {
 .material-design-input:valid + .material-design-label-for-input.valid span {
     color: rgb(104, 219, 104);
 }
-
